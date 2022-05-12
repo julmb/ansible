@@ -2,5 +2,5 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?ListenAddress "
-    line: ListenAddress 192.168.0.11
+    line: ListenAddress {{ ssh.address }}
   notify: restart ssh
