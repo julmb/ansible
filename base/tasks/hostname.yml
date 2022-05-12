@@ -1,2 +1,2 @@
-- name: set hostname
+- name: hostname
   ansible.builtin.hostname: { name: "{{inventory_hostname}}" }
