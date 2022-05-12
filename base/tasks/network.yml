@@ -1,0 +1,13 @@
+- name: network
+  hosts: host1
+  become: true
+  tasks:
+  - name: base configuration
+    ansible.builtin.copy: { src: base.cfg, dest: /etc/network/interfaces }
+    notify: restart networking service
+  - name: enp3s0 configuration
+    ansible.builtin.copy: { src: enp3s0.cfg, dest: /etc/network/interfaces.d/ }
+    notify: restart networking service
+  handlers:
+  - name: restart networking service
+    ansible.builtin.service: { name: networking, state: restarted }
