@@ -1,2 +1,2 @@
-- name: set hostname
-  ansible.builtin.hostname: { name: "{{inventory_hostname}}" }
+- import_tasks: hostname.yml
+- import_tasks: network.yml
