@@ -2,5 +2,6 @@
   ansible.builtin.copy: { src: base.cfg, dest: /etc/network/interfaces }
   notify: restart networking service
 - name: enp3s0 configuration
-  ansible.builtin.copy: { src: enp3s0.cfg, dest: /etc/network/interfaces.d/ }
+  ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
   notify: restart networking service
+  loop: "{{ network | dict2items }}"
