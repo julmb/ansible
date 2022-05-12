@@ -1,4 +1,4 @@
-- name: restart networking service
+- name: restart networking
   ansible.builtin.service: { name: networking, state: restarted }
-- name: restart ssh service
+- name: restart ssh
   ansible.builtin.service: { name: ssh, state: restarted }
