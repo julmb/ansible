@@ -1,0 +1,25 @@
+- name: samba
+  hosts: host1
+  become: true
+  tasks:
+  - name: package
+    ansible.builtin.apt: { pkg: samba }
+  - name: users system
+    ansible.builtin.user: { name: "{{ item.key }}", create_home: false }
+    loop: "{{ users | dict2items }}"
+  - name: directories
+    ansible.builtin.file:
+      path: "{{ item.path }}"
+      state: directory
+      owner: "{{ item.user | default('nobody') }}"
+      mode: 0700
+    loop: "{{ samba.shares }}"
+  - name: users samba
+    samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
+    loop: "{{ users | dict2items }}"
+  - name: configuration
+    ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
+    notify: restart samba
+  handlers:
+  - name: restart samba
+    ansible.builtin.service: { name: smbd, state: restarted }

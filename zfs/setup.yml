@@ -1,0 +1,22 @@
+- name: zfs
+  hosts: host1
+  become: true
+  tasks:
+  - name: package
+    ansible.builtin.apt: { pkg: zfsutils-linux }
+  - name: configuration
+    ansible.builtin.template: { src: zfs.conf, dest: /etc/modprobe.d/ }
+  - name: kernel module
+    community.general.modprobe: { name: zfs }
+  - name: pools
+    zpool:
+      name: "{{ item.key }}"
+      vdevs: "{{ item.value.vdevs }}"
+      properties: "{{ item.value.properties | default(omit) }}"
+    loop: "{{ zfs.pools | dict2items }}"
+  - name: datasets
+    community.general.zfs:
+      name: "{{ item.key }}"
+      state: present
+      extra_zfs_properties: "{{ item.value | default(omit, true) }}"
+    loop: "{{ zfs.datasets | dict2items }}"
