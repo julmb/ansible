@@ -8,11 +8,11 @@
   loop: "{{ samba.users | dict2items }}"
 - name: directories
   ansible.builtin.file:
-    path: "{{ item.path }}"
+    path: "{{ item.value.path }}"
     state: directory
-    owner: "{{ item.user | default('nobody') }}"
+    owner: "{{ item.value.user | default('nobody') }}"
     mode: 0700
-  loop: "{{ samba.shares }}"
+  loop: "{{ samba.shares | dict2items }}"
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
   notify: restart samba
