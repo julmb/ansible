@@ -3,6 +3,9 @@
 - name: users system
   ansible.builtin.user: { name: "{{ item.key }}", create_home: false }
   loop: "{{ samba.users | dict2items }}"
+- name: users samba
+  samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
+  loop: "{{ samba.users | dict2items }}"
 - name: directories
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -10,9 +13,6 @@
     owner: "{{ item.user | default('nobody') }}"
     mode: 0700
   loop: "{{ samba.shares }}"
-- name: users samba
-  samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
-  loop: "{{ samba.users | dict2items }}"
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
   notify: restart samba
