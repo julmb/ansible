@@ -4,4 +4,4 @@
 - name: network interfaces
   ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
   notify: restart networking
-  loop: "{{ network | dict2items }}"
+  loop: "{{ interfaces | dict2items }}"
