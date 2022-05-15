@@ -2,9 +2,9 @@
     "keys": {
         "developer": {},
         "personal": {
-            "api_key": "{{ google.api_key }}",
-            "client_id": "{{ google.client_id }}",
-            "client_secret": "{{ google.client_secret }}"
+            "api_key": "{{ kodi.youtube.api_key }}",
+            "client_id": "{{ kodi.youtube.client_id }}",
+            "client_secret": "{{ kodi.youtube.client_secret }}"
         }
     }
 }
