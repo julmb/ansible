@@ -7,12 +7,24 @@
   ansible.builtin.user: { name: kodi }
 - name: lightdm configuration
   ansible.builtin.copy: { src: lightdm.conf, dest: /etc/lightdm/ }
-- name: youtube addon api keys
-  ansible.builtin.copy: { src: api_keys.json, dest: /home/kodi/.kodi/userdata/addon_data/plugin.video.youtube/ }
+
+# kodi configuration
 - name: repositories directory
-  ansible.builtin.file: { path: /home/kodi/.kodi/addons, state: directory }
+  ansible.builtin.file:
+    path: /home/kodi/.kodi/addons
+    state: directory
+    owner: kodi
+    group: kodi
 - name: jellyfin repository
   ansible.builtin.unarchive:
     src: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip
     dest: /home/kodi/.kodi/addons/
     remote_src: true
+    owner: kodi
+    group: kodi
+- name: youtube addon api keys
+  ansible.builtin.copy:
+    src: api_keys.json
+    dest: /home/kodi/.kodi/userdata/addon_data/plugin.video.youtube/
+    owner: kodi
+    group: kodi
