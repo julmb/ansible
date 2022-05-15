@@ -7,5 +7,7 @@
 - name: user
   #ansible.builtin.user: { name: kodi, create_home: false }
   ansible.builtin.user: { name: kodi }
+- name: lightdm configuration
+  ansible.builtin.copy: { src: lightdm.conf, dest: /etc/lightdm/ }
 - name: jellyfin plugin
   ansible.builtin.get_url: { url: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip, dest: . }
