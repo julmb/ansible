@@ -13,4 +13,7 @@
 - name: youtube addon api keys
   ansible.builtin.copy: { src: api_keys.json, dest: .kodi/userdata/addon_data/plugin.video.youtube/ }
 - name: jellyfin plugin
-  ansible.builtin.get_url: { url: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip, dest: /home/kodi/ }
+  ansible.builtin.unarchive:
+    src: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip
+    dest: /home/kodi/.kodi/addons
+    remote_src: true
