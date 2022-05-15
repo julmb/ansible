@@ -1,4 +1,3 @@
-# TODO: fix fonts
 - name: lightdm
   ansible.builtin.apt: { pkg: lightdm }
 - name: kodi
