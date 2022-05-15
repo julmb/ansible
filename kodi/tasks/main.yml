@@ -1,7 +1,5 @@
-- name: lightdm
-  ansible.builtin.apt: { pkg: lightdm }
-- name: kodi
-  ansible.builtin.apt: { pkg: [kodi, kodi-inputstream-adaptive] }
+- name: packages
+  ansible.builtin.apt: { pkg: [lightdm, kodi, kodi-inputstream-adaptive] }
 - name: user
   ansible.builtin.user: { name: kodi }
 - name: lightdm configuration
