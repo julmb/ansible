@@ -3,7 +3,7 @@
 - name: user
   ansible.builtin.user: { name: "{{ kodi.user }}" }
 - name: lightdm configuration
-  ansible.builtin.copy: { src: lightdm.conf, dest: /etc/lightdm/ }
+  ansible.builtin.template: { src: lightdm.conf, dest: /etc/lightdm/ }
 
 - name: repositories directory
   ansible.builtin.file:
