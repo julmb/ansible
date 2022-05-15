@@ -23,7 +23,7 @@
     owner: kodi
     group: kodi
 - name: youtube addon api keys
-  ansible.builtin.copy:
+  ansible.builtin.template:
     src: api_keys.json
     dest: /home/kodi/.kodi/userdata/addon_data/plugin.video.youtube/
     owner: kodi
