@@ -1,0 +1,10 @@
+{
+    "keys": {
+        "developer": {},
+        "personal": {
+            "api_key": "key",
+            "client_id": "id",
+            "client_secret": "secret"
+        }
+    }
+}
