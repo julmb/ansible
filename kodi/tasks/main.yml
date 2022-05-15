@@ -1,7 +1,6 @@
 # TODO: can plugin installation be automated?
 # TODO: can youtube keys be automated?
 # TODO: fix fonts
-# TODO: start kodi instead of gdm
 - name: package
   ansible.builtin.apt: { pkg: [lightdm, kodi, kodi-inputstream-adaptive] }
 - name: user
