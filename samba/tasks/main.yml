@@ -11,6 +11,7 @@
     path: "{{ item.value.path }}"
     state: directory
     owner: "{{ item.value.user | default('nobody') }}"
+    # TODO: since we are never sharing parent directories, we may not need these restrictive permissions
     mode: 0700
   loop: "{{ samba.shares | dict2items }}"
 - name: configuration
