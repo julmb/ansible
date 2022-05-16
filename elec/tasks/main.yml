@@ -1,26 +1,13 @@
-- name: packages
-  ansible.builtin.apt: { pkg: [lightdm, kodi, kodi-inputstream-adaptive, unzip] }
-- name: user
-  ansible.builtin.user: { name: "{{ kodi.user }}" }
-- name: lightdm configuration
-  ansible.builtin.template: { src: lightdm.conf, dest: /etc/lightdm/ }
-
 - name: repositories directory
   ansible.builtin.file:
     path: /home/{{ kodi.user }}/.kodi/addons
     state: directory
-    owner: "{{ kodi.user }}"
-    group: "{{ kodi.user }}"
 - name: jellyfin repository
   ansible.builtin.unarchive:
     src: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip
     dest: /home/{{ kodi.user }}/.kodi/addons/
     remote_src: true
-    owner: "{{ kodi.user }}"
-    group: "{{ kodi.user }}"
 - name: youtube addon api keys
   ansible.builtin.template:
     src: api_keys.json
     dest: /home/{{ kodi.user }}/.kodi/userdata/addon_data/plugin.video.youtube/
-    owner: "{{ kodi.user }}"
-    group: "{{ kodi.user }}"
