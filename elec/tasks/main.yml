@@ -1,13 +1,13 @@
 - name: repositories directory
   ansible.builtin.file:
-    path: /home/{{ kodi.user }}/.kodi/addons
+    path: .kodi/addons
     state: directory
 - name: jellyfin repository
   ansible.builtin.unarchive:
     src: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip
-    dest: /home/{{ kodi.user }}/.kodi/addons/
+    dest: .kodi/addons/
     remote_src: true
 - name: youtube addon api keys
   ansible.builtin.template:
     src: api_keys.json
-    dest: /home/{{ kodi.user }}/.kodi/userdata/addon_data/plugin.video.youtube/
+    dest: .kodi/userdata/addon_data/plugin.video.youtube/
