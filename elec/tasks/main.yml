@@ -1,4 +1,0 @@
-- name: jellyfin repository
-  ansible.builtin.get_url: { url: https://kodi.jellyfin.org/repository.jellyfin.kodi.zip, dest: . }
-- name: youtube addon api keys
-  ansible.builtin.template: { src: api_keys.json, dest: .kodi/userdata/addon_data/plugin.video.youtube/ }
