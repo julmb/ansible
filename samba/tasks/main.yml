@@ -9,11 +9,8 @@
   samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
   loop: "{{ samba.users | dict2items }}"
 - name: share directories
-  ansible.builtin.file:
-    path: "{{ item.value.path }}"
-    state: directory
-    owner: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'shared' }}"
-    group: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'shared' }}"
+  ansible.builtin.file: { path: "{{ item.value.path }}", state: directory, owner: "{{ user }}", group: "{{ user }}" }
+  vars: { user: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'shared' }}" }
   loop: "{{ samba.shares | dict2items }}"
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
