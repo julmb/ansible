@@ -11,6 +11,7 @@
     path: "{{ item.value.path }}"
     state: directory
     owner: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'nobody' }}"
+    group: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'nogroup' }}"
   loop: "{{ samba.shares | dict2items }}"
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
