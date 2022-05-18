@@ -72,9 +72,9 @@ def process(name, state, password, check):
 	return result | {"action": adjust(name, expected, actual)} if result["changed"] and not check else result
 
 def main():
-	name = dict(type = 'str', required = True)
-	state = dict(type = 'str', choices = ["present", "absent"], default = "present")
-	password = dict(type = 'str', no_log = True)
+	name = dict(type = "str", required = True)
+	state = dict(type = "str", choices = ["present", "absent"], default = "present")
+	password = dict(type = "str", no_log = True)
 	parameters = dict(name = name, state = state, password = password)
 	module = AnsibleModule(parameters, supports_check_mode = True)
 	result = process(module.params["name"], module.params["state"], module.params["password"], module.check_mode)

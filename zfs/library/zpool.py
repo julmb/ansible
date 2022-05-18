@@ -75,12 +75,12 @@ def process(module, name, state, vdevs, properties, check):
 	return result | {"action": adjust(module, name, expected, actual)} if result["changed"] and not check else result
 
 def main():
-	name = dict(type = 'str', required = True)
-	state = dict(type = 'str', choices = ["present", "absent"], default = "present")
-	vdevs = dict(type = 'list', elements = 'dict')
-	properties = dict(type = 'dict', default = {})
+	name = dict(type = "str", required = True)
+	state = dict(type = "str", choices = ["present", "absent"], default = "present")
+	vdevs = dict(type = "list", elements = "dict")
+	properties = dict(type = "dict", default = {})
 	parameters = dict(name = name, state = state, vdevs = vdevs, properties = properties)
-	required_if = [('state', 'present', ['vdevs'])]
+	required_if = [("state", "present", ["vdevs"])]
 	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["vdevs"], module.params["properties"], module.check_mode)
 	module.exit_json(**result)
