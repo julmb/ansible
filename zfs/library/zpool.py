@@ -45,34 +45,29 @@ def zpool_get(module, name, properties):
 def zpool_set(module, name, properties, current):
 	properties = {prop: value for prop, value in properties.items() if value != current[prop]}
 	for prop, value in properties.items(): run(module, "zpool set {}={} {}".format(prop, print_value(value), name))
-	return "set properties {} of {}".format(properties, name)
 def zpool_create(module, name, vdevs, properties):
 	if any(kind1 != "disk" and kind2 == "disk" for kind1, kind2 in pairs(list(map(fst, vdevs)))):
 		raise NotImplementedError("cannot create pool with disk vdev following group vdev", vdevs)
 	pvdevs = " ".join(devices if kind == "disk" else " ".join([kind] + devices) for kind, devices in vdevs)
 	pproperties = " ".join("-o {}={}".format(prop, print_value(value)) for prop, value in properties.items())
 	run(module, "zpool create {} {} {}".format(pproperties, name, pvdevs))
-	return "created zpool {}".format(name)
 def zpool_destroy(module, name):
 	run(module, "zpool destroy {}".format(name))
-	return "destroyed zpool {}".format(name)
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: return zpool_create(module, name, expected["vdevs"], expected["properties"])
-	if not expected and actual: return zpool_destroy(module, name)
-	if expected["vdevs"] != actual["vdevs"]:
-		raise NotImplementedError("vdev adjustment is not supported", actual["vdevs"], expected["vdevs"])
-	if expected["properties"] != actual["properties"]:
-		return zpool_set(module, name, expected["properties"], actual["properties"])
-	raise ValueError("impossible violation of actual vs. expected state")
+	if expected and not actual: zpool_create(module, name, expected["vdevs"], expected["properties"])
+	elif not expected and actual: zpool_destroy(module, name)
+	elif expected["vdevs"] != actual["vdevs"]: raise NotImplementedError("vdev adjustment is not supported", actual["vdevs"], expected["vdevs"])
+	elif expected["properties"] != actual["properties"]: zpool_set(module, name, expected["properties"], actual["properties"])
+	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, vdevs, properties, check):
 	vdevs = list(single(vdev.items()) for vdev in vdevs)
 	expected = dict(vdevs = vdevs, properties = properties) if state == "present" else None
 	status = zpool_status(module, name)
 	actual = dict(vdevs = status, properties = zpool_get(module, name, properties)) if status else None
-	result = dict(changed = actual != expected, expected = expected, actual = actual)
-	return result | {"action": adjust(module, name, expected, actual)} if result["changed"] and not check else result
+	if actual != expected and not check: adjust(module, name, expected, actual)
+	return dict(changed = actual != expected, expected = expected, actual = actual)
 
 def main():
 	name = dict(type = "str", required = True)
