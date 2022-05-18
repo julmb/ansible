@@ -38,34 +38,34 @@ def zpool_status(module, name):
 	list(iterate(lambda: None if "config:" in lines.pop(0) else "entry"))
 	vdevs = snd(parse_tree(lines[2:], 0))
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
-def zpool_get(module, name, properties):
-	if not properties: return properties
-	out = run(module, "zpool get -H -p -o property,value {} {}".format(",".join(properties), name))
+def zpool_get(module, name, props):
+	if not props: return props
+	out = run(module, "zpool get -H -p -o property,value {} {}".format(",".join(props), name))
 	return {prop: parse_value(value) for line in out.splitlines() for prop, value in [line.split("\t")]}
-def zpool_set(module, name, properties, current):
-	properties = {prop: value for prop, value in properties.items() if value != current[prop]}
-	for prop, value in properties.items(): run(module, "zpool set {}={} {}".format(prop, print_value(value), name))
-def zpool_create(module, name, vdevs, properties):
+def zpool_set(module, name, props, current):
+	props = {prop: value for prop, value in props.items() if value != current[prop]}
+	for prop, value in props.items(): run(module, "zpool set {}={} {}".format(prop, print_value(value), name))
+def zpool_create(module, name, vdevs, props):
 	if any(kind1 != "disk" and kind2 == "disk" for kind1, kind2 in pairs(list(map(fst, vdevs)))):
 		raise NotImplementedError("cannot create pool with disk vdev following group vdev", vdevs)
 	pvdevs = " ".join(devices if kind == "disk" else " ".join([kind] + devices) for kind, devices in vdevs)
-	pproperties = " ".join("-o {}={}".format(prop, print_value(value)) for prop, value in properties.items())
-	run(module, "zpool create {} {} {}".format(pproperties, name, pvdevs))
+	pprops = " ".join("-o {}={}".format(prop, print_value(value)) for prop, value in props.items())
+	run(module, "zpool create {} {} {}".format(pprops, name, pvdevs))
 def zpool_destroy(module, name):
 	run(module, "zpool destroy {}".format(name))
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: zpool_create(module, name, expected["vdevs"], expected["properties"])
+	if expected and not actual: zpool_create(module, name, expected["vdevs"], expected["props"])
 	elif not expected and actual: zpool_destroy(module, name)
 	elif expected["vdevs"] != actual["vdevs"]: module.fail_json("vdev adjustment is not supported", expected = expected, actual = actual)
-	elif expected["properties"] != actual["properties"]: zpool_set(module, name, expected["properties"], actual["properties"])
+	elif expected["props"] != actual["props"]: zpool_set(module, name, expected["props"], actual["props"])
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
-def process(module, name, state, vdevs, properties, check):
+def process(module, name, state, vdevs, props, check):
 	vdevs = list(single(vdev.items()) for vdev in vdevs)
-	expected = dict(vdevs = vdevs, properties = properties) if state == "present" else None
+	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
 	status = zpool_status(module, name)
-	actual = dict(vdevs = status, properties = zpool_get(module, name, properties)) if status else None
+	actual = dict(vdevs = status, props = zpool_get(module, name, props)) if status else None
 	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
