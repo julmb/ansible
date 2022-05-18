@@ -28,8 +28,9 @@ def zpool_get(module, name, props):
 	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
 	return {prop: parse_value(value) for line in out.splitlines() for prop, value in [line.split("\t")]}
 def zpool_set(module, name, props, current):
-	props = {prop: value for prop, value in props.items() if value != current[prop]}
-	for prop, value in props.items(): module.run_command("zpool set {}={} {}".format(prop, print_value(value), name), check_rc = True)
+	for prop, value in props.items():
+		if current[prop] != value:
+			module.run_command("zpool set {}={} {}".format(prop, print_value(value), name), check_rc = True)
 def zpool_create(module, name, vdevs, props):
 	if any(kind1 != "disk" and kind2 == "disk" for (kind1, _), (kind2, _) in pairwise(vdevs)):
 		module.fail_json("cannot create pool with disk vdev following group vdev", vdevs = vdevs)
