@@ -9,13 +9,6 @@ def pairs(sequence): return zip(sequence, sequence[1:])
 def iterate(get):
 	while item := get(): yield item
 
-def run(module, command, check = True):
-	code, out, err = module.run_command(command)
-	if code == 0: return out
-	if not check: return None
-	print(out); print(err)
-	raise ValueError("command returned error code", command, code)
-
 def parse_tree(lines, layer):
 	if not lines or not lines[0].startswith("\t" + layer * "  "): return None
 	return lines.pop(0).split()[0], list(iterate(lambda: parse_tree(lines, layer + 1)))
@@ -32,27 +25,27 @@ def print_value(value):
 	return str(value)
 
 def zpool_status(module, name):
-	out = run(module, "zpool status {}".format(name), False)
-	if not out: return None
+	rc, out, _ = module.run_command("zpool status {}".format(name))
+	if rc != 0: return None
 	lines = out.splitlines()
 	list(iterate(lambda: None if "config:" in lines.pop(0) else "entry"))
 	vdevs = snd(parse_tree(lines[2:], 0))
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	if not props: return props
-	out = run(module, "zpool get -H -p -o property,value {} {}".format(",".join(props), name))
+	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
 	return {prop: parse_value(value) for line in out.splitlines() for prop, value in [line.split("\t")]}
 def zpool_set(module, name, props, current):
 	props = {prop: value for prop, value in props.items() if value != current[prop]}
-	for prop, value in props.items(): run(module, "zpool set {}={} {}".format(prop, print_value(value), name))
+	for prop, value in props.items(): module.run_command("zpool set {}={} {}".format(prop, print_value(value), name), check_rc = True)
 def zpool_create(module, name, vdevs, props):
 	if any(kind1 != "disk" and kind2 == "disk" for kind1, kind2 in pairs(list(map(fst, vdevs)))):
 		raise NotImplementedError("cannot create pool with disk vdev following group vdev", vdevs)
 	pvdevs = " ".join(devices if kind == "disk" else " ".join([kind] + devices) for kind, devices in vdevs)
 	pprops = " ".join("-o {}={}".format(prop, print_value(value)) for prop, value in props.items())
-	run(module, "zpool create {} {} {}".format(pprops, name, pvdevs))
+	module.run_command("zpool create {} {} {}".format(pprops, name, pvdevs), check_rc = True)
 def zpool_destroy(module, name):
-	run(module, "zpool destroy {}".format(name))
+	module.run_command("zpool destroy {}".format(name), check_rc = True)
 
 def adjust(module, name, expected, actual):
 	if expected and not actual: zpool_create(module, name, expected["vdevs"], expected["props"])
