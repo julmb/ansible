@@ -10,7 +10,7 @@ def parse(line):
 def pdbedit_user(module, name):
 	rc, out, _ = module.run_command("pdbedit --user {} --verbose --smbpasswd-style".format(name))
 	if rc != 0: return None
-	return dict(parse(line) for line in out.splitlines())
+	return dict(map(parse, out.splitlines()))
 def pdbedit_create(module, name):
 	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")
 def pdbedit_delete(module, name):
