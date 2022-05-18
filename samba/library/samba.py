@@ -54,7 +54,8 @@ def main():
 	state = dict(type = "str", choices = ["present", "absent"], default = "present")
 	password = dict(type = "str", no_log = True)
 	parameters = dict(name = name, state = state, password = password)
-	module = AnsibleModule(parameters, supports_check_mode = True)
+	required_if = [("state", "present", ["password"])]
+	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["password"], module.check_mode)
 	module.exit_json(**result)
 
