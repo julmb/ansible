@@ -1,12 +1,7 @@
 #!/usr/bin/python
 
-from operator import itemgetter
-import ansible.module_utils.basic
-
-# TODO: replace this with itertools.pairwise in python 3.10
-def pairwise(sequence): return zip(sequence, sequence[1:])
-def iterate(get):
-	while item := get(): yield item
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.tools import fst, snd, single, pairwise, iterate
 
 def parse_tree(lines, layer):
 	if not lines or not lines[0].startswith("\t" + layer * "  "): return None
@@ -29,7 +24,7 @@ def zpool_status(module, name):
 	lines = out.splitlines()
 	list(iterate(lambda: None if "config:" in lines.pop(0) else "entry"))
 	_, vdevs = parse_tree(lines[2:], 0)
-	return list((name.split("-")[0], list(map(itemgetter(0), devices))) if devices else ("disk", name) for name, devices in vdevs)
+	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	if not props: return props
 	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
@@ -54,7 +49,7 @@ def adjust(module, name, expected, actual):
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, vdevs, props, check):
-	vdevs = list(item for vdev in vdevs for [item] in [vdev.items()])
+	vdevs = list(single(vdev.items()) for vdev in vdevs)
 	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
 	status = zpool_status(module, name)
 	actual = dict(vdevs = status, props = zpool_get(module, name, props)) if status else None
@@ -68,7 +63,7 @@ def main():
 	properties = dict(type = "dict", default = {})
 	parameters = dict(name = name, state = state, vdevs = vdevs, properties = properties)
 	required_if = [("state", "present", ["vdevs"])]
-	module = ansible.module_utils.basic.AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
+	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["vdevs"], module.params["properties"], module.check_mode)
 	module.exit_json(**result)
 
