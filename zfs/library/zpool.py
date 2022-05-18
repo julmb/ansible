@@ -3,10 +3,6 @@
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.tools import fst, snd, single, pairwise, iterate
 
-def parse_tree(lines, layer):
-	if not lines or not lines[0].startswith("\t" + layer * "  "): return None
-	return lines.pop(0).split()[0], list(iterate(lambda: parse_tree(lines, layer + 1)))
-
 def parse_value(text):
 	if text == "-": return None
 	if text == "off": return False
@@ -17,6 +13,10 @@ def print_value(value):
 	if value == False: return "off"
 	if value == True: return "on"
 	return str(value)
+
+def parse_tree(lines, layer):
+	if not lines or not lines[0].startswith("\t" + layer * "  "): return None
+	return lines.pop(0).split()[0], list(iterate(lambda: parse_tree(lines, layer + 1)))
 
 def zpool_status(module, name):
 	rc, out, _ = module.run_command("zpool status {}".format(name))
