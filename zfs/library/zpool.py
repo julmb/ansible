@@ -4,7 +4,6 @@ import ansible.module_utils.basic
 
 def fst(t): x, _ = t; return x
 def snd(t): _, y = t; return y
-def single(sequence): [item] = sequence; return item
 def pairs(sequence): return zip(sequence, sequence[1:])
 def iterate(get):
 	while item := get(): yield item
@@ -55,7 +54,7 @@ def adjust(module, name, expected, actual):
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, vdevs, props, check):
-	vdevs = list(single(vdev.items()) for vdev in vdevs)
+	vdevs = list(item for vdev in vdevs for [item] in [vdev.items()])
 	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
 	status = zpool_status(module, name)
 	actual = dict(vdevs = status, props = zpool_get(module, name, props)) if status else None
