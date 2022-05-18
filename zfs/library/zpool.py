@@ -58,7 +58,7 @@ def main():
 	name = dict(type = "str", required = True)
 	state = dict(type = "str", choices = ["present", "absent"], default = "present")
 	vdevs = dict(type = "list", elements = "dict")
-	properties = dict(type = "dict", default = {})
+	properties = dict(type = "dict", default = None)
 	parameters = dict(name = name, state = state, vdevs = vdevs, properties = properties)
 	required_if = [("state", "present", ["vdevs"])]
 	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
