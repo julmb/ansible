@@ -2,6 +2,7 @@
 
 import ansible.module_utils.basic
 
+# TODO: can we pattern match on 2-tuple so that this doesn't work on sequences?
 def fst(tuple): return tuple[0]
 def snd(tuple): return tuple[1]
 def single(sequence): [item] = sequence; return item
