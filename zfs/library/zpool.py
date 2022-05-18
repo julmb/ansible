@@ -29,7 +29,7 @@ def zpool_status(module, name):
 	if rc != 0: return None
 	lines = out.splitlines()
 	list(iterate(lambda: None if "config:" in lines.pop(0) else "entry"))
-	vdevs = snd(parse_tree(lines[2:], 0))
+	_, vdevs = parse_tree(lines[2:], 0)
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	if not props: return props
