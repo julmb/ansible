@@ -25,7 +25,6 @@ def zpool_status(module, name):
 	_, vdevs = parse_tree(list(islice(dropwhile(lambda line: "config:" not in line, out.splitlines()), 3, None)), 0)
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
-	if not props: return props
 	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
 	return {prop: parse_value(value) for line in out.splitlines() for prop, value in [line.split("\t")]}
 def zpool_set(module, name, props, current):
@@ -51,7 +50,7 @@ def process(module, name, state, vdevs, props, check):
 	vdevs = list(single(vdev.items()) for vdev in vdevs)
 	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
 	status = zpool_status(module, name)
-	actual = dict(vdevs = status, props = zpool_get(module, name, props)) if status else None
+	actual = dict(vdevs = status, props = zpool_get(module, name, props) if props else props) if status else None
 	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
