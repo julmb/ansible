@@ -50,8 +50,8 @@ def adjust(module, name, expected, actual):
 def process(module, name, state, vdevs, props, check):
 	vdevs = list(single(vdev.items()) for vdev in vdevs)
 	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
-	status = zpool_status(module, name)
-	actual = dict(vdevs = status, props = zpool_get(module, name, props) if props else props) if status else None
+	vdevs = zpool_status(module, name)
+	actual = dict(vdevs = vdevs, props = zpool_get(module, name, props) if props else props) if vdevs else None
 	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
