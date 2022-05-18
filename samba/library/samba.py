@@ -11,16 +11,15 @@ def pdbedit_user(module, name):
 	rc, out, _ = module.run_command("pdbedit --user {} --verbose --smbpasswd-style".format(name))
 	if rc != 0: return None
 	return dict(parse(line) for line in out.splitlines())
-def pdbedit_create(module, name, nt_hash):
+def pdbedit_create(module, name):
 	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")
-	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
 def pdbedit_delete(module, name):
 	module.run_command("pdbedit --delete --user {}".format(name), check_rc = True)
 def pdbedit_modify(module, name, nt_hash):
 	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: pdbedit_create(module, name, expected["nt_hash"])
+	if expected and not actual: pdbedit_create(module, name); pdbedit_modify(module, name, expected["nt_hash"])
 	if not expected and actual: pdbedit_delete(module, name)
 	if expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
 	raise ValueError("impossible violation of actual vs. expected state")
