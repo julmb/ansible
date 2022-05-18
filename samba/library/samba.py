@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-import hashlib, ansible.module_utils.basic
+import hashlib
+import ansible.module_utils.basic
 
 # TODO: backport this to zpool
 # TODO: is there a way to collect helper functions?
