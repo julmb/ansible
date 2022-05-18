@@ -38,7 +38,7 @@ def zpool_set(module, name, props, current):
 	props = {prop: value for prop, value in props.items() if value != current[prop]}
 	for prop, value in props.items(): module.run_command("zpool set {}={} {}".format(prop, print_value(value), name), check_rc = True)
 def zpool_create(module, name, vdevs, props):
-	if any(kind1 != "disk" and kind2 == "disk" for kind1, kind2 in pairs(list(map(fst, vdevs)))):
+	if any(kind1 != "disk" and kind2 == "disk" for (kind1, _), (kind2, _) in pairs(vdevs)):
 		module.fail_json("cannot create pool with disk vdev following group vdev", vdevs = vdevs)
 	pvdevs = " ".join(devices if kind == "disk" else " ".join([kind] + devices) for kind, devices in vdevs)
 	pprops = " ".join("-o {}={}".format(prop, print_value(value)) for prop, value in props.items())
