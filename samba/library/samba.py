@@ -11,28 +11,29 @@ def pdbedit_user(module, name):
 	rc, out, _ = module.run_command("pdbedit --user {} --verbose --smbpasswd-style".format(name))
 	if rc != 0: return None
 	return dict(parse(line) for line in out.splitlines())
-def pdbedit_create(module, name, password):
-	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = 2 * (password + "\n"))
-	return "added {} with password {}".format(name, password)
+def pdbedit_create(module, name, nt_hash):
+	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")
+	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
+	return "added {} with password {}".format(name, nt_hash)
 def pdbedit_delete(module, name):
 	module.run_command("pdbedit --delete --user {}".format(name), check_rc = True)
 	return "removed {}".format(name)
-def pdbedit_modify(module, name, password):
-	# echo -n <password> | iconv -t utf16le | openssl md4
-	hash_nt = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
-	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, hash_nt), check_rc = True)
-	return "set password for {} to {}".format(name, password)
+def pdbedit_modify(module, name, nt_hash):
+	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
+	return "set nt hash for {} to {}".format(name, nt_hash)
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: return pdbedit_create(module, name, expected["password"])
+	if expected and not actual: return pdbedit_create(module, name, expected["nt_hash"])
 	if not expected and actual: return pdbedit_delete(module, name)
-	if expected["password"] != actual["password"]: return pdbedit_modify(module, name, expected["password"])
+	if expected["nt_hash"] != actual["nt_hash"]: return pdbedit_modify(module, name, expected["nt_hash"])
 	raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, password, check):
-	expected = dict(password = password) if state == "present" else None
+	# echo -n <password> | iconv -t utf16le | openssl md4
+	nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
+	expected = dict(nt_hash = nt_hash) if state == "present" else None
 	entries = pdbedit_user(module, name)
-	actual = dict(password = entries["NT hash"]) if entries else None
+	actual = dict(nt_hash = entries["NT hash"]) if entries else None
 	result = dict(changed = actual != expected, expected = expected, actual = actual)
 	return result | {"action": adjust(module, name, expected, actual)} if result["changed"] and not check else result
 
