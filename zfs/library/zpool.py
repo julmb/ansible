@@ -2,9 +2,8 @@
 
 import ansible.module_utils.basic
 
-# TODO: can we pattern match on 2-tuple so that this doesn't work on sequences?
-def fst(tuple): return tuple[0]
-def snd(tuple): return tuple[1]
+def fst(t): x, _ = t; return x
+def snd(t): _, y = t; return y
 def single(sequence): [item] = sequence; return item
 def pairs(sequence): return zip(sequence, sequence[1:])
 def iterate(get):
