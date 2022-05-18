@@ -21,7 +21,7 @@ def parse(line):
 def pdbedit_user(module, name):
 	out = run(module, "pdbedit --user {} --verbose --smbpasswd-style".format(name), check = False)
 	if not out: return None
-	return dict(parse(line) for line in pdbedit.stdout.splitlines())
+	return dict(parse(line) for line in out.splitlines())
 def pdbedit_create(module, name, password):
 	run(module, "pdbedit --create --user {} --password-from-stdin".format(name), "{}\n{}\n".format(password, password))
 	return "added {} with password {}".format(name, password)
