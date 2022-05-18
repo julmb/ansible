@@ -3,33 +3,24 @@
 import hashlib
 import ansible.module_utils.basic
 
-# TODO: backport this to zpool
-# TODO: is there a way to collect helper functions?
-def run(module, command, data = None, check = True):
-	code, out, err = module.run_command(command, data = data)
-	if code == 0: return out
-	if not check: return None
-	print(out); print(err)
-	raise ValueError("command returned error code", command, code)
-
 def parse(line):
 	key, value = line.split(":", maxsplit = 1)
 	return key.strip(), value.strip() or None
 
 def pdbedit_user(module, name):
-	out = run(module, "pdbedit --user {} --verbose --smbpasswd-style".format(name), check = False)
-	if not out: return None
+	rc, out, _ = module.run_command("pdbedit --user {} --verbose --smbpasswd-style".format(name))
+	if rc != 0: return None
 	return dict(parse(line) for line in out.splitlines())
 def pdbedit_create(module, name, password):
-	run(module, "pdbedit --create --user {} --password-from-stdin".format(name), 2 * (password + "\n"))
+	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = 2 * (password + "\n"))
 	return "added {} with password {}".format(name, password)
 def pdbedit_delete(module, name):
-	run(module, "pdbedit --delete --user {}".format(name))
+	module.run_command("pdbedit --delete --user {}".format(name), check_rc = True)
 	return "removed {}".format(name)
 def pdbedit_modify(module, name, password):
 	# echo -n <password> | iconv -t utf16le | openssl md4
 	hash_nt = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
-	run(module, "pdbedit --modify --user {} --set-nt-hash {}".format(name, hash_nt))
+	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, hash_nt), check_rc = True)
 	return "set password for {} to {}".format(name, password)
 
 def adjust(module, name, expected, actual):
