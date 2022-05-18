@@ -7,6 +7,8 @@ from ansible.module_utils.basic import AnsibleModule
 # echo -n <password> | iconv -t utf16le | openssl md4
 def hash_nt(password): return hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
 
+# TODO: backport this to zpool
+# TODO: is there a way to collect helper functions?
 def run(module, command, data = None, check = True):
 	code, out, err = module.run_command(command, data = data)
 	if code == 0: return out
