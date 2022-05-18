@@ -66,6 +66,7 @@ def adjust(module, name, expected, actual):
 		return zpool_set(module, name, expected["properties"], actual["properties"])
 	raise ValueError("impossible violation of actual vs. expected state")
 
+# TODO: name is never used in expected/actual
 def process(module, name, state, vdevs, properties, check):
 	vdevs = list(single(vdev.items()) for vdev in vdevs)
 	expected = dict(name = name, vdevs = vdevs, properties = properties) if state == "present" else None
