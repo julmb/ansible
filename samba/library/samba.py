@@ -2,9 +2,6 @@
 
 import hashlib, ansible.module_utils.basic
 
-# echo -n <password> | iconv -t utf16le | openssl md4
-def hash_nt(password): return hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
-
 # TODO: backport this to zpool
 # TODO: is there a way to collect helper functions?
 def run(module, command, data = None, check = True):
@@ -39,7 +36,9 @@ def adjust(module, name, expected, actual):
 	raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, password, check):
-	expected = dict(password = hash_nt(password)) if state == "present" else None
+	# echo -n <password> | iconv -t utf16le | openssl md4
+	hash_nt = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
+	expected = dict(password = hash_nt) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(password = entries["NT hash"]) if entries else None
 	result = dict(changed = actual != expected, expected = expected, actual = actual)
