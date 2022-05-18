@@ -21,7 +21,7 @@ def pdbedit_user(module, name):
 	if not out: return None
 	return dict(parse(line) for line in out.splitlines())
 def pdbedit_create(module, name, password):
-	run(module, "pdbedit --create --user {} --password-from-stdin".format(name), "{}\n{}\n".format(password, password))
+	run(module, "pdbedit --create --user {} --password-from-stdin".format(name), 2 * (password + "\n"))
 	return "added {} with password {}".format(name, password)
 def pdbedit_delete(module, name):
 	run(module, "pdbedit --delete --user {}".format(name))
