@@ -27,7 +27,9 @@ def pdbedit_delete(module, name):
 	run(module, "pdbedit --delete --user {}".format(name))
 	return "removed {}".format(name)
 def pdbedit_modify(module, name, password):
-	run(module, "pdbedit --modify --user {} --set-nt-hash {}".format(name, password))
+	# echo -n <password> | iconv -t utf16le | openssl md4
+	hash_nt = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
+	run(module, "pdbedit --modify --user {} --set-nt-hash {}".format(name, hash_nt))
 	return "set password for {} to {}".format(name, password)
 
 def adjust(module, name, expected, actual):
@@ -37,9 +39,7 @@ def adjust(module, name, expected, actual):
 	raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, password, check):
-	# echo -n <password> | iconv -t utf16le | openssl md4
-	hash_nt = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
-	expected = dict(password = hash_nt) if state == "present" else None
+	expected = dict(password = password) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(password = entries["NT hash"]) if entries else None
 	result = dict(changed = actual != expected, expected = expected, actual = actual)
