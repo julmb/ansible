@@ -48,10 +48,9 @@ def adjust(module, name, expected, actual):
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, vdevs, props, check):
-	vdevs = list(single(vdev.items()) for vdev in vdevs)
-	expected = dict(vdevs = vdevs, props = props) if state == "present" else None
+	expected = dict(vdevs = list(single(vdev.items()) for vdev in vdevs), props = props or {}) if state == "present" else None
 	vdevs = zpool_status(module, name)
-	actual = dict(vdevs = vdevs, props = zpool_get(module, name, props) if props else props) if vdevs else None
+	actual = dict(vdevs = vdevs, props = zpool_get(module, name, props) if props else {}) if vdevs else None
 	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
