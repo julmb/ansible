@@ -57,7 +57,7 @@ def zpool_destroy(module, name):
 def adjust(module, name, expected, actual):
 	if expected and not actual: zpool_create(module, name, expected["vdevs"], expected["properties"])
 	elif not expected and actual: zpool_destroy(module, name)
-	elif expected["vdevs"] != actual["vdevs"]: raise NotImplementedError("vdev adjustment is not supported", actual["vdevs"], expected["vdevs"])
+	elif expected["vdevs"] != actual["vdevs"]: module.fail_json("vdev adjustment is not supported", expected = expected, actual = actual)
 	elif expected["properties"] != actual["properties"]: zpool_set(module, name, expected["properties"], actual["properties"])
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
