@@ -14,7 +14,7 @@ def pdbedit_user(module, name):
 def pdbedit_create(module, name, nt_hash):
 	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")
 	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
-	return "added {} with password {}".format(name, nt_hash)
+	return "added {} with nt hash {}".format(name, nt_hash)
 def pdbedit_delete(module, name):
 	module.run_command("pdbedit --delete --user {}".format(name), check_rc = True)
 	return "removed {}".format(name)
