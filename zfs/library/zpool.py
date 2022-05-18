@@ -26,7 +26,7 @@ def zpool_status(module, name):
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
-	return {prop: parse_value(value) for line in out.splitlines() for prop, value in [line.split("\t")]}
+	return dict((prop, parse_value(value)) for line in out.splitlines() for prop, value in [line.split("\t")])
 def zpool_set(module, name, props, current):
 	for prop, value in props.items():
 		if current[prop] != value:
