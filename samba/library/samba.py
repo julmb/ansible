@@ -14,18 +14,15 @@ def pdbedit_user(module, name):
 def pdbedit_create(module, name, nt_hash):
 	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")
 	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
-	return "added {} with nt hash {}".format(name, nt_hash)
 def pdbedit_delete(module, name):
 	module.run_command("pdbedit --delete --user {}".format(name), check_rc = True)
-	return "removed {}".format(name)
 def pdbedit_modify(module, name, nt_hash):
 	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
-	return "set nt hash for {} to {}".format(name, nt_hash)
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: return pdbedit_create(module, name, expected["nt_hash"])
-	if not expected and actual: return pdbedit_delete(module, name)
-	if expected["nt_hash"] != actual["nt_hash"]: return pdbedit_modify(module, name, expected["nt_hash"])
+	if expected and not actual: pdbedit_create(module, name, expected["nt_hash"])
+	if not expected and actual: pdbedit_delete(module, name)
+	if expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
 	raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, password, check):
@@ -34,8 +31,8 @@ def process(module, name, state, password, check):
 	expected = dict(nt_hash = nt_hash) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
-	result = dict(changed = actual != expected, expected = expected, actual = actual)
-	return result | {"action": adjust(module, name, expected, actual)} if result["changed"] and not check else result
+	if actual != expected and not check: adjust(module, name, expected, actual)
+	return dict(changed = actual != expected, expected = expected, actual = actual)
 
 def main():
 	name = dict(type = "str", required = True)
