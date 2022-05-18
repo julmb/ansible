@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from itertools import islice, dropwhile
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.tools import fst, snd, single, pairwise, iterate
 
@@ -21,9 +22,7 @@ def parse_tree(lines, layer):
 def zpool_status(module, name):
 	rc, out, _ = module.run_command("zpool status {}".format(name))
 	if rc != 0: return None
-	lines = out.splitlines()
-	list(iterate(lambda: "config:" not in lines.pop(0)))
-	_, vdevs = parse_tree(lines[2:], 0)
+	_, vdevs = parse_tree(list(islice(dropwhile(lambda line: "config:" not in line, out.splitlines()), 3, None)), 0)
 	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	if not props: return props
