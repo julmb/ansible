@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import hashlib
-
-from ansible.module_utils.basic import AnsibleModule
+import hashlib, ansible.module_utils.basic
 
 # echo -n <password> | iconv -t utf16le | openssl md4
 def hash_nt(password): return hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
@@ -53,7 +51,7 @@ def main():
 	password = dict(type = "str", no_log = True)
 	parameters = dict(name = name, state = state, password = password)
 	required_if = [("state", "present", ["password"])]
-	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
+	module = ansible.module_utils.basic.AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["password"], module.check_mode)
 	module.exit_json(**result)
 

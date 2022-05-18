@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from ansible.module_utils.basic import AnsibleModule
+import ansible.module_utils.basic
 
 def fst(tuple): return tuple[0]
 def snd(tuple): return tuple[1]
@@ -82,7 +82,7 @@ def main():
 	properties = dict(type = "dict", default = {})
 	parameters = dict(name = name, state = state, vdevs = vdevs, properties = properties)
 	required_if = [("state", "present", ["vdevs"])]
-	module = AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
+	module = ansible.module_utils.basic.AnsibleModule(parameters, required_if = required_if, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["vdevs"], module.params["properties"], module.check_mode)
 	module.exit_json(**result)
 
