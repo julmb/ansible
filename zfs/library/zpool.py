@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
+from operator import itemgetter
 import ansible.module_utils.basic
 
-def fst(t): x, _ = t; return x
-def snd(t): _, y = t; return y
 def pairs(sequence): return zip(sequence, sequence[1:])
 def iterate(get):
 	while item := get(): yield item
@@ -29,7 +28,7 @@ def zpool_status(module, name):
 	lines = out.splitlines()
 	list(iterate(lambda: None if "config:" in lines.pop(0) else "entry"))
 	_, vdevs = parse_tree(lines[2:], 0)
-	return list((name.split("-")[0], list(map(fst, devices))) if devices else ("disk", name) for name, devices in vdevs)
+	return list((name.split("-")[0], list(map(itemgetter(0), devices))) if devices else ("disk", name) for name, devices in vdevs)
 def zpool_get(module, name, props):
 	if not props: return props
 	_, out, _ = module.run_command("zpool get -H -p -o property,value {} {}".format(",".join(props), name), check_rc = True)
