@@ -18,9 +18,9 @@ def pdbedit_modify(module, name, nt_hash):
 	module.run_command("pdbedit --modify --user {} --set-nt-hash {}".format(name, nt_hash), check_rc = True)
 
 def adjust(module, name, expected, actual):
-	if expected and not actual: pdbedit_create(module, name); pdbedit_modify(module, name, expected["nt_hash"])
-	if not expected and actual: pdbedit_delete(module, name)
-	if expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
+	if expected and not actual: pdbedit_create(module, name); pdbedit_modify(module, name, expected["nt_hash"]); return
+	if not expected and actual: pdbedit_delete(module, name); return
+	if expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"]); return
 	raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, password, check):
