@@ -11,8 +11,8 @@ def parse_value(text):
 	try: return int(text); return float(text)
 	except ValueError: return text
 def print_value(value):
-	if value == False: return "off"
-	if value == True: return "on"
+	if value is False: return "off"
+	if value is True: return "on"
 	return str(value)
 
 def parse_tree(lines, layer):
