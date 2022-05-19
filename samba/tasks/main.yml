@@ -3,13 +3,18 @@
 - name: user share
   ansible.builtin.user: { name: share, create_home: false }
 - name: users system
-  ansible.builtin.user: { name: "{{ item.key }}", create_home: false }
+  ansible.builtin.user: { name: "{{ item.key }}", groups: [share], create_home: false, append: true }
   loop: "{{ samba.users | dict2items }}"
 - name: users samba
   samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
   loop: "{{ samba.users | dict2items }}"
 - name: share directories
-  ansible.builtin.file: { path: "{{ item.value.path }}", state: directory, owner: "{{ user }}", group: "{{ user }}" }
+  ansible.builtin.file:
+    path: "{{ item.value.path }}"
+    state: directory
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: 0775
   vars: { user: "{{ item.value.users[0] if item.value.users is defined and item.value.users | length == 1 else 'share' }}" }
   loop: "{{ samba.shares | dict2items }}"
 - name: configuration
