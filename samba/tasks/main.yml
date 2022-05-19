@@ -14,7 +14,7 @@
     state: directory
     owner: "{{ item.value.users[0] if single else 'share' }}"
     group: "{{ item.value.users[0] if single else 'share' }}"
-    mode: "{{ '0755' if single else '02775' }}"
+    mode: "{{ '0755' if single else '03775' }}"
   vars: { single: "{{ item.value.users | default | length == 1 }}" }
   loop: "{{ samba.shares | dict2items }}"
 - name: configuration
