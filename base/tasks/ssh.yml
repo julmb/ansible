@@ -2,5 +2,5 @@
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?ListenAddress "
-    line: ListenAddress {{ ssh.address }}
+    line: "{{ 'ListenAddress {}'.format(ssh.address) if ssh.address is defined else '#ListenAddress 0.0.0.0' }}"
   notify: restart ssh
