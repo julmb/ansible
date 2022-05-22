@@ -1,13 +1,13 @@
-- name: network base
+- name: base
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
   notify: restart networking
-- name: network loopback
+- name: loopback
   ansible.builtin.copy: { src: loopback.cfg, dest: /etc/network/interfaces.d/lo.cfg }
   notify: restart networking
-- name: network interfaces
+- name: interfaces
   ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
   notify: restart networking
   loop: "{{ network.interfaces | dict2items }}"
-- name: network nameservers
+- name: nameservers
   ansible.builtin.template: { src: resolv.conf, dest: "/etc/" }
   notify: restart networking
