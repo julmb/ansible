@@ -1,5 +1,3 @@
 - name: plain network
   ansible.builtin.apt: { name: [dhcpcd, dhcpcd5, resolvconf, openresolv], state: absent, purge: yes, autoremove: yes }
   notify: reboot
-- name: flush handlers
-  ansible.builtin.meta: flush_handlers
