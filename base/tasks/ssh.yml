@@ -1,6 +1,6 @@
 - name: ssh listen address
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
-    regexp: "^#?ListenAddress "
+    regexp: "^#?ListenAddress \\d+\\.\\d+\\.\\d+\\.\\d+"
     line: "{{ 'ListenAddress {}'.format(ssh.address) if ssh.address is defined else '#ListenAddress 0.0.0.0' }}"
   notify: restart ssh
