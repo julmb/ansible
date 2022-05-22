@@ -1,3 +1,2 @@
 - import_tasks: hostname.yml
-- import_tasks: network.yml
 - import_tasks: ssh.yml
