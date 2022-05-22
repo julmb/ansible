@@ -1,5 +1,8 @@
 - name: package
   ansible.builtin.package: { name: dnsmasq }
+- name: configuration
+  ansible.builtin.template: { src: dnsmasq.conf, dest: /etc/ }
+  notify: restart dnsmasq
 - name: hosts
   ansible.builtin.template: { src: hosts, dest: /etc/ }
   notify: restart dnsmasq
