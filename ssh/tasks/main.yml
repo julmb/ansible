@@ -1,4 +1,4 @@
-- name: ssh listen address
+- name: listen address
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: "^#?ListenAddress \\d+\\.\\d+\\.\\d+\\.\\d+"
