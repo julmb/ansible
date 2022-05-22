@@ -5,7 +5,7 @@
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
   notify: restart networking
 - name: network loopback
-  ansible.builtin.copy: { src: lo.cfg, dest: /etc/network/interfaces.d/ }
+  ansible.builtin.copy: { src: loopback.cfg, dest: /etc/network/interfaces.d/lo.cfg }
   notify: restart networking
 - name: network interfaces
   ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
