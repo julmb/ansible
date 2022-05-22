@@ -1,3 +1,5 @@
-- name: no dhcpcd
-  ansible.builtin.apt: { name: [dhcpcd, dhcpcd5], state: absent, purge: yes, autoremove: yes }
-  notify: restart networking
+- name: stop dhcpcd
+  ansible.builtin.service: { name: dhcpcd, state: stopped, enabled: no }
+# - name: no dhcpcd
+#   ansible.builtin.apt: { name: [dhcpcd, dhcpcd5], state: absent, purge: yes, autoremove: yes }
+#   notify: restart networking
