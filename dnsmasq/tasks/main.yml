@@ -1,2 +1,4 @@
 - name: package
   ansible.builtin.package: { name: dnsmasq }
+- name: hosts
+  ansible.builtin.template: { src: hosts, dest: /etc/ }
