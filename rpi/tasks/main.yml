@@ -1,2 +1,3 @@
 - name: dhcpcd disabled
-  ansible.builtin.service: { name: dhcpcd, state: stopped, enabled: no }
+  ansible.builtin.service: { name: dhcpcd, enabled: no }
+  notify: reboot
