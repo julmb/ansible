@@ -10,4 +10,3 @@
   loop: "{{ network.interfaces | dict2items }}"
 - name: nameservers
   ansible.builtin.template: { src: resolv.conf, dest: "/etc/" }
-  notify: restart networking
