@@ -1,3 +1,6 @@
+- name: no dhcpcd
+  ansible.builtin.package: { name: [dhcpcd, dhcpcd5], state: absent }
+  notify: restart networking
 - name: network base
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
   notify: restart networking
