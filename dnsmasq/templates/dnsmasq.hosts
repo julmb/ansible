@@ -1,6 +1,3 @@
-127.0.0.1	localhost
-127.0.1.1	{{ inventory_hostname }}
-
 {% for host, entry in dnsmasq.hosts.items() %}
 {{ entry.ip }}	{{ '{}.{}'.format(host, dnsmasq.domain) if dnsmasq.domain is defined }}	{{ host }}
 {% endfor %}
