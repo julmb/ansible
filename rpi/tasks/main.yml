@@ -2,3 +2,5 @@
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
 - name: plain network
   ansible.builtin.apt: { name: [dhcpcd, dhcpcd5, resolvconf, openresolv], state: absent, purge: yes, autoremove: yes }
+- name: reboot
+  ansible.builtin.reboot:
