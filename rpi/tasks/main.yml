@@ -1,7 +1,4 @@
-# TODO: stop dhcpcd so it does not interfere with dnsmasq?
-# TODO: what if we want an rpi to have dhcpcd? how can we make this a one-time thing?
-# TODO: how can we properly switch from one IP to the permanent one?
-# TODO: check contents of raspberrypi-net-mods
+- name: interfaces
+  ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
 - name: plain network
   ansible.builtin.apt: { name: [dhcpcd, dhcpcd5, resolvconf, openresolv], state: absent, purge: yes, autoremove: yes }
-  notify: reboot
