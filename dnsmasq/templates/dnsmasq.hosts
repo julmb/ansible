@@ -4,6 +4,8 @@
 {% endif %}
 {% endfor %}
 
+{% if dnsmasq.domains is defined %}
 {% for domain, ip in dnsmasq.domains.items() %}
 {{ ip }}	{{ domain }}
 {% endfor %}
+{% endif %}
