@@ -1,5 +1,9 @@
 {% for host, entry in dnsmasq.hosts.items() %}
 {% if entry.ip is defined %}
-{{ entry.ip }}	{{ host + '.' + dnsmasq.domain if dnsmasq.domain is defined }}	{{ host }}
+{{ entry.ip }}	{{ host }}
 {% endif %}
+{% endfor %}
+
+{% for domain, ip in dnsmasq.domains.items() %}
+{{ ip }}	{{ domain }}
 {% endfor %}
