@@ -16,3 +16,11 @@
     state: present
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ zfs.datasets | dict2items }}"
+- name: trim service
+  ansible.builtin.copy: { src: zfs-trim@.service, dest: /etc/systemd/system/ }
+  notify: reload systemd
+- name: trim timer
+  ansible.builtin.copy: { src: zfs-trim@.timer, dest: /etc/systemd/system/ }
+  notify: reload systemd
+- name: trim timer enabled
+  ansible.builtin.systemd: { name: zfs-trim@pool2.timer, enabled: yes, state: started }
