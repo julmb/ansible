@@ -21,4 +21,9 @@
   loop: [zpool-trim@.service, zpool-trim@.timer]
   notify: reload systemd
 - name: trim timer
-  ansible.builtin.systemd: { name: zpool-trim@pool2.timer, enabled: yes, state: started }
+  ansible.builtin.systemd:
+    name: zpool-trim@{{ item.key }}.timer
+    enabled: "{{ trim }}"
+    state: "{{ 'started' if trim else 'stopped' }}"
+  vars: { trim: "{{ item.value.trim | default(false) }}" }
+  loop: "{{ zfs.pools | dict2items }}"
