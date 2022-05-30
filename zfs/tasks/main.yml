@@ -18,8 +18,15 @@
   loop: "{{ zfs.datasets | dict2items }}"
 - name: systemd units
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
-  loop: [zpool-trim@.service, zpool-trim@.timer]
+  loop: [zpool-scrub@.service, zpool-scrub@.timer, zpool-trim@.service, zpool-trim@.timer]
   notify: reload systemd
+- name: scrub timer
+  ansible.builtin.systemd:
+    name: zpool-scrub@{{ item.key }}.timer
+    enabled: "{{ scrub }}"
+    state: "{{ 'started' if scrub else 'stopped' }}"
+  vars: { scrub: "{{ item.value.scrub | default(false) }}" }
+  loop: "{{ zfs.pools | dict2items }}"
 - name: trim timer
   ansible.builtin.systemd:
     name: zpool-trim@{{ item.key }}.timer

@@ -1,0 +1,8 @@
+[Unit]
+Description = zpool scrub on %i
+
+[Service]
+ExecStart = zpool scrub %i
+
+[Install]
+WantedBy = multi-user.target
