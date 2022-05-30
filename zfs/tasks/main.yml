@@ -23,14 +23,14 @@
 - name: scrub timer
   ansible.builtin.systemd:
     name: zpool-scrub@{{ item.key }}.timer
-    enabled: "{{ scrub }}"
-    state: "{{ 'started' if scrub else 'stopped' }}"
-  vars: { scrub: "{{ item.value.scrub | default(false) }}" }
+    enabled: "{{ enabled }}"
+    state: "{{ 'started' if enabled else 'stopped' }}"
+  vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ zfs.pools | dict2items }}"
 - name: trim timer
   ansible.builtin.systemd:
     name: zpool-trim@{{ item.key }}.timer
-    enabled: "{{ trim }}"
-    state: "{{ 'started' if trim else 'stopped' }}"
-  vars: { trim: "{{ item.value.trim | default(false) }}" }
+    enabled: "{{ enabled }}"
+    state: "{{ 'started' if enabled else 'stopped' }}"
+  vars: { enabled: "{{ item.value.trim | default(false) }}" }
   loop: "{{ zfs.pools | dict2items }}"
