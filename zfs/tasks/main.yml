@@ -16,18 +16,22 @@
     state: present
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ zfs.datasets | dict2items }}"
-- name: systemd units
+- name: systemd units scrub
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
-  loop: [zpool-scrub@.service, zpool-scrub@.timer, zpool-trim@.service, zpool-trim@.timer]
+  loop: [zpool-scrub@.service, zpool-scrub@.timer]
   notify: reload systemd
-- name: scrub timer
+- name: timer scrub
   ansible.builtin.systemd:
     name: zpool-scrub@{{ item.key }}.timer
     enabled: "{{ enabled }}"
     state: "{{ 'started' if enabled else 'stopped' }}"
   vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ zfs.pools | dict2items }}"
-- name: trim timer
+- name: systemd units trim
+  ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
+  loop: [zpool-trim@.service, zpool-trim@.timer]
+  notify: reload systemd
+- name: timer trim
   ansible.builtin.systemd:
     name: zpool-trim@{{ item.key }}.timer
     enabled: "{{ enabled }}"
