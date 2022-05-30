@@ -18,7 +18,7 @@
   loop: "{{ zfs.datasets | dict2items }}"
 - name: systemd units
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
-  loop: [zfs-trim@.service, zfs-trim@.timer]
+  loop: [zpool-trim@.service, zpool-trim@.timer]
   notify: reload systemd
 - name: trim timer
-  ansible.builtin.systemd: { name: zfs-trim@pool2.timer, enabled: yes, state: started }
+  ansible.builtin.systemd: { name: zpool-trim@pool2.timer, enabled: yes, state: started }
