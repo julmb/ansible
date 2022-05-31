@@ -2,4 +2,4 @@
 Description = zpool trim on %i
 
 [Service]
-ExecStart = zpool trim %i
+ExecStart = zpool trim -w %i

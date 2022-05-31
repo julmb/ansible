@@ -2,4 +2,4 @@
 Description = zpool scrub on %i
 
 [Service]
-ExecStart = zpool scrub %i
+ExecStart = zpool scrub -w %i
