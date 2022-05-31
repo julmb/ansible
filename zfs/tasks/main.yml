@@ -16,6 +16,7 @@
     state: present
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ zfs.datasets | dict2items }}"
+  # TODO: use zfs-scrub-monthly timer shipped with zfs 2.1.3
 - name: systemd units scrub
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
   loop: [zpool-scrub@.service, zpool-scrub@.timer]
@@ -27,6 +28,7 @@
     state: "{{ 'started' if enabled else 'stopped' }}"
   vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ zfs.pools | dict2items }}"
+  # TODO: use zfs-trim-monthly timer shipped with zfs x.x.x
 - name: systemd units trim
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
   loop: [zpool-trim@.service, zpool-trim@.timer]
