@@ -4,4 +4,5 @@
   ansible.builtin.template: { src: fan-duty.service, dest: /etc/systemd/system/ }
   notify: reload systemd
 - name: systemd unit enabled
-  ansible.builtin.systemd: { name: fan-duty, enabled: yes, state: started }
+  ansible.builtin.systemd: { name: fan-duty, enabled: yes }
+  notify: start service
