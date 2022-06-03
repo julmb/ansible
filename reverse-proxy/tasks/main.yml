@@ -1,6 +1,8 @@
 - name: package
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
-- name: configuration
+- name: docker configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: reverse-proxy/ }
-- name: enable
+- name: nginx configuration
+  ansible.builtin.copy: { src: default.conf, dest: reverse-proxy/ }
+- name: enabled
   community.docker.docker_compose: { project_src: reverse-proxy }
