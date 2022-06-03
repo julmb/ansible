@@ -3,7 +3,7 @@
 - name: service configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: reverse-proxy/ }
 - name: nginx configuration
-  ansible.builtin.copy: { src: default.conf, dest: reverse-proxy/ }
+  ansible.builtin.template: { src: default.conf, dest: reverse-proxy/ }
   notify: restart service
 - name: service
   community.docker.docker_compose: { project_src: reverse-proxy }
