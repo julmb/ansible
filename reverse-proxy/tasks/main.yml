@@ -1,4 +1,4 @@
-- name: package
+- name: docker
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
 - name: docker configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: reverse-proxy/ }
