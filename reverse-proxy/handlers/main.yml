@@ -1,0 +1,2 @@
+- name: restart container
+  community.docker.docker_compose: { project_src: reverse-proxy, restarted: yes }
