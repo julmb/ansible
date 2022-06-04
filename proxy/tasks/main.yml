@@ -1,5 +1,7 @@
 - name: docker
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
+- name: certbot
+  ansible.builtin.apt: { pkg: certbot }
 - name: service configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: proxy/ }
 - name: nginx configuration
