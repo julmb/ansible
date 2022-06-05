@@ -26,5 +26,3 @@
   ansible.builtin.template: { src: proxy.conf, dest: "proxy/configuration/{{ item.key }}.conf" }
   loop: "{{ proxy.entries | dict2items }}"
   notify: restart service
-
-# TODO: renew timer
