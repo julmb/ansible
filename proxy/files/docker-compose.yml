@@ -7,4 +7,5 @@ services:
     volumes:
       - ./configuration:/etc/nginx/conf.d:ro
       - ./webroot:/usr/share/nginx/html:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     ports: [80:80, 443:443]
