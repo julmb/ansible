@@ -15,8 +15,11 @@
   ansible.builtin.apt: { pkg: certbot }
 - name: certbot
   ansible.builtin.command:
-    cmd: certbot certonly --test-cert --non-interactive --agree-tos --email name@example.com --webroot -w proxy/webroot -d {{ item.key }}
+    cmd: certbot certonly --test-cert --non-interactive {{ account }} {{ entry }}
     creates: /etc/letsencrypt/live/{{ item.key }}/fullchain.pem
+  vars:
+    account: "{{ '--agree-tos' if proxy.acme.agree_tos | default }} {{ '--email {}'.format(proxy.acme.email) }}"
+    entry: --webroot -w proxy/webroot -d {{ item.key }}
   loop: "{{ proxy.entries | dict2items }}"
 
 - name: proxy configuration
