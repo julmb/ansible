@@ -6,7 +6,7 @@
   community.docker.docker_compose: { project_src: proxy }
 
 - name: default configuration
-  ansible.builtin.template: { src: default.conf, dest: proxy/configuration/ }
+  ansible.builtin.copy: { src: default.conf, dest: proxy/configuration/ }
   notify: restart service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
