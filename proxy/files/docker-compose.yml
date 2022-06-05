@@ -4,5 +4,7 @@ services:
   main:
     image: nginx
     restart: always
-    volumes: [./configuration:/etc/nginx/conf.d:ro]
+    volumes:
+      - ./configuration:/etc/nginx/conf.d:ro
+      - ./webroot:/usr/share/nginx/html:ro
     ports: [80:80, 443:443]
