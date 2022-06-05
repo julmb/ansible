@@ -13,9 +13,11 @@
   ansible.builtin.apt: { pkg: certbot }
 - name: certbot
   ansible.builtin.command:
-    cmd: certbot certonly --non-interactive --agree-tos --email name@example.com --webroot -w proxy/webroot -d gitea.example.com
+    cmd: certbot certonly --test-cert --non-interactive --agree-tos --email name@example.com --webroot -w proxy/webroot -d gitea.example.com
     creates: /etc/letsencrypt/live/gitea.example.com/fullchain.pem
 
 - name: proxy configuration
   ansible.builtin.template: { src: proxy.conf, dest: proxy/configuration/ }
   notify: restart service
+
+# TODO: renew timer
