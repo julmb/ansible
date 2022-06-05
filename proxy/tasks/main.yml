@@ -2,15 +2,20 @@
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
 - name: service configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: proxy/ }
-- name: nginx configuration
-  ansible.builtin.template: { src: proxy.conf, dest: proxy/configuration/ }
-  notify: restart service
 - name: service
   community.docker.docker_compose: { project_src: proxy }
+
+- name: default configuration
+  ansible.builtin.template: { src: default.conf, dest: proxy/configuration/ }
+  notify: restart service
 
 - name: certbot package
   ansible.builtin.apt: { pkg: certbot }
 - name: certbot
   ansible.builtin.command:
-    cmd: certbot certonly --test-cert --webroot -w proxy/webroot -d gitea.example.com
+    cmd: certbot certonly --non-interactive --agree-tos --email name@example.com --webroot -w proxy/webroot -d gitea.example.com
     creates: /etc/letsencrypt/live/gitea.example.com/fullchain.pem
+
+- name: proxy configuration
+  ansible.builtin.template: { src: proxy.conf, dest: proxy/configuration/ }
+  notify: restart service
