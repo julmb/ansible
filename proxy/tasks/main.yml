@@ -12,5 +12,5 @@
   ansible.builtin.apt: { pkg: certbot }
 - name: certbot
   ansible.builtin.command:
-    cmd: certbot certonly --test-cert --webroot -w webroot -d gitea.example.com
+    cmd: certbot certonly --test-cert --webroot -w proxy/webroot -d gitea.example.com
     creates: /etc/letsencrypt/live/gitea.example.com/fullchain.pem
