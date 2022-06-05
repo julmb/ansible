@@ -1,8 +1,8 @@
-- name: docker
+- name: docker package
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
-- name: service configuration
+- name: docker compose definition
   ansible.builtin.copy: { src: docker-compose.yml, dest: proxy/ }
-- name: service
+- name: docker compose up
   community.docker.docker_compose: { project_src: proxy }
 
 - name: default configuration
@@ -22,7 +22,6 @@
     email: "{{ '--email {}'.format(proxy.acme.email) if proxy.acme.email is defined }}"
     installer: --webroot --webroot-path proxy/webroot --domain {{ item.key }}
   loop: "{{ proxy.entries | dict2items }}"
-
 - name: proxy configuration
   ansible.builtin.template: { src: proxy.conf, dest: "proxy/configuration/{{ item.key }}.conf" }
   loop: "{{ proxy.entries | dict2items }}"
