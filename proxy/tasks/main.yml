@@ -17,7 +17,8 @@
     creates: /etc/letsencrypt/live/gitea.example.com/fullchain.pem
 
 - name: proxy configuration
-  ansible.builtin.template: { src: proxy.conf, dest: proxy/configuration/ }
+  ansible.builtin.template: { src: proxy.conf, dest: "proxy/configuration/{{ item.key }}.conf" }
+  loop: "{{ proxy.entries | dict2items }}"
   notify: restart service
 
 # TODO: renew timer
