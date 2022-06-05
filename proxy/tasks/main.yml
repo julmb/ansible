@@ -5,7 +5,7 @@
 - name: service configuration
   ansible.builtin.copy: { src: docker-compose.yml, dest: proxy/ }
 - name: nginx configuration
-  ansible.builtin.template: { src: default.conf, dest: proxy/ }
+  ansible.builtin.template: { src: proxy.conf, dest: proxy/configuration/ }
   notify: restart service
 - name: service
   community.docker.docker_compose: { project_src: proxy }
