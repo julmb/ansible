@@ -1,13 +1,13 @@
-{% if dnsmasq.hosts is defined %}
-{% for host, entry in dnsmasq.hosts.items() %}
+{% if hosts is defined %}
+{% for host, entry in hosts.items() %}
 {% if entry.ip is defined %}
 {{ entry.ip }}	{{ host }}
 {% endif %}
 {% endfor %}
 {% endif %}
 
-{% if dnsmasq.domains is defined %}
-{% for domain, ip in dnsmasq.domains.items() %}
+{% if domains is defined %}
+{% for domain, ip in domains.items() %}
 {{ ip }}	{{ domain }}
 {% endfor %}
 {% endif %}
