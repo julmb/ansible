@@ -6,7 +6,7 @@
   notify: restart networking
 - name: interfaces
   ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
-  notify: restart networking
   loop: "{{ interfaces | dict2items }}"
+  notify: restart networking
 - name: nameservers
   ansible.builtin.template: { src: resolv.conf, dest: "/etc/" }
