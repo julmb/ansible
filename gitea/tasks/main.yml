@@ -5,8 +5,10 @@
 - name: docker compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }
 
-- name: user
+- name: administrator
   community.docker.docker_container_exec:
     container: gitea_main_1
     user: 1000
-    command: gitea admin user create --admin --username user1 --password password --email name@example.com
+    command: gitea admin user create --admin {{ user }}
+  vars:
+    user: --username {{ admin.username }} --password {{ admin.password }} --email {{ admin.email }}
