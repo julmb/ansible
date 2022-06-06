@@ -4,10 +4,10 @@
   ansible.builtin.user: { name: share, create_home: false }
 - name: users system
   ansible.builtin.user: { name: "{{ item.key }}", groups: [share], create_home: false, append: true }
-  loop: "{{ samba.users | dict2items }}"
+  loop: "{{ users | dict2items }}"
 - name: users samba
   samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
-  loop: "{{ samba.users | dict2items }}"
+  loop: "{{ users | dict2items }}"
 - name: share directories
   ansible.builtin.file:
     path: "{{ item.value.path }}"
@@ -16,7 +16,7 @@
     group: "{{ item.value.users[0] if single else 'share' }}"
     mode: "{{ '0755' if single else '02775' }}"
   vars: { single: "{{ item.value.users | default | length == 1 }}" }
-  loop: "{{ samba.shares | dict2items }}"
+  loop: "{{ shares | dict2items }}"
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
   notify: restart samba
