@@ -8,7 +8,16 @@
 - name: administrator
   community.docker.docker_container_exec:
     container: gitea_main_1
-    user: 1000
-    command: gitea admin user create --admin {{ user }}
+    user: git
+    command: >
+      gitea admin user create
+      --admin
+      --username {{ admin.username }}
+      --password {{ admin.password }}
+      --email {{ admin.email }}
   vars:
-    user: --username {{ admin.username }} --password {{ admin.password }} --email {{ admin.email }}
+    created: "New user '{{ admin.username }}' has been successfully created!"
+    exists: "CreateUser: user already exists [name: {{ admin.username }}]"
+  register: result
+  failed_when: result.rc != 0 and exists not in result.stdout
+  changed_when: result.rc == 0 and created in result.stdout
