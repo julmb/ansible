@@ -1,2 +1,2 @@
 - name: restart service
-  community.docker.docker_compose: { project_src: proxy, restarted: yes }
+  community.docker.docker_compose: { project_src: "{{ path }}", restarted: yes }

@@ -1,12 +1,12 @@
 - name: docker package
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
 - name: docker compose definition
-  ansible.builtin.copy: { src: docker-compose.yml, dest: "{{ proxy.path }}/" }
+  ansible.builtin.copy: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: docker compose up
-  community.docker.docker_compose: { project_src: "{{ proxy.path }}" }
+  community.docker.docker_compose: { project_src: "{{ path }}" }
 
 - name: default configuration
-  ansible.builtin.copy: { src: default.conf, dest: "{{ proxy.path }}/configuration/" }
+  ansible.builtin.copy: { src: default.conf, dest: "{{ path }}/configuration/" }
   notify: restart service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
@@ -18,11 +18,11 @@
     cmd: certbot certonly --test-cert --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
     creates: /etc/letsencrypt/live/{{ item.key }}/fullchain.pem
   vars:
-    agree_tos: "{{ '--agree-tos' if proxy.acme.agree_tos is defined and proxy.acme.agree_tos }}"
-    email: "{{ '--email {}'.format(proxy.acme.email) if proxy.acme.email is defined }}"
-    installer: --webroot --webroot-path {{ proxy.path }}/webroot --domain {{ item.key }}
-  loop: "{{ proxy.entries | dict2items }}"
+    agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
+    email: "{{ '--email {}'.format(acme.email) if acme.email is defined }}"
+    installer: --webroot --webroot-path {{ path }}/webroot --domain {{ item.key }}
+  loop: "{{ entries | dict2items }}"
 - name: proxy configuration
-  ansible.builtin.template: { src: proxy.conf, dest: "{{ proxy.path }}/configuration/{{ item.key }}.conf" }
-  loop: "{{ proxy.entries | dict2items }}"
+  ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
+  loop: "{{ entries | dict2items }}"
   notify: restart service
