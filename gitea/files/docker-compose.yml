@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  main:
+    image: gitea/gitea
+    restart: always
+    volumes: [./data:/data]
+    ports: [192.168.0.53:80:80, 192.168.0.53:22:22]
+    environment:
+      GITEA____APP_NAME: Gitea
+      GITEA__security__INSTALL_LOCK: "true"
+      GITEA__SERVER__ROOT_URL: https://gitea.example.com
+      GITEA__SERVER__PROTOCOL: http
+      GITEA__SERVER__DOMAIN: host1.local
+      GITEA__SERVER__HTTP_PORT: 80
+      GITEA__DATABASE__DB_TYPE: sqlite3
+      GITEA__OPENID__ENABLE_OPENID_SIGNIN: "false"
+      GITEA__INDEXER__REPO_INDEXER_ENABLED: "true"
+      GITEA__REPOSITORY__DEFAULT_REPO_UNITS: repo.code
+      GITEA__SERVICE__DISABLE_REGISTRATION: "true"
+      GITEA__SERVICE__DEFAULT_ALLOW_CREATE_ORGANIZATION: "false"
+      GITEA__SERVICE__DEFAULT_ENABLE_TIMETRACKING: "false"
+      GITEA__PICTURE__ENABLE_FEDERATED_AVATAR: "false"

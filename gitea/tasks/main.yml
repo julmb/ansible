@@ -1,0 +1,15 @@
+- name: gitea
+  hosts: host1
+  become: true
+  tasks:
+  - name: docker
+    ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
+  - name: configuration
+    ansible.builtin.copy: { src: docker-compose.yml, dest: /mnt/pool2/services/gitea/ }
+  - name: enable
+    community.docker.docker_compose: { project_src: /mnt/pool2/services/gitea }
+  - name: user
+    community.docker.docker_container_exec:
+      container: gitea_main_1
+      user: 1000
+      command: gitea admin user create --admin --username user1 --password password --email name@example.com
