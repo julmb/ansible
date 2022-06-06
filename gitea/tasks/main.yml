@@ -15,9 +15,6 @@
       --username {{ admin.username }}
       --password {{ admin.password }}
       --email {{ admin.email }}
-  vars:
-    created: "New user '{{ admin.username }}' has been successfully created!"
-    exists: "CreateUser: user already exists [name: {{ admin.username }}]"
   register: result
-  failed_when: result.rc != 0 and exists not in result.stdout
-  changed_when: result.rc == 0 and created in result.stdout
+  failed_when: result.rc != 0 and 'user already exists' not in result.stdout
+  changed_when: result.rc == 0
