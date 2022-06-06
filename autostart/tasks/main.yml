@@ -1,5 +1,3 @@
-# - name: package
-#   ansible.builtin.apt: { pkg: ipmitool }
 - name: systemd unit
   ansible.builtin.template: { src: "autostart.service", dest: "/etc/systemd/system/{{ service }}.service" }
   notify: reload systemd
