@@ -5,7 +5,9 @@ services:
     image: gitea/gitea
     restart: always
     volumes: [./data:/data]
-    ports: [192.168.0.53:80:80, 192.168.0.53:22:22]
+    ports:
+    - "{{ address }}:80:80"
+    - "{{ address }}:22:22"
     environment:
       GITEA____APP_NAME: Gitea
       GITEA__SECURITY__INSTALL_LOCK: "true"
