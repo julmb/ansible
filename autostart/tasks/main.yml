@@ -1,6 +1,5 @@
 - name: systemd unit
   ansible.builtin.template: { src: "autostart.service", dest: "/etc/systemd/system/{{ service }}.service" }
-  notify: [reload systemd, start service]
+  notify: run autostart service once
 - name: systemd unit enabled
-  ansible.builtin.systemd: { name: "{{ service }}", enabled: yes }
-  notify: start service
+  ansible.builtin.systemd: { name: "{{ service }}", enabled: yes, daemon_reload: yes }

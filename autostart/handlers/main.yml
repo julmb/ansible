@@ -1,4 +1,2 @@
-- name: reload systemd
-  ansible.builtin.systemd: { daemon_reload: true }
-- name: start service
+- name: run autostart service once
   ansible.builtin.systemd: { name: "{{ service }}", state: started }
