@@ -1,8 +1,0 @@
-[Unit]
-Description = set fan duty for EPYC3101D4I-2T
-
-[Service]
-ExecStart = ipmitool raw 0x3a 0x05 0x01 0x00 {{ hardware.fan_duty | join(' ') }}
-
-[Install]
-WantedBy = multi-user.target
