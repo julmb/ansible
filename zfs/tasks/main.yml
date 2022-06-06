@@ -20,23 +20,23 @@
 - name: systemd units scrub
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
   loop: [zpool-scrub@.service, zpool-scrub@.timer]
-  notify: reload systemd
 - name: timer scrub
   ansible.builtin.systemd:
     name: zpool-scrub@{{ item.key }}.timer
     enabled: "{{ enabled }}"
     state: "{{ 'started' if enabled else 'stopped' }}"
+    daemon_reload: yes
   vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ pools | dict2items }}"
   # TODO: use zfs-trim-monthly timer shipped with zfs x.x.x
 - name: systemd units trim
   ansible.builtin.copy: { src: "{{ item }}", dest: /etc/systemd/system/ }
   loop: [zpool-trim@.service, zpool-trim@.timer]
-  notify: reload systemd
 - name: timer trim
   ansible.builtin.systemd:
     name: zpool-trim@{{ item.key }}.timer
     enabled: "{{ enabled }}"
     state: "{{ 'started' if enabled else 'stopped' }}"
+    daemon_reload: yes
   vars: { enabled: "{{ item.value.trim | default(false) }}" }
   loop: "{{ pools | dict2items }}"
