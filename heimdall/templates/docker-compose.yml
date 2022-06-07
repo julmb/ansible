@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  heimdall:
+    image: linuxserver/heimdall
+    restart: unless-stopped
+    volumes:
+    - ./config:/config
+    ports:
+    - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
+    - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
