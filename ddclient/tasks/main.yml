@@ -2,3 +2,4 @@
   ansible.builtin.package: { name: ddclient }
 - name: configuration
   ansible.builtin.template: { src: ddclient.conf, dest: /etc/ }
+  notify: restart ddclient
