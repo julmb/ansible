@@ -6,8 +6,8 @@ services:
     restart: always
     volumes: [./data:/data]
     ports:
-    - {{ address }}:80:80
-    - {{ address }}:22:22
+    - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
+    - {{ '{}:22:22'.format(address) if address is defined else '22:22' }}
     environment:
       GITEA____APP_NAME: {{ title }}
       GITEA__SECURITY__INSTALL_LOCK: "true"
