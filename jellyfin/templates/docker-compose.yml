@@ -5,8 +5,8 @@ services:
     image: jellyfin/jellyfin
     restart: always
     volumes:
-    - /mnt/pool2/services/jellyfin/config:/config
-    - /mnt/pool2/services/jellyfin/cache:/cache
+    - ./config:/config
+    - ./cache:/cache
     - /mnt/pool1/files/user1:/media/user1:ro
     - /mnt/pool1/files/user2:/media/user2:ro
     ports:
