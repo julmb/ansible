@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  main:
+    image: jellyfin/jellyfin
+    restart: always
+    volumes:
+    - /mnt/pool2/services/jellyfin/config:/config
+    - /mnt/pool2/services/jellyfin/cache:/cache
+    - /mnt/pool1/files/user1:/media/user1:ro
+    - /mnt/pool1/files/user2:/media/user2:ro
+    ports: [192.168.0.54:80:8096]
