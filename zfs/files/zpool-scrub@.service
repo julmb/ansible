@@ -1,5 +1,0 @@
-[Unit]
-Description = zpool scrub on %i
-
-[Service]
-ExecStart = zpool scrub -w %i
