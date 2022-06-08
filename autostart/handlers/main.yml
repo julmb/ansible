@@ -1,2 +1,0 @@
-- name: run autostart service once
-  ansible.builtin.systemd: { name: "{{ service }}", state: started }
