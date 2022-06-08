@@ -1,4 +1,4 @@
-- name: systemd unit
-  ansible.builtin.template: { src: "autostart.service", dest: "/etc/systemd/system/{{ service }}.service" }
-- name: systemd unit enabled
+- name: systemd unit service
+  ansible.builtin.template: { src: service.ini, dest: "/etc/systemd/system/{{ service }}.service" }
+- name: systemd service
   ansible.builtin.systemd: { name: "{{ service }}", enabled: yes, daemon_reload: yes }
