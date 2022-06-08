@@ -1,4 +1,0 @@
-- name: install
-  ansible.builtin.import_role: { name: systemd/timer-install }
-- name: enable
-  ansible.builtin.import_role: { name: systemd/timer-enable }
