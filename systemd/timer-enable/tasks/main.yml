@@ -1,0 +1,6 @@
+- name: systemd timer
+  ansible.builtin.systemd:
+    name: "{{ service }}.timer"
+    enabled: "{{ enabled }}"
+    state: "{{ 'started' if enabled else 'stopped' }}"
+    daemon_reload: yes

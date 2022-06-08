@@ -2,9 +2,3 @@
   ansible.builtin.template: { src: service.ini, dest: "/etc/systemd/system/{{ service }}.service" }
 - name: systemd unit timer
   ansible.builtin.template: { src: timer.ini, dest: "/etc/systemd/system/{{ service }}.timer" }
-- name: systemd timer
-  ansible.builtin.systemd:
-    name: "{{ service }}.timer"
-    enabled: "{{ enabled }}"
-    state: "{{ 'started' if enabled else 'stopped' }}"
-    daemon_reload: yes
