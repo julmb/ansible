@@ -5,8 +5,8 @@ services:
     image: nginx
     volumes:
     - ./configuration:/etc/nginx/conf.d:ro
-    - ./webroot:/usr/share/nginx/html:ro
     - ./letsencrypt:/etc/letsencrypt:ro
+    - ./webroot:/usr/share/nginx/html:ro
     ports:
     - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
     - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
