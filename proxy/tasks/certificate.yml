@@ -12,5 +12,4 @@
   when: not certificate.stat.exists
 - name: proxy configuration
   ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
-  # TODO: restart nginx only
-  notify: restart proxy containers
+  notify: restart nginx service

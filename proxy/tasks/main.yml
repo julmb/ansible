@@ -9,8 +9,7 @@
 
 - name: default configuration
   ansible.builtin.copy: { src: default.conf, dest: "{{ path }}/configuration/" }
-  # TODO: restart nginx only
-  notify: restart proxy containers
+  notify: restart nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
 - name: certificates
