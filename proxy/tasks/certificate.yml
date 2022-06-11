@@ -1,6 +1,3 @@
-- name: "{{ item.key }} check"
-  ansible.builtin.stat: { path: "{{ path }}/letsencrypt/live/{{ item.key }}/fullchain.pem" }
-  register: certificate
 - name: "{{ item.key }} certificate"
   community.docker.docker_container_exec:
     container: proxy_certbot_1
@@ -9,7 +6,8 @@
     agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
     email: "{{ '--email {}'.format(acme.email) if acme.email is defined }}"
     installer: --webroot --webroot-path /webroot --domain {{ item.key }}
-  when: not certificate.stat.exists
+  register: certbot
+  changed_when: not 'no action taken' in certbot.stdout
 - name: "{{ item.key }} configuration"
   ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
   notify: restart nginx service
