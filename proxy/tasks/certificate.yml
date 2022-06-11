@@ -1,5 +1,5 @@
 - name: certificate check
-  ansible.builtin.stat: { path: "/etc/letsencrypt/live/{{ item.key }}/fullchain.pem" }
+  ansible.builtin.stat: { path: "{{ path }}/letsencrypt/live/{{ item.key }}/fullchain.pem" }
   register: certificate
 - name: certificate
   community.docker.docker_container_exec:
