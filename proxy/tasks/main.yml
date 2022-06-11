@@ -2,27 +2,17 @@
   ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
 - name: docker compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
+- name: certbot docker container
+  ansible.builtin.copy: { src: certbot, dest: "{{ path }}/" }
 - name: docker compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }
 
 - name: default configuration
   ansible.builtin.copy: { src: default.conf, dest: "{{ path }}/configuration/" }
+  # TODO: restart nginx only
   notify: restart proxy containers
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
-
-- name: certbot package
-  ansible.builtin.apt: { pkg: certbot }
-- name: certbot
-  ansible.builtin.command:
-    cmd: certbot certonly --test-cert --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
-    creates: /etc/letsencrypt/live/{{ item.key }}/fullchain.pem
-  vars:
-    agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
-    email: "{{ '--email {}'.format(acme.email) if acme.email is defined }}"
-    installer: --webroot --webroot-path {{ path }}/webroot --domain {{ item.key }}
+- name: certificates
+  ansible.builtin.include_tasks: certificate.yml
   loop: "{{ entries | dict2items }}"
-- name: proxy configuration
-  ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
-  loop: "{{ entries | dict2items }}"
-  notify: restart proxy containers

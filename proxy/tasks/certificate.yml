@@ -1,0 +1,16 @@
+- name: certificate check
+  ansible.builtin.stat: { path: "/etc/letsencrypt/live/{{ item.key }}/fullchain.pem" }
+  register: certificate
+- name: certificate
+  community.docker.docker_container_exec:
+    container: proxy_certbot_1
+    command: certbot certonly --test-cert --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
+  vars:
+    agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
+    email: "{{ '--email {}'.format(acme.email) if acme.email is defined }}"
+    installer: --webroot --webroot-path /webroot --domain {{ item.key }}
+  when: not certificate.stat.exists
+- name: proxy configuration
+  ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
+  # TODO: restart nginx only
+  notify: restart proxy containers
