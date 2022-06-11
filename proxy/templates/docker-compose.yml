@@ -11,7 +11,7 @@ services:
     - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
     - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
   certbot:
-    build: https://github.com/julmb/certbot.git
+    build: https://github.com/julmb/certbot.git#main
     volumes:
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot
