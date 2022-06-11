@@ -11,7 +11,6 @@ services:
     environment:
       GITEA____APP_NAME: {{ title }}
       GITEA__SECURITY__INSTALL_LOCK: "true"
-      GITEA__SERVER__PROTOCOL: http
       GITEA__SERVER__DOMAIN: {{ server.http }}
       GITEA__SERVER__SSH_DOMAIN: {{ server.ssh }}
       GITEA__SERVER__ROOT_URL: {{ server.url }}
