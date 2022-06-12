@@ -3,7 +3,7 @@ version: "3"
 services:
   main:
     image: jellyfin/jellyfin
-    restart: always
+    restart: unless-stopped
     volumes:
     - ./config:/config
     - ./cache:/cache

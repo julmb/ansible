@@ -3,6 +3,7 @@ version: "3"
 services:
   nginx:
     image: nginx
+    restart: unless-stopped
     volumes:
     - ./configuration:/etc/nginx/conf.d:ro
     - ./letsencrypt:/etc/letsencrypt:ro
@@ -14,6 +15,7 @@ services:
     build:
       context: https://github.com/julmb/certbot.git#main
       args: { tag: {{ certbot_architecture[ansible_architecture] }}-latest }
+    restart: unless-stopped
     volumes:
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot
