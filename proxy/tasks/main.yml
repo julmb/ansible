@@ -10,6 +10,7 @@
   notify: restart nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
+
 - name: certificates
   ansible.builtin.include_tasks: certificate.yml
   loop: "{{ entries | dict2items }}"
