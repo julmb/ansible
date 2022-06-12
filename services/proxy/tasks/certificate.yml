@@ -1,7 +1,7 @@
 - name: "{{ item.key }} certificate"
   community.docker.docker_container_exec:
     container: proxy_certbot_1
-    command: certbot certonly --test-cert --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
+    command: certbot certonly --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
   vars:
     agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
     email: "{{ '--email {}'.format(acme.email) if acme.email is defined }}"
