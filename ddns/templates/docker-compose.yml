@@ -1,6 +1,6 @@
 version: "3"
 
 services:
-  main:
+  ddclient:
     image: linuxserver/ddclient
     volumes: [./configuration:/config]
