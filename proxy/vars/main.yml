@@ -1,0 +1,4 @@
+certbot_architecture:
+  armv6l: arm32v6
+  aarch64: arm64v8
+  x86_64: amd64

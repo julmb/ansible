@@ -13,7 +13,8 @@ services:
   certbot:
     build:
       context: https://github.com/julmb/certbot.git#main
-      args: { tag: arm64v8-latest }
+      args:
+        tag: {{ certbot_architecture[ansible_architecture] }}-latest
     volumes:
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot
