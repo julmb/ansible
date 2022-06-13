@@ -1,0 +1,7 @@
+location:
+  source_directories:
+  - /mnt/pool2/services
+  repositories:
+  - host3.local:/mnt/pool3/backup
+# storage: { archive_name_format: "services-{now}" }
+# retention: { prefix: services }
