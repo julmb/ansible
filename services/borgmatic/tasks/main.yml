@@ -1,7 +1,8 @@
 - name: package
   ansible.builtin.package: { name: borgmatic }
 - name: ssh hosts
-  ansible.builtin.template: { src: known_hosts, dest: /root/.ssh/ }
+  ansible.builtin.known_hosts: { name: "{{ item.key }}", key: "{{ item.key }} ssh-ed25519 {{ item.value }}" }
+  loop: "{{ hosts | dict2items }}"
 - name: ssh key
   ansible.builtin.template: { src: id_ed25519, dest: /root/.ssh/, mode: 0600 }
 - name: configuration
