@@ -6,3 +6,5 @@
 #   community.crypto.openssh_keypair: { path: /root/.ssh/id_ed25519, type: ed25519 }
 - name: configuration
   ansible.builtin.template: { src: config.yaml, dest: /etc/borgmatic/, validate: validate-borgmatic-config --config %s }
+# - name: initialize repository
+#   ansible.builtin.command: borgmatic init --encryption repokey
