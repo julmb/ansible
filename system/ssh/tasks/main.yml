@@ -1,0 +1,9 @@
+- name: directory
+  ansible.builtin.file: { path: /root/.ssh, state: directory }
+- name: hosts
+  ansible.builtin.known_hosts: { name: "{{ item.key }}", key: "{{ item.key }} ssh-ed25519 {{ item.value }}" }
+  loop: "{{ known_hosts | dict2items }}"
+- name: key
+  ansible.builtin.template: { src: id_ed25519, dest: /root/.ssh/, mode: 0600 }
+- name: authorized keys
+  ansible.builtin.template: { src: authorized_keys, dest: /root/.ssh/ }
