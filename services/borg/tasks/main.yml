@@ -1,2 +1,4 @@
 - name: package
   ansible.builtin.package: { name: borgbackup }
+- name: authorized keys
+  ansible.builtin.template: { src: authorized_keys, dest: /root/.ssh/ }
