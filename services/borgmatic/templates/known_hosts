@@ -1,0 +1,3 @@
+{% for host, key in hosts.items() %}
+{{ host }} ssh-ed25519 {{ key }}
+{% endfor %}
