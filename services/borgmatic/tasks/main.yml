@@ -1,5 +1,7 @@
 - name: package
   ansible.builtin.package: { name: borgmatic }
+- name: ssh directory
+  ansible.builtin.file: { path: /root/.ssh, state: directory }
 - name: ssh hosts
   ansible.builtin.known_hosts: { name: "{{ item.key }}", key: "{{ item.key }} ssh-ed25519 {{ item.value }}" }
   loop: "{{ hosts | dict2items }}"
