@@ -5,7 +5,7 @@
   loop: "{{ known_hosts | dict2items }}"
   when: known_hosts is defined
 - name: private key
-  ansible.builtin.template: { src: id_ed25519, dest: /root/.ssh/, mode: 0600 }
+  ansible.builtin.template: { src: private_key, dest: /root/.ssh/id_ed25519, mode: 0600 }
   when: private_key is defined
 - name: authorized keys
   ansible.posix.authorized_key: { user: root, key: "ssh-ed25519 {{ item.value }} {{ item.key }}" }
