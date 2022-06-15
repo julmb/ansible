@@ -2,8 +2,6 @@
   ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system], install_recommends: no }
 - name: python bindings
   ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
-- name: users system
-  ansible.builtin.user: { name: user1, groups: [libvirt], create_home: false, append: true }
 
 - name: pools definition
   community.libvirt.virt_pool: { name: "{{ item.key }}", command: define, xml: "{{ lookup('template', 'pool.xml') }}" }
@@ -13,6 +11,10 @@
   loop: "{{ pools | dict2items }}"
 - name: pools autostart
   community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
+  loop: "{{ pools | dict2items }}"
+
+- name: test
+  ansible.builtin.template: { src: pool.xml, dest: "{{ item.key }}.xml" }
   loop: "{{ pools | dict2items }}"
 
 - name: volume

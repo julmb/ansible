@@ -1,5 +1,6 @@
 <pool type="dir">
   <name>{{ item.key }}</name>
+  <uuid>{{ item.key | to_uuid }}</uuid>
   <target>
     <path>{{ item.value }}</path>
   </target>
