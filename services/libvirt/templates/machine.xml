@@ -4,7 +4,7 @@
   <memory unit='GiB'>1</memory>
   <vcpu>2</vcpu>
   <os>
-    <type>hvm</type>
+    <type machine="q35">hvm</type>
     <boot dev='hd'/>
     <boot dev='cdrom'/>
   </os>
@@ -12,12 +12,12 @@
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='cdrom'>
       <source file='/mnt/pool2/virtual/images/debian'/>
-      <target dev='hdc'/>
+      <target dev='sdb'/>
       <readonly/>
     </disk>
     <disk type='file' device='disk'>
       <source file='/mnt/pool2/virtual/disks/{{ item.key }}'/>
-      <target dev='hda'/>
+      <target dev='sda'/>
     </disk>
     <interface type='network'>
       <source network='default'/>
