@@ -3,33 +3,23 @@
 - name: python bindings
   ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
 
-- name: pools definition
-  community.libvirt.virt_pool: { name: "{{ item.key }}", command: define, xml: "{{ lookup('template', 'pool.xml') }}" }
-  loop: "{{ pools | dict2items }}"
-- name: pools active
-  community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
-  loop: "{{ pools | dict2items }}"
-- name: pools autostart
-  community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
+- name: pools
+  ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
 
-- name: test
-  ansible.builtin.template: { src: pool.xml, dest: "{{ item.key }}.xml" }
-  loop: "{{ pools | dict2items }}"
+# - name: volume
+#   ansible.builtin.command: virsh vol-create-as default testa 8
+#   register: result
+#   failed_when: result.rc != 0 and 'exists already' not in result.stderr
+#   changed_when: result.rc == 0
 
-- name: volume
-  ansible.builtin.command: virsh vol-create-as default testa 8
-  register: result
-  failed_when: result.rc != 0 and 'exists already' not in result.stderr
-  changed_when: result.rc == 0
-
-- name: machine
-  community.libvirt.virt:
-    name: host4
-    command: undefine
-- name: machine
-  community.libvirt.virt:
-    command: define
-    xml: "{{ lookup('template', 'host4.xml') }}"
+# - name: machine
+#   community.libvirt.virt:
+#     name: host4
+#     command: undefine
+# - name: machine
+#   community.libvirt.virt:
+#     command: define
+#     xml: "{{ lookup('template', 'host4.xml') }}"
 
 # TODO: figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)

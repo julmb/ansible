@@ -1,0 +1,29 @@
+- name: definition
+  ansible.builtin.command: virsh pool-define-as {{ item.key }} dir --target {{ item.value }}
+  register: result
+  failed_when: result.rc != 0 and 'already exists' not in result.stderr
+  changed_when: result.rc == 0
+- name: active
+  community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
+- name: autostart
+  community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
+
+# - name: original file
+#   ansible.builtin.stat: { path: "/etc/libvirt/storage/{{ item.key }}.xml", checksum_algorithm: sha256 }
+#   register: original
+
+# - name: temporary definition file
+#   ansible.builtin.tempfile:
+#   register: definition
+# - name: definition file
+#   ansible.builtin.template: { src: pool.xml, dest: "{{ definition.path }}" }
+# - name: definition
+#   ansible.builtin.command: virsh pool-define {{ definition.path }}
+
+
+# - name: pool definition
+#   community.libvirt.virt_pool: { name: "{{ item.key }}", command: define, xml: "{{ lookup('template', 'pool.xml') }}" }
+# - name: pool active
+#   community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
+# - name: pool autostart
+#   community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
