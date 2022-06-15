@@ -1,9 +1,19 @@
 - name: package
   ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system], install_recommends: no }
 - name: python bindings
-  ansible.builtin.package: { name: python3-libvirt }
+  ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
 - name: users system
   ansible.builtin.user: { name: user1, groups: [libvirt], create_home: false, append: true }
+
+- name: pools definition
+  community.libvirt.virt_pool: { name: "{{ item.key }}", command: define, xml: "{{ lookup('template', 'pool.xml') }}" }
+  loop: "{{ pools | dict2items }}"
+- name: pools active
+  community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
+  loop: "{{ pools | dict2items }}"
+- name: pools autostart
+  community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
+  loop: "{{ pools | dict2items }}"
 
 - name: volume
   ansible.builtin.command: virsh vol-create-as default testa 8
@@ -19,3 +29,5 @@
   community.libvirt.virt:
     command: define
     xml: "{{ lookup('template', 'host4.xml') }}"
+
+# TODO: figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)
