@@ -15,12 +15,12 @@
       <readonly/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/mnt/pool2/virtual/machines/{{ item.key }}'/>
+      <source file='/mnt/pool2/virtual/disks/{{ item.key }}'/>
       <target dev='hda'/>
     </disk>
-    <!-- <interface type='network'>
+    <interface type='network'>
       <source network='default'/>
-    </interface> -->
+    </interface>
     <graphics type='vnc' port='-1'/>
   </devices>
 </domain>
