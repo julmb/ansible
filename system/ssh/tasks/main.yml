@@ -8,5 +8,6 @@
   ansible.builtin.template: { src: id_ed25519, dest: /root/.ssh/, mode: 0600 }
   when: private_key is defined
 - name: authorized keys
-  ansible.builtin.template: { src: authorized_keys, dest: /root/.ssh/ }
+  ansible.posix.authorized_key: { user: root, key: "ssh-ed25519 {{ item.value }} {{ item.key }}" }
+  loop: "{{ authorized_keys | dict2items }}"
   when: authorized_keys is defined
