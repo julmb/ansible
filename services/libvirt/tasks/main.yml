@@ -6,12 +6,7 @@
 - name: pools
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
-
-# - name: volume
-#   ansible.builtin.command: virsh vol-create-as default testa 8
-#   register: result
-#   failed_when: result.rc != 0 and 'exists already' not in result.stderr
-#   changed_when: result.rc == 0
+  loop_control: { loop_var: pool }
 
 # - name: machine
 #   community.libvirt.virt:

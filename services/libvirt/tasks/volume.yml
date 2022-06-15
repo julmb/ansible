@@ -1,0 +1,5 @@
+- name: definition
+  ansible.builtin.command: virsh vol-create-as {{ pool.key }} {{ volume.key }} {{ volume.value }}
+  register: result
+  failed_when: result.rc != 0 and 'exists already' not in result.stderr
+  changed_when: result.rc == 0
