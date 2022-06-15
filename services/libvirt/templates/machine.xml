@@ -24,8 +24,13 @@
       <readonly/>
     </disk>
     <interface type="network">
+      <model type="virtio"/>
       <source network="default"/>
     </interface>
-    <graphics type="vnc" port="-1"/>
+    <graphics type="vnc" />
+    <!-- <graphics type="spice" />
+    <video>
+      <model type="virtio" />
+    </video> -->
   </devices>
 </domain>
