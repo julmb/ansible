@@ -27,10 +27,9 @@
       <model type="virtio"/>
       <source network="default"/>
     </interface>
-    <graphics type="vnc" />
-    <!-- <graphics type="spice" />
+    <graphics type="spice" autoport="yes" />
     <video>
       <model type="virtio" />
-    </video> -->
+    </video>
   </devices>
 </domain>
