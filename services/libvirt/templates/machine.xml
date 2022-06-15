@@ -1,4 +1,4 @@
-<domain type='qemu'>
+<domain type='kvm'>
   <name>{{ item.key }}</name>
   <uuid>{{ item.key | to_uuid }}</uuid>
   <memory unit='GiB'>1</memory>
