@@ -3,3 +3,7 @@
   register: result
   failed_when: result.rc != 0 and 'exists already' not in result.stderr
   changed_when: result.rc == 0
+
+# image
+# virsh vol-create-as images debian 0
+# virsh vol-upload debian debian-11.3.0-amd64-netinst.iso --pool images
