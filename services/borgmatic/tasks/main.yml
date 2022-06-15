@@ -23,3 +23,11 @@
 - name: timer enable
   ansible.builtin.include_role: { name: system/timer-enable }
   vars: { service: borgmatic, enabled: yes }
+
+# TODO: improve timers, make them configurable
+#       better defaults for variance
+# TODO: use proper time for backups (2am)
+# TODO: take care of ssh host key setup on new machine
+# TODO: consider separate ssh user
+# TODO: use ssh forced command
+# TODO: use borg serve --append-only --restrict-to-path?
