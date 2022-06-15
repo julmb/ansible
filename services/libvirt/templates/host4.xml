@@ -1,0 +1,25 @@
+<domain type='qemu'>
+  <name>host4</name>
+  <memory unit='GiB'>1</memory>
+  <vcpu>2</vcpu>
+  <os>
+    <type arch='i686' machine='pc'>hvm</type>
+    <boot dev='cdrom'/>
+  </os>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='cdrom'>
+      <source file='/home/user1/debian-11.3.0-amd64-netinst.iso'/>
+      <target dev='hdc'/>
+      <readonly/>
+    </disk>
+    <disk type='file' device='disk'>
+      <source file='/var/lib/libvirt/images/testa'/>
+      <target dev='hda'/>
+    </disk>
+    <!-- <interface type='network'>
+      <source network='default'/>
+    </interface> -->
+    <graphics type='vnc' port='-1'/>
+  </devices>
+</domain>

@@ -1,2 +1,21 @@
 - name: package
   ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system], install_recommends: no }
+- name: python bindings
+  ansible.builtin.package: { name: python3-libvirt }
+- name: users system
+  ansible.builtin.user: { name: user1, groups: [libvirt], create_home: false, append: true }
+
+- name: volume
+  ansible.builtin.command: virsh vol-create-as default testa 8
+  register: result
+  failed_when: result.rc != 0 and 'exists already' not in result.stderr
+  changed_when: result.rc == 0
+
+- name: machine
+  community.libvirt.virt:
+    name: host4
+    command: undefine
+- name: machine
+  community.libvirt.virt:
+    command: define
+    xml: "{{ lookup('template', 'host4.xml') }}"
