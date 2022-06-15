@@ -10,14 +10,14 @@
   </os>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="file" device="disk">
+      <source file="/mnt/pool2/virtual/disks/{{ item.key }}"/>
+      <target dev="sda"/>
+    </disk>
     <disk type="file" device="cdrom">
       <source file="/mnt/pool2/virtual/images/debian"/>
       <target dev="sdb"/>
       <readonly/>
-    </disk>
-    <disk type="file" device="disk">
-      <source file="/mnt/pool2/virtual/disks/{{ item.key }}"/>
-      <target dev="sda"/>
     </disk>
     <interface type="network">
       <source network="default"/>
