@@ -1,7 +1,13 @@
 - name: package
   ansible.builtin.package: { name: borgmatic }
+- name: directory
+  ansible.builtin.file: { path: /etc/borgmatic.d, state: directory }
 - name: configuration
-  ansible.builtin.template: { src: config.yaml, dest: /etc/borgmatic/, validate: validate-borgmatic-config --config %s }
+  ansible.builtin.template:
+    src: config.yaml
+    dest: /etc/borgmatic.d/{{ item.key }}.yaml
+    validate: validate-borgmatic-config --config %s
+  loop: "{{ archives | dict2items }}"
 - name: repository
   ansible.builtin.command: borgmatic init --encryption repokey
   environment: { BORG_PASSPHRASE: "{{ password }}" }

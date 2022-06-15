@@ -1,5 +1,3 @@
 location:
-  source_directories:
-  - /mnt/pool2/services
-  repositories:
-  - host3.local:/mnt/pool3/backup
+  source_directories: {{ item.value.paths }}
+  repositories: {{ item.value.repositories }}
