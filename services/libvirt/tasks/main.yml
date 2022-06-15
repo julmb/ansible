@@ -12,3 +12,4 @@
 
 # TODO: figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)
 # TODO: what sort of settings does operating system selection affect? make templates for windows and linux?
+# TODO: rename machines to domains
