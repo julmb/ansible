@@ -1,6 +1,6 @@
 <domain type='qemu'>
-  <name>host4</name>
-  <uuid>{{ 'host4' | to_uuid }}</uuid>
+  <name>{{ item.key }}</name>
+  <uuid>{{ item.key | to_uuid }}</uuid>
   <memory unit='GiB'>1</memory>
   <vcpu>2</vcpu>
   <os>
@@ -15,7 +15,7 @@
       <readonly/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/mnt/pool2/virtual/machines/host4'/>
+      <source file='/mnt/pool2/virtual/machines/{{ item.key }}'/>
       <target dev='hda'/>
     </disk>
     <!-- <interface type='network'>

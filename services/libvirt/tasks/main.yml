@@ -6,12 +6,8 @@
 - name: pools
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
-  loop_control: { loop_var: pool }
-
-# TODO: this successfully updates configuration but does not error on uuid mismatch
 - name: machine
-  community.libvirt.virt:
-    command: define
-    xml: "{{ lookup('template', 'host4.xml') }}"
+  ansible.builtin.include_tasks: machine.yml
+  loop: "{{ machines | dict2items }}"
 
 # TODO: figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)

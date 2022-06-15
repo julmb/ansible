@@ -1,18 +1,12 @@
 - name: definition
-  ansible.builtin.command: virsh pool-define-as {{ pool.key }} dir --target {{ pool.value.path }}
+  ansible.builtin.command: virsh pool-define-as {{ item.key }} dir --target {{ item.value }}
   register: result
   failed_when: result.rc != 0 and 'already exists' not in result.stderr
   changed_when: result.rc == 0
 - name: active
-  community.libvirt.virt_pool: { name: "{{ pool.key }}", state: active }
+  community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
 - name: autostart
-  community.libvirt.virt_pool: { name: "{{ pool.key }}", autostart: yes }
-
-- name: volumes
-  ansible.builtin.include_tasks: volume.yml
-  loop: "{{ pool.value.volumes | dict2items }}"
-  loop_control: { loop_var: volume }
-  when: pool.value.volumes is defined
+  community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
 
 # - name: original file
 #   ansible.builtin.stat: { path: "/etc/libvirt/storage/{{ item.key }}.xml", checksum_algorithm: sha256 }
