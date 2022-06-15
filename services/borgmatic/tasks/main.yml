@@ -8,7 +8,7 @@
     dest: /etc/borgmatic.d/{{ item.key }}.yaml
     validate: validate-borgmatic-config --config %s
   loop: "{{ archives | dict2items }}"
-- name: repository
+- name: repositories
   ansible.builtin.command: borgmatic init --encryption repokey
   register: result
   changed_when: result.stdout or result.stderr
