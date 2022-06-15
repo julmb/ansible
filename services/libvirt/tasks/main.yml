@@ -1,2 +1,2 @@
 - name: package
-  ansible.builtin.package: { name: libvirt-daemon-system }
+  ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system], install_recommends: no }
