@@ -1,5 +1,6 @@
 <domain type='qemu'>
   <name>host4</name>
+  <uuid>{{ 'host4' | to_uuid }}</uuid>
   <memory unit='GiB'>1</memory>
   <vcpu>2</vcpu>
   <os>
@@ -9,12 +10,12 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type='file' device='cdrom'>
-      <source file='/home/user1/debian-11.3.0-amd64-netinst.iso'/>
+      <source file='/mnt/pool2/virtual/images/debian'/>
       <target dev='hdc'/>
       <readonly/>
     </disk>
     <disk type='file' device='disk'>
-      <source file='/var/lib/libvirt/images/testa'/>
+      <source file='/mnt/pool2/virtual/machines/host4'/>
       <target dev='hda'/>
     </disk>
     <!-- <interface type='network'>

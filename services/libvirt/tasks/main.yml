@@ -8,13 +8,10 @@
   loop: "{{ pools | dict2items }}"
   loop_control: { loop_var: pool }
 
-# - name: machine
-#   community.libvirt.virt:
-#     name: host4
-#     command: undefine
-# - name: machine
-#   community.libvirt.virt:
-#     command: define
-#     xml: "{{ lookup('template', 'host4.xml') }}"
+# TODO: this successfully updates configuration but does not error on uuid mismatch
+- name: machine
+  community.libvirt.virt:
+    command: define
+    xml: "{{ lookup('template', 'host4.xml') }}"
 
 # TODO: figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)
