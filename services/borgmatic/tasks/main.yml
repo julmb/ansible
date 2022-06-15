@@ -8,7 +8,19 @@
     dest: /etc/borgmatic.d/{{ item.key }}.yaml
     validate: validate-borgmatic-config --config %s
   loop: "{{ backups | dict2items }}"
+
 - name: repositories
   ansible.builtin.command: borgmatic init --encryption repokey
   register: result
   changed_when: result.stdout or result.stderr
+
+- name: timer install
+  ansible.builtin.include_role: { name: system/timer-install }
+  vars:
+    service: borgmatic
+    description: daily borgmatic backup
+    command: borgmatic create --files --stats
+    time: daily
+- name: timer enable
+  ansible.builtin.include_role: { name: system/timer-enable }
+  vars: { service: borgmatic, enabled: yes }
