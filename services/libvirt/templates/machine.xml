@@ -1,22 +1,26 @@
-<domain type="kvm">
+<domain type="{{ item.value.type }}">
   <name>{{ item.key }}</name>
   <uuid>{{ item.key | to_uuid }}</uuid>
-  <memory unit="GiB">1</memory>
-  <vcpu>2</vcpu>
+  <vcpu>{{ item.value.cpus }}</vcpu>
+  <memory unit="bytes">{{ item.value.memory }}</memory>
   <os>
-    <type machine="q35">hvm</type>
+    <type arch="{{ item.value.architecture }}" machine="{{ item.value.chipset }}">hvm</type>
+    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
     <boot dev="hd"/>
     <boot dev="cdrom"/>
   </os>
+  <features>
+    <acpi/>
+  </features>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
       <source file="/mnt/pool2/virtual/disks/{{ item.key }}"/>
-      <target dev="sda"/>
+      <target dev="sda" bus="sata"/>
     </disk>
     <disk type="file" device="cdrom">
       <source file="/mnt/pool2/virtual/images/debian"/>
-      <target dev="sdb"/>
+      <target dev="sdb" bus="sata"/>
       <readonly/>
     </disk>
     <interface type="network">
