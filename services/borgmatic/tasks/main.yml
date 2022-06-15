@@ -10,6 +10,5 @@
   loop: "{{ archives | dict2items }}"
 - name: repository
   ansible.builtin.command: borgmatic init --encryption repokey
-  environment: { BORG_PASSPHRASE: "{{ password }}" }
   register: result
   changed_when: result.stdout or result.stderr
