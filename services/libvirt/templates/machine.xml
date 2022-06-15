@@ -12,6 +12,7 @@
   <features>
     <acpi/>
   </features>
+  <cpu mode="host-passthrough" />
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
     <disk type="file" device="disk">
