@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system], install_recommends: no }
+  ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system, dnsmasq-base], install_recommends: no }
 - name: python bindings
   ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
 
