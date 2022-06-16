@@ -15,8 +15,9 @@
   <cpu mode="host-passthrough" />
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type="file" device="disk">
-      <source file="/mnt/pool2/virtual/disks/{{ item.key }}"/>
+    <!-- https://github.com/jedi4ever/veewee/issues/996#issuecomment-497976612 -->
+    <disk type="volume" device="disk">
+      <source pool="disks" volume="{{ item.key }}.img" />
       <target dev="sda" bus="sata"/>
     </disk>
     <disk type="file" device="cdrom">
