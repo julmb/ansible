@@ -1,31 +1,17 @@
-- name: definition
-  ansible.builtin.command: virsh pool-define-as {{ item.key }} dir --target {{ item.value }}
+- name: "{{ item.key }} definition"
+  ansible.builtin.shell: |
+    set -e
+    beforei=$(virsh pool-dumpxml --inactive {{ item.key }})
+    before=$(virsh pool-dumpxml {{ item.key }})
+    virsh pool-define <(echo '{{ lookup('template', 'pool.xml') }}')
+    afteri=$(virsh pool-dumpxml --inactive {{ item.key }})
+    after=$(virsh pool-dumpxml {{ item.key }})
+    if [[ "$beforei" != "$afteri" ]]; then echo "inactive pool definition changed"; fi
+    if [[ "$before" != "$after" ]]; then echo "pool definition changed"; fi
+  args: { executable: bash }
   register: result
-  failed_when: result.rc != 0 and 'already exists' not in result.stderr
-  changed_when: result.rc == 0
-- name: active
-  community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
-- name: autostart
-  community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
-
-# TODO: maybe just call dumpxml before and after in a shell script
-
-# - name: original file
-#   ansible.builtin.stat: { path: "/etc/libvirt/storage/{{ item.key }}.xml", checksum_algorithm: sha256 }
-#   register: original
-
-# - name: temporary definition file
-#   ansible.builtin.tempfile:
-#   register: definition
-# - name: definition file
-#   ansible.builtin.template: { src: pool.xml, dest: "{{ definition.path }}" }
-# - name: definition
-#   ansible.builtin.command: virsh pool-define {{ definition.path }}
-
-
-# - name: pool definition
-#   community.libvirt.virt_pool: { name: "{{ item.key }}", command: define, xml: "{{ lookup('template', 'pool.xml') }}" }
-# - name: pool active
+  changed_when: "'pool definition changed' in result.stdout"
+# - name: "{{ item.key }} active"
 #   community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
-# - name: pool autostart
+# - name: "{{ item.key }} autostart"
 #   community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
