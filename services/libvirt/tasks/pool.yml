@@ -8,6 +8,8 @@
 - name: autostart
   community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
 
+# TODO: maybe just call dumpxml before and after in a shell script
+
 # - name: original file
 #   ansible.builtin.stat: { path: "/etc/libvirt/storage/{{ item.key }}.xml", checksum_algorithm: sha256 }
 #   register: original
