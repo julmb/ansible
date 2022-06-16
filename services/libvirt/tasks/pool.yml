@@ -1,13 +1,13 @@
 - name: "{{ item.key }} definition"
   ansible.builtin.shell: |
     set -e
-    beforei=$(virsh pool-dumpxml --inactive {{ item.key }})
     before=$(virsh pool-dumpxml {{ item.key }})
+    beforei=$(virsh pool-dumpxml --inactive {{ item.key }})
     virsh pool-define <(echo '{{ lookup('template', 'pool.xml') }}')
-    afteri=$(virsh pool-dumpxml --inactive {{ item.key }})
     after=$(virsh pool-dumpxml {{ item.key }})
-    if [[ "$beforei" != "$afteri" ]]; then echo "inactive pool definition changed"; fi
+    afteri=$(virsh pool-dumpxml --inactive {{ item.key }})
     if [[ "$before" != "$after" ]]; then echo "pool definition changed"; fi
+    if [[ "$beforei" != "$afteri" ]]; then echo "inactive pool definition changed"; fi
   args: { executable: bash }
   register: result
   changed_when: "'pool definition changed' in result.stdout"
