@@ -17,7 +17,6 @@
   <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
 
   <devices>
-    <emulator>/usr/bin/qemu-system-x86_64</emulator>
 {% for entry in domain.value.storage %}
     <disk type="{{ entry.type }}" device="{{ entry.device.type }}">
 {% if entry.type == 'volume' %}
