@@ -1,7 +1,7 @@
-- name: "{{ item.key }} volumes"
+- name: "{{ domain.key }} volumes"
   ansible.builtin.include_tasks: volume.yml
   vars: { content: "{{ storage.content }}" }
-  loop: "{{ item.value.storage }}"
+  loop: "{{ domain.value.storage }}"
   loop_control: { loop_var: storage }
   when: storage.meta.type == 'volume'
 # TODO: this successfully updates configuration but does not error on uuid mismatch

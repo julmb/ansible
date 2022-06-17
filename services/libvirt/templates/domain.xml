@@ -1,10 +1,10 @@
-<domain type="{{ item.value.type }}">
-  <name>{{ item.key }}</name>
-  <uuid>{{ item.key | to_uuid }}</uuid>
-  <vcpu>{{ item.value.cpus }}</vcpu>
-  <memory unit="bytes">{{ item.value.memory }}</memory>
+<domain type="{{ domain.value.type }}">
+  <name>{{ domain.key }}</name>
+  <uuid>{{ domain.key | to_uuid }}</uuid>
+  <vcpu>{{ domain.value.cpus }}</vcpu>
+  <memory unit="bytes">{{ domain.value.memory }}</memory>
   <os>
-    <type arch="{{ item.value.architecture }}" machine="{{ item.value.chipset }}">hvm</type>
+    <type arch="{{ domain.value.architecture }}" machine="{{ domain.value.chipset }}">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
   </os>
   <features>
@@ -13,7 +13,7 @@
   <cpu mode="host-passthrough" />
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-{% for entry in item.value.storage %}
+{% for entry in domain.value.storage %}
     <disk type="{{ entry.meta.type }}" device="{{ entry.meta.kind }}">
 {% if entry.meta.type == 'volume' %}
       <source pool="{{ entry.content.pool }}" volume="{{ entry.content.volume }}"/>
