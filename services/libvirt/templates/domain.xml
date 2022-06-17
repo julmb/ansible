@@ -1,10 +1,10 @@
 <domain type="{{ domain.value.type }}">
   <name>{{ domain.key }}</name>
   <uuid>{{ domain.key | to_uuid }}</uuid>
-  <vcpu>{{ domain.value.cpus }}</vcpu>
-  <memory unit="bytes">{{ domain.value.memory }}</memory>
+  <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
+  <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
   <os>
-    <type arch="{{ domain.value.architecture }}" machine="{{ domain.value.chipset }}">hvm</type>
+    <type arch="{{ domain.value.platform.architecture }}" machine="{{ domain.value.platform.chipset }}">hvm</type>
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
   </os>
   <features>
