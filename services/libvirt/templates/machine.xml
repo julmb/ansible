@@ -27,6 +27,7 @@
       <boot order="1" />
     </disk>
     <interface type="network">
+      <mac address="52:54:00:8e:d6:bb"/>
       <model type="virtio"/>
       <source network="default"/>
     </interface>
