@@ -13,7 +13,6 @@
   <cpu mode="host-passthrough" />
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <!-- https://github.com/jedi4ever/veewee/issues/996#issuecomment-497976612 -->
     <disk type="volume" device="disk">
       <source pool="disks" volume="{{ item.key }}.img" />
       <target dev="sda" bus="sata"/>
