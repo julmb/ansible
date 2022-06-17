@@ -14,10 +14,10 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
 {% for entry in domain.value.storage %}
-    <disk type="{{ entry.meta.type }}" device="{{ entry.meta.kind }}">
-{% if entry.meta.type == 'volume' %}
+    <disk type="{{ entry.type }}" device="{{ entry.meta.kind }}">
+{% if entry.type == 'volume' %}
       <source pool="{{ entry.volume.pool }}" volume="{{ entry.volume.name }}"/>
-{% elif entry.meta.type == 'file' %}
+{% elif entry.type == 'file' %}
       <source file="{{ entry.path }}"/>
 {% endif %}
       <target dev="{{ entry.meta.device }}" bus="{{ entry.meta.bus }}"/>
