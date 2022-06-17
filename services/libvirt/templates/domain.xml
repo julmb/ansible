@@ -14,14 +14,14 @@
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
 {% for entry in domain.value.storage %}
-    <disk type="{{ entry.type }}" device="{{ entry.meta.kind }}">
+    <disk type="{{ entry.type }}" device="{{ entry.device.type }}">
 {% if entry.type == 'volume' %}
       <source pool="{{ entry.volume.pool }}" volume="{{ entry.volume.name }}"/>
 {% elif entry.type == 'file' %}
       <source file="{{ entry.path }}"/>
 {% endif %}
-      <target dev="{{ entry.meta.device }}" bus="{{ entry.meta.bus }}"/>
-      <boot order="{{ entry.meta.boot }}"/>
+      <target dev="{{ entry.device.name }}" bus="{{ entry.device.bus }}"/>
+      <boot order="{{ entry.device.boot }}"/>
     </disk>
 {% endfor %}
     <interface type="network">
