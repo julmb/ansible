@@ -6,6 +6,7 @@
 - name: pools
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
+  loop_control: { loop_var: pool }
 - name: domains
   ansible.builtin.include_tasks: domain.yml
   loop: "{{ domains | dict2items }}"

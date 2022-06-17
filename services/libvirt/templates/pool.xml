@@ -1,7 +1,7 @@
 <pool type="dir">
-  <name>{{ item.key }}</name>
-  <uuid>{{ item.key | to_uuid }}</uuid>
+  <name>{{ pool.key }}</name>
+  <uuid>{{ pool.key | to_uuid }}</uuid>
   <target>
-    <path>{{ item.value }}</path>
+    <path>{{ pool.value }}</path>
   </target>
 </pool>

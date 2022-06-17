@@ -1,17 +1,17 @@
-- name: "{{ item.key }} definition"
+- name: "{{ pool.key }} definition"
   ansible.builtin.shell: |
     set -e
-    before=$(virsh pool-dumpxml {{ item.key }})
-    beforei=$(virsh pool-dumpxml --inactive {{ item.key }})
+    before=$(virsh pool-dumpxml {{ pool.key }})
+    beforei=$(virsh pool-dumpxml --inactive {{ pool.key }})
     virsh pool-define <(echo '{{ lookup('template', 'pool.xml') }}')
-    after=$(virsh pool-dumpxml {{ item.key }})
-    afteri=$(virsh pool-dumpxml --inactive {{ item.key }})
+    after=$(virsh pool-dumpxml {{ pool.key }})
+    afteri=$(virsh pool-dumpxml --inactive {{ pool.key }})
     if [[ "$before" != "$after" ]]; then echo "pool definition changed"; fi
     if [[ "$beforei" != "$afteri" ]]; then echo "inactive pool definition changed"; fi
   args: { executable: bash }
   register: result
   changed_when: "'pool definition changed' in result.stdout"
-# - name: "{{ item.key }} active"
-#   community.libvirt.virt_pool: { name: "{{ item.key }}", state: active }
-# - name: "{{ item.key }} autostart"
-#   community.libvirt.virt_pool: { name: "{{ item.key }}", autostart: yes }
+# - name: "{{ pool.key }} active"
+#   community.libvirt.virt_pool: { name: "{{ pool.key }}", state: active }
+# - name: "{{ pool.key }} autostart"
+#   community.libvirt.virt_pool: { name: "{{ pool.key }}", autostart: yes }
