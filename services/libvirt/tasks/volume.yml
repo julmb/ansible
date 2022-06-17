@@ -1,5 +1,5 @@
-- name: "{{ content.volume }} definition"
-  ansible.builtin.command: virsh vol-create-as {{ content.pool }} {{ content.volume }} {{ content.size }}
+- name: "{{ item.content.volume }} definition"
+  ansible.builtin.command: virsh vol-create-as {{ item.content.pool }} {{ item.content.volume }} {{ item.content.size }}
   register: result
   failed_when: result.rc != 0 and 'exists already' not in result.stderr
   changed_when: result.rc == 0
