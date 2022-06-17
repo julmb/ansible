@@ -13,16 +13,17 @@
   <cpu mode="host-passthrough" />
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type="volume" device="disk">
-      <source pool="disks" volume="{{ item.key }}.img" />
-      <target dev="sda" bus="sata"/>
-      <boot order="2" />
+{% for entry in item.value.storage %}
+    <disk type="{{ entry.meta.type }}" device="{{ entry.meta.kind }}">
+{% if entry.meta.type == 'volume' %}
+      <source pool="{{ entry.content.pool }}" volume="{{ entry.content.volume }}"/>
+{% elif entry.meta.type == 'file' %}
+      <source file="{{ entry.content }}"/>
+{% endif %}
+      <target dev="{{ entry.meta.device }}" bus="{{ entry.meta.bus }}"/>
+      <boot order="{{ entry.meta.boot }}"/>
     </disk>
-    <disk type="file" device="cdrom">
-      <source file="/mnt/pool2/virtual/images/debian-11.3.0-amd64-netinst.iso"/>
-      <target dev="sdb" bus="sata"/>
-      <boot order="1" />
-    </disk>
+{% endfor %}
     <interface type="network">
       <mac address="52:54:00:8e:d6:bb"/>
       <model type="virtio"/>
