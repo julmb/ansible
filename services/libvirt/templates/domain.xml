@@ -1,16 +1,21 @@
 <domain type="{{ domain.value.type }}">
   <name>{{ domain.key }}</name>
   <uuid>{{ domain.key | to_uuid }}</uuid>
-  <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
-  <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
+
   <os>
     <type arch="{{ domain.value.platform.architecture }}" machine="{{ domain.value.platform.chipset }}">hvm</type>
+{% if domain.value.platform.uefi %}
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
+{% endif %}
   </os>
   <features>
     <acpi/>
   </features>
-  <cpu mode="host-passthrough" />
+
+  <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
+  <cpu mode="host-passthrough"/>
+  <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
+
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
 {% for entry in domain.value.storage %}
