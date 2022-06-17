@@ -1,9 +1,5 @@
-- name: definition
-  ansible.builtin.command: virsh vol-create-as disks {{ item.key }}.img {{ item.value.disk }}
+- name: "{{ content.volume }} definition"
+  ansible.builtin.command: virsh vol-create-as {{ content.pool }} {{ content.volume }} {{ content.size }}
   register: result
   failed_when: result.rc != 0 and 'exists already' not in result.stderr
   changed_when: result.rc == 0
-
-# image
-# virsh vol-create-as images debian 0
-# virsh vol-upload debian debian-11.3.0-amd64-netinst.iso --pool images
