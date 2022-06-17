@@ -5,7 +5,7 @@
   <memory unit="bytes">{{ domain.value.memory }}</memory>
   <os>
     <type arch="{{ domain.value.architecture }}" machine="{{ domain.value.chipset }}">hvm</type>
-    <loader readonly="yes" type="pflash">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
+    <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
   </os>
   <features>
     <acpi/>
