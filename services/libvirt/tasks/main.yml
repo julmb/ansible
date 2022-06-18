@@ -1,7 +1,7 @@
 - name: package
   ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system, dnsmasq-base, ovmf], install_recommends: no }
-- name: python bindings
-  ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
+# - name: python bindings
+#   ansible.builtin.package: { name: [python3-libvirt, python3-lxml] }
 
 - name: pools
   ansible.builtin.include_tasks: pool.yml
