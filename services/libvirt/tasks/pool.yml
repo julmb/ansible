@@ -11,7 +11,3 @@
   args: { executable: bash }
   register: result
   changed_when: "'pool definition changed' in result.stdout"
-# - name: "{{ pool.key }} active"
-#   community.libvirt.virt_pool: { name: "{{ pool.key }}", state: active }
-# - name: "{{ pool.key }} autostart"
-#   community.libvirt.virt_pool: { name: "{{ pool.key }}", autostart: yes }
