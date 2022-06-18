@@ -1,4 +1,5 @@
 <domain type="{{ domain.value.type }}">
+
   <name>{{ domain.key }}</name>
   <uuid>{{ domain.key | to_uuid }}</uuid>
 
@@ -9,15 +10,14 @@
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
 {% endif %}
   </os>
-  <features>
-    <acpi/>
-  </features>
+  <features><acpi/></features>
 
-  <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
   <cpu mode="host-passthrough"/>
+  <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
   <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
 
   <devices>
+
 {% for entry in domain.value.storage %}
     <disk type="{{ entry.type }}" device="{{ entry.device.type }}">
 {% if entry.type == 'volume' %}
@@ -29,14 +29,18 @@
       <boot order="{{ entry.device.boot }}"/>
     </disk>
 {% endfor %}
+
     <interface type="network">
       <mac address="52:54:00:8e:d6:bb"/>
       <model type="virtio"/>
       <source network="default"/>
     </interface>
+
     <graphics type="spice" autoport="yes" />
     <video>
       <model type="virtio" />
     </video>
+
   </devices>
+
 </domain>
