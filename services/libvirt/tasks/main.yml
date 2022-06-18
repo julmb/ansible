@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system, dnsmasq-base, ovmf], install_recommends: no }
+  ansible.builtin.apt: { name: [libvirt-daemon-system, qemu-system, qemu-utils, dnsmasq-base, ovmf], install_recommends: no }
 
 - name: pools
   ansible.builtin.include_tasks: pool.yml
