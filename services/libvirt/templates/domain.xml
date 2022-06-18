@@ -36,10 +36,8 @@
       <source network="default"/>
     </interface>
 
-    <graphics type="spice" autoport="yes" />
-    <video>
-      <model type="virtio" />
-    </video>
+    <video><model type="virtio"/></video>
+    <graphics type="spice" autoport="yes"/>
 
   </devices>
 
