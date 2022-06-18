@@ -5,14 +5,15 @@
   loop: "{{ domain.value.storage }}"
 - name: "{{ domain.key }} definition"
   ansible.builtin.shell: |
-    set -e
     before=$(virsh dumpxml {{ domain.key }})
     beforei=$(virsh dumpxml --inactive {{ domain.key }})
     virsh define <(echo '{{ lookup('template', 'domain.xml') }}')
+    result=$?
     after=$(virsh dumpxml {{ domain.key }})
     afteri=$(virsh dumpxml --inactive {{ domain.key }})
     if [[ "$before" != "$after" ]]; then echo "domain definition changed"; fi
     if [[ "$beforei" != "$afteri" ]]; then echo "inactive domain definition changed"; fi
+    exit $result
   args: { executable: bash }
   register: result
   changed_when: "'domain definition changed' in result.stdout"
