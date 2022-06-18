@@ -26,7 +26,9 @@
       <source file="{{ entry.path }}"/>
 {% endif %}
       <target dev="{{ entry.device.name }}" bus="{{ entry.device.bus }}"/>
+{% if entry.device.boot is defined %}
       <boot order="{{ entry.device.boot }}"/>
+{% endif %}
     </disk>
 {% endfor %}
 
