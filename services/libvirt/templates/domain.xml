@@ -31,7 +31,7 @@
 {% endfor %}
 
     <interface type="network">
-      <mac address="52:54:00:8e:d6:bb"/>
+      <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key) }}"/>
       <model type="virtio"/>
       <source network="default"/>
     </interface>
