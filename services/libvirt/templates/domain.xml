@@ -4,7 +4,7 @@
 
   <os>
     <type arch="{{ domain.value.platform.architecture }}" machine="{{ domain.value.platform.chipset }}">hvm</type>
-{% if domain.value.platform.uefi %}
+{% if domain.value.platform.uefi | default(false) %}
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
 {% endif %}
   </os>
