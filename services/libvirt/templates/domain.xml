@@ -3,7 +3,8 @@
   <uuid>{{ domain.key | to_uuid }}</uuid>
 
   <os>
-    <type arch="{{ domain.value.platform.architecture | default }}" machine="{{ domain.value.platform.chipset | default }}">hvm</type>
+    <type arch="{{ domain.value.platform.architecture | default }}"
+      machine="{{ domain.value.platform.chipset | default }}">hvm</type>
 {% if domain.value.platform.uefi | default(false) %}
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
 {% endif %}
