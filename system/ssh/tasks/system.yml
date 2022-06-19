@@ -4,3 +4,11 @@
     regexp: "^#?ListenAddress \\d+\\.\\d+\\.\\d+\\.\\d+"
     line: "{{ 'ListenAddress {}'.format(system.address) if system.address is defined else '#ListenAddress 0.0.0.0' }}"
   notify: restart ssh
+
+- name: host key
+  ansible.builtin.template:
+    src: private_key
+    dest: /etc/ssh/{{ system.host_key.name }}
+    mode: 0600
+  vars: { key: "{{ system.host_key.key }}" }
+  when: system.host_key is defined
