@@ -4,6 +4,7 @@
 - name: users
   ansible.builtin.include_tasks: user.yml
   loop: "{{ users | dict2items }}"
+  loop_control: { loop_var: user }
   when: users is defined
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
