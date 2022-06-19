@@ -24,5 +24,3 @@
     persistent: yes
 - name: timer enabled
   ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
-
-# TODO: take care of ssh host key setup on new machine
