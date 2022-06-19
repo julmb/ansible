@@ -61,3 +61,29 @@ sample role
 			path: /mnt/pool2/virtual/images/virtio-win-0.1.217.iso
 		interfaces:
 		- { type: virtio, network: default }
+
+TODO
+	figure out level of detail of configuration
+		- easy to add new machine by adding a few yaml lines
+		- flexible configuration by supplying full xml definition
+		- definition via yaml, but with most/all of the xml functionality exposed
+	only specify domain options that libvirt does not infer on its own
+	figure out backing storage configuration (recordsize, volume vs. file, raw vs. qcow2)
+		recordsize
+		zfs volume vs. file
+		formats (raw vs. qcow2)
+		caching mode
+		discard options
+	set up bridge networking
+		https://wiki.libvirt.org/page/Networking
+		https://wiki.debian.org/BridgeNetworkConnections
+		set physical interface to manual
+			iface enp3s0 inet manual
+		do network configuration dhcp/static for physical interface on bridge instaed
+			auto vmbr0
+			iface vmbr0 inet static
+				address 192.168.10.10/24
+				gateway 192.168.10.1
+				bridge-ports enp3s0
+				bridge-stp off
+				bridge-fd 0
