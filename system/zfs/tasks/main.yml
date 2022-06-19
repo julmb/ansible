@@ -26,7 +26,8 @@
     service: zpool-scrub@
     description: zpool scrub on %i
     command: zpool scrub -w %i
-    time: monthly
+    time: "*-*-01 00:00:00"
+    variance: 1h
     persistent: yes
 - name: timer scrub state
   ansible.builtin.systemd:
@@ -44,7 +45,8 @@
     service: zpool-trim@
     description: zpool trim on %i
     command: zpool trim -w %i
-    time: monthly
+    time: "*-*-15 00:00:00"
+    variance: 1h
     persistent: yes
 - name: timer trim state
   ansible.builtin.systemd:
