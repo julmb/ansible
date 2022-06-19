@@ -6,6 +6,7 @@
     src: private_key
     dest: ~{{ user.key }}/.ssh/{{ user.value.private_key.name }}
     mode: 0600
+  vars: { key: "{{ user.value.private_key.key }}" }
   when: user.value.private_key is defined
 
 - name: known hosts
