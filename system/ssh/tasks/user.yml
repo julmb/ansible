@@ -1,13 +1,13 @@
 - name: directory
   ansible.builtin.file: { path: "~{{ user.key }}/.ssh", state: directory }
   
-- name: authorized keys
-  ansible.posix.authorized_key:
-    user: "{{ user.key }}"
-    key: "{{ item.value.type }} {{ item.value.key }} {{ item.key }}"
-    key_options: "{{ item.value.options | join(',') if item.value.options is defined else omit }}"
-  loop: "{{ user.value.authorized_keys | dict2items }}"
-  when: user.value.authorized_keys is defined
+- name: private key
+  ansible.builtin.template:
+    src: private_key
+    dest: ~{{ user.key }}/.ssh/{{ user.value.private_key.name }}
+    mode: 0600
+  when: user.value.private_key is defined
+
 - name: known hosts
   ansible.builtin.known_hosts:
     path: ~{{ user.key }}/.ssh/known_hosts
@@ -15,9 +15,11 @@
     key: "{{ item.key }} {{ item.value.type }} {{ item.value.key }}"
   loop: "{{ user.value.known_hosts | dict2items }}"
   when: user.value.known_hosts is defined
-- name: private key
-  ansible.builtin.template:
-    src: private_key
-    dest: ~{{ user.key }}/.ssh/{{ user.value.private_key.name }}
-    mode: 0600
-  when: user.value.private_key is defined
+
+- name: authorized keys
+  ansible.posix.authorized_key:
+    user: "{{ user.key }}"
+    key: "{{ item.value.type }} {{ item.value.key }} {{ item.key }}"
+    key_options: "{{ item.value.options | join(',') if item.value.options is defined else omit }}"
+  loop: "{{ user.value.authorized_keys | dict2items }}"
+  when: user.value.authorized_keys is defined
