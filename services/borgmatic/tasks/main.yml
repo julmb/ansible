@@ -26,5 +26,3 @@
   ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
 
 # TODO: take care of ssh host key setup on new machine
-# TODO: use ssh forced command
-# TODO: use borg serve --append-only --restrict-to-path?
