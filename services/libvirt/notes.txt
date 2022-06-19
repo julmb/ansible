@@ -26,3 +26,38 @@ windows configuration
 		<timer name="hpet" present="no"/>
 		<timer name="hypervclock" present="yes"/>
 	</clock>
+
+sample role
+	role: services/libvirt
+	pools:
+		disks: /mnt/pool2/virtual/disks
+	domains:
+		host4:
+		type: kvm
+		platform: { architecture: x86_64, chipset: q35, uefi: yes }
+		hardware: { cpus: 2, memory: 1073741824 }
+		storage:
+		- type: volume
+			device: { type: disk, name: sda, bus: virtio, boot: 1 }
+			volume: { pool: disks, name: host4.img, size: 8589934592 }
+		- type: file
+			device: { type: cdrom, name: sdb, bus: sata, boot: 2 }
+			path: /mnt/pool2/virtual/images/debian-11.3.0-amd64-netinst.iso
+		interfaces:
+		- { type: virtio, network: default }
+		host5:
+		type: kvm
+		platform: { architecture: x86_64, chipset: q35, uefi: yes }
+		hardware: { cpus: 4, memory: 8589934592 }
+		storage:
+		- type: volume
+			device: { type: disk, name: sda, bus: virtio, boot: 1 }
+			volume: { pool: disks, name: host5.img, size: 68719476736 }
+		- type: file
+			device: { type: cdrom, name: sdb, bus: sata, boot: 2 }
+			path: /mnt/pool2/virtual/images/windows.iso
+		- type: file
+			device: { type: cdrom, name: sdc, bus: sata }
+			path: /mnt/pool2/virtual/images/virtio-win-0.1.217.iso
+		interfaces:
+		- { type: virtio, network: default }
