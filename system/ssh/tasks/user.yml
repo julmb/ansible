@@ -1,5 +1,6 @@
 - name: directory
-  ansible.builtin.file: { path: /root/.ssh, state: directory }
+  ansible.builtin.file: { path: "~{{ item.key }}/.ssh", state: directory }
+  
 - name: authorized keys
   ansible.posix.authorized_key:
     user: root
