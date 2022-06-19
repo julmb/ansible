@@ -19,14 +19,12 @@
     service: borgmatic
     description: daily borgmatic backup
     command: borgmatic create --files --stats
-    time: daily
+    time: "{{ time }}"
+    variance: 1h
     persistent: yes
 - name: timer enabled
   ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
 
-# TODO: improve timers, make them configurable
-#       better defaults for variance
-# TODO: use proper time for backups (2am)
 # TODO: take care of ssh host key setup on new machine
 # TODO: consider separate ssh user
 # TODO: use ssh forced command
