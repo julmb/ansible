@@ -63,6 +63,8 @@ sample role
 		- { type: virtio, network: default }
 
 TODO
+	consider only configuring pools, setting up machines via virt-manager
+		maybe add ability to save xml configuration to ansible for persistence
 	figure out level of detail of configuration
 		- easy to add new machine by adding a few yaml lines
 		- flexible configuration by supplying full xml definition
