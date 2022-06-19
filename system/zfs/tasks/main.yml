@@ -26,7 +26,7 @@
     service: zpool-scrub@
     description: zpool scrub on %i
     command: zpool scrub -w %i
-    time: "{{ timers.scrub }}"
+    time: "{{ timers.scrub | default('*-*-01 00:00:00') }}"
     variance: 1h
     persistent: yes
 - name: timer scrub state
@@ -45,7 +45,7 @@
     service: zpool-trim@
     description: zpool trim on %i
     command: zpool trim -w %i
-    time: "{{ timers.trim }}"
+    time: "{{ timers.trim | default('*-*-15 00:00:00') }}"
     variance: 1h
     persistent: yes
 - name: timer trim state
