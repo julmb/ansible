@@ -1,3 +1,10 @@
+- name: listen address
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?ListenAddress \\d+\\.\\d+\\.\\d+\\.\\d+"
+    line: "{{ 'ListenAddress {}'.format(address) if address is defined else '#ListenAddress 0.0.0.0' }}"
+  notify: restart ssh
+
 - name: directory
   ansible.builtin.file: { path: /root/.ssh, state: directory }
 - name: authorized keys
@@ -14,3 +21,6 @@
 - name: private key
   ansible.builtin.template: { src: private_key, dest: /root/.ssh/id_ed25519, mode: 0600 }
   when: private_key is defined
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
