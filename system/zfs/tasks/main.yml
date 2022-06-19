@@ -20,7 +20,7 @@
   # TODO: use zfs-scrub-monthly timer shipped with zfs 2.1.3
 - name: timer scrub
   ansible.builtin.include_role: { name: system/timer }
-  vars: { service: zpool-scrub@, description: zpool scrub on %i, command: zpool scrub -w %i, time: monthly }
+  vars: { service: zpool-scrub@, description: zpool scrub on %i, command: zpool scrub -w %i, time: monthly, persistent: yes }
 - name: timer scrub state
   ansible.builtin.systemd:
     name: zpool-scrub@{{ item.key }}.timer
@@ -32,7 +32,7 @@
   # TODO: use zfs-trim-monthly timer shipped with zfs x.x.x
 - name: timer trim
   ansible.builtin.include_role: { name: system/timer }
-  vars: { service: zpool-trim@, description: zpool trim on %i, command: zpool trim -w %i, time: monthly }
+  vars: { service: zpool-trim@, description: zpool trim on %i, command: zpool trim -w %i, time: monthly, persistent: yes }
 - name: timer trim state
   ansible.builtin.systemd:
     name: zpool-trim@{{ item.key }}.timer

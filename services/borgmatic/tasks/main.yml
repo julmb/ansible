@@ -20,6 +20,7 @@
     description: daily borgmatic backup
     command: borgmatic create --files --stats
     time: daily
+    persistent: yes
 - name: timer enable
   ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
 
