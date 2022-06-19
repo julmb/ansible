@@ -1,6 +1,6 @@
 - name: directory
   ansible.builtin.file: { path: "~{{ user.key }}/.ssh", state: directory }
-  
+
 - name: private key
   ansible.builtin.template:
     src: private_key
