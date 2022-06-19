@@ -9,7 +9,10 @@
   loop: "{{ authorized_keys | dict2items }}"
   when: authorized_keys is defined
 - name: known hosts
-  ansible.builtin.known_hosts: { name: "{{ item.key }}", key: "{{ item.key }} ssh-ed25519 {{ item.value }}" }
+  ansible.builtin.known_hosts:
+    path: "~{{ user.key }}/.ssh/known_hosts"
+    name: "{{ item.key }}"
+    key: "{{ item.key }} {{ item.value.type | default('ssh-ed25519') }} {{ item.value.key }}"
   loop: "{{ known_hosts | dict2items }}"
   when: known_hosts is defined
 - name: private key
