@@ -19,7 +19,7 @@
     service: borgmatic
     description: daily borgmatic backup
     command: borgmatic --verbosity -1 --syslog-verbosity 1 create --files --stats
-    time: "{{ time }}"
+    time: "{{ timer }}"
     variance: 1h
     persistent: yes
 - name: timer enabled
