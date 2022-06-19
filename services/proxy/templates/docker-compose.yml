@@ -16,6 +16,7 @@ services:
       context: https://github.com/julmb/certbot.git#main
       args: { tag: {{ certbot_architecture[ansible_architecture] }}-latest }
     restart: unless-stopped
+    depends_on: [nginx]
     volumes:
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot
