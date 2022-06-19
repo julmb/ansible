@@ -21,7 +21,7 @@
     command: borgmatic create --files --stats
     time: daily
     persistent: yes
-- name: timer enable
+- name: timer enabled
   ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
 
 # TODO: improve timers, make them configurable
