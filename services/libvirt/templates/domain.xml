@@ -32,11 +32,13 @@
     </disk>
 {% endfor %}
 
+{% for entry in domain.value.interfaces %}
     <interface type="network">
-      <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key) }}"/>
-      <model type="virtio"/>
-      <source network="default"/>
+      <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key + '-' + loop.index | string) }}"/>
+      <model type="{{ entry.type }}"/>
+      <source network="{{ entry.network }}"/>
     </interface>
+{% endfor %}
 
     <video><model type="virtio"/></video>
     <graphics type="spice" autoport="yes"/>
