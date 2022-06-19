@@ -43,6 +43,8 @@
     <video><model type="virtio"/></video>
     <graphics type="spice" autoport="yes"/>
 
+    <input type="tablet"/>
+
   </devices>
 
 </domain>
