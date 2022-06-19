@@ -14,7 +14,7 @@
   register: result
   changed_when: result.stdout or result.stderr
 - name: timer install
-  ansible.builtin.include_role: { name: system/timer-install }
+  ansible.builtin.include_role: { name: system/timer }
   vars:
     service: borgmatic
     description: daily borgmatic backup
