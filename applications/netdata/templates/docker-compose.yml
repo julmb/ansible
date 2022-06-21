@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  main:
+    image: netdata/netdata
+    restart: always
+    cap_add: [SYS_PTRACE]
+    security_opt: [apparmor:unconfined]
+    volumes:
+    - netdataconfig:/etc/netdata
+    - netdatalib:/var/lib/netdata
+    - netdatacache:/var/cache/netdata
+    - /etc/passwd:/host/etc/passwd:ro
+    - /etc/group:/host/etc/group:ro
+    - /proc:/host/proc:ro
+    - /sys:/host/sys:ro
+    - /etc/os-release:/host/etc/os-release:ro
+    ports: [192.168.0.14:80:19999]
+
+volumes:
+  netdataconfig:
+  netdatalib:
+  netdatacache:
