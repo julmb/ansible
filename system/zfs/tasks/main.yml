@@ -25,7 +25,7 @@
   vars:
     service: zpool-scrub@
     description: zpool scrub on %i
-    command: zpool scrub -w %i
+    command: sh -c "zpool scrub -w %i && zpool status %i"
     time: "{{ timers.scrub | default('*-*-01 00:00:00') }}"
     variance: 1h
     persistent: yes
