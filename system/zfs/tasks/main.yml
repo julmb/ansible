@@ -19,7 +19,6 @@
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ datasets | dict2items }}"
 
-  # TODO: use zfs-scrub-monthly timer shipped with zfs 2.1.3
 - name: timer scrub
   ansible.builtin.include_role: { name: system/timer }
   vars:
@@ -38,7 +37,6 @@
   vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ pools | dict2items }}"
 
-  # TODO: use zfs-trim-monthly timer shipped with zfs x.x.x
 - name: timer trim
   ansible.builtin.include_role: { name: system/timer }
   vars:
