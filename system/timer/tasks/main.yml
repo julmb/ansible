@@ -1,4 +1,4 @@
 - name: systemd unit service
-  ansible.builtin.template: { src: service.ini, dest: "/etc/systemd/system/{{ service }}.service" }
+  ansible.builtin.import_role: { name: system/service }
 - name: systemd unit timer
   ansible.builtin.template: { src: timer.ini, dest: "/etc/systemd/system/{{ service }}.timer" }
