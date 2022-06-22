@@ -1,0 +1,5 @@
+- name: package
+  ansible.builtin.package: { name: smartmontools }
+
+# TODO: this has /etc/smartmontools/run.d/ files
+#       currently has mailer in it, maybe replace with discord?
