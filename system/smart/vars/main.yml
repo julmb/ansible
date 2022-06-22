@@ -1,0 +1,8 @@
+template:
+  embeds:
+  - title: $SMARTD_SUBJECT
+    description: $SMARTD_FULLMESSAGE
+    color: 0xFF0000
+    fields:
+    - { name: "Device", value: $SMARTD_DEVICESTRING, inline: yes }
+    - { name: "Device Information", value: $SMARTD_DEVICEINFO, inline: yes }

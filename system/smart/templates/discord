@@ -3,17 +3,10 @@
 # Append the output of smartctl -a to the message:
 #/usr/sbin/smartctl -a -d $SMART_DEVICETYPE $SMARTD_DEVICE >> /root/msg
 
-let "red = 0xFF0000"
-
 # TODO: check more variables exposed by smartd
 header="Content-Type: application/json"
-message=${SMARTD_FULLMESSAGE//$'\n'/\\n}
-fieldDevice="{ \"name\": \"device\", \"value\": \"$SMARTD_DEVICESTRING\", \"inline\": true }"
-fieldDeviceInfo="{ \"name\": \"device information\", \"value\": \"$SMARTD_DEVICEINFO\", \"inline\": true }"
-embed="{ \"title\": \"$SMARTD_SUBJECT\", \"description\": \"$message\", \"color\": $red, \"fields\": [$fieldDevice, $fieldDeviceInfo] }"
-content="recipient: $SMARTD_ADDRESS\nsubject: $SMARTD_SUBJECT\nmessage\n$message"
-#data="{ \"content\": \"$content\" }"
-data="{ \"embeds\": [$embed] }"
+data=$(envsubst <<< '{{ template | to_json }}')
+data=${data//$'\n'/\\n}
 
 echo "$data"
 
