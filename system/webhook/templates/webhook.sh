@@ -1,6 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-header='Content-Type: application/json'
-data='{ "content": "{{ content }}" }'
+recipient=$4
+subject=$3
+message=$(cat $1)
+
+header="Content-Type: application/json"
+data="{ \"content\": \"recipient: $recipient\nsubject: $subject\nmessage\n${message//$'\n'/\\n}\" }"
 
 curl --header "$header" --data "$data" {{ url }}
