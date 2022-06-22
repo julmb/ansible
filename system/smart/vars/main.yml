@@ -1,8 +1,8 @@
 template:
   embeds:
   - title: $SMARTD_SUBJECT
-    description: $SMARTD_FULLMESSAGE
+    description: $SMARTD_MESSAGE
     color: 0xFF0000
+    timestamp: $time
     fields:
-    - { name: "Device", value: $SMARTD_DEVICESTRING, inline: yes }
-    - { name: "Device Information", value: $SMARTD_DEVICEINFO, inline: yes }
+    - { name: "Device Information", value: $SMARTD_DEVICEINFO }
