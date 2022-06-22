@@ -1,5 +1,6 @@
 - name: package
   ansible.builtin.apt: { pkg: samba }
+
 - name: user share
   ansible.builtin.user: { name: share, create_home: false }
 - name: users system
@@ -8,6 +9,7 @@
 - name: users samba
   samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
   loop: "{{ users | dict2items }}"
+
 - name: share directories
   ansible.builtin.file:
     path: "{{ item.value.path }}"
@@ -17,6 +19,10 @@
     mode: "{{ '0755' if single else '02775' }}"
   vars: { single: "{{ item.value.users | default | length == 1 }}" }
   loop: "{{ shares | dict2items }}"
+
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
   notify: restart samba
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
