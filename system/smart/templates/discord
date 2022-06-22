@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Append the output of smartctl -a to the message:
+#/usr/sbin/smartctl -a -d $SMART_DEVICETYPE $SMARTD_DEVICE >> /root/msg
+
 # TODO: check more variables exposed by smartd
 # TODO: use discord formatting options
 header="Content-Type: application/json"
