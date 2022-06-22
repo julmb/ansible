@@ -1,0 +1,2 @@
+- name: webhook
+  ansible.builtin.template: { src: webhook.sh, dest: "{{ path }}", mode: 0755 }
