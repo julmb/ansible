@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# TODO: check more variables exposed by smartd
+# TODO: use discord formatting options
 header="Content-Type: application/json"
 data="{ \"content\": \"recipient: $SMARTD_ADDRESS\nsubject: $SMARTD_SUBJECT\nmessage\n${SMARTD_FULLMESSAGE//$'\n'/\\n}\" }"
 
