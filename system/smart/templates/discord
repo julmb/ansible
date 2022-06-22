@@ -1,15 +1,14 @@
 #!/bin/bash
 
-# Append the output of smartctl -a to the message:
-#/usr/sbin/smartctl -a -d $SMART_DEVICETYPE $SMARTD_DEVICE >> /root/msg
+export SMARTD_TIME=$(date -Iseconds -d @$SMARTD_TFIRSTEPOCH)
+# TODO: this is too long to embed, use discord attachments
+#export SMARTD_INFO=$(/usr/sbin/smartctl --all $SMARTD_DEVICE)
 
-export time=$(date -Iseconds -d @$SMARTD_TFIRSTEPOCH)
-
-# TODO: check more variables exposed by smartd
 header="Content-Type: application/json"
 data=$(envsubst <<< '{{ template | to_json }}')
 data=${data//$'\n'/\\n}
+data=${data//$'\t'/\\t}
 
-echo "$data"
+#echo "$data" > /tmp/data.json
 
 curl --silent --header "$header" --data "$data" {{ url }}
