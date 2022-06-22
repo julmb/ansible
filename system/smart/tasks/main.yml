@@ -1,4 +1,6 @@
 - name: package
   ansible.builtin.package: { name: smartmontools }
+- name: webhook
+  ansible.builtin.template: { src: discord, dest: /etc/smartmontools/smartd_warning.d/, mode: 0755 }
 - name: configuration
   ansible.builtin.template: { src: smartd.conf, dest: /etc/ }
