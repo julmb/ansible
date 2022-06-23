@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export SMARTD_TIME=$(date -Iseconds -d @$SMARTD_TFIRSTEPOCH)
+export SMARTD_TIME=$(date --iso-8601=seconds --date=@$SMARTD_TFIRSTEPOCH)
 # TODO: this is too long to embed, use discord attachments
 #export SMARTD_INFO=$(/usr/sbin/smartctl --all $SMARTD_DEVICE)
 
