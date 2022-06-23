@@ -4,7 +4,12 @@ template:
     description: $SMARTD_MESSAGE
     color: 0xFF0000
     timestamp: $SMARTD_TIME
+    #url: attachment://smartctl.txt
     fields:
     - { name: "Device Information", value: $SMARTD_DEVICEINFO }
   # - title: SMART Information
   #   description: $SMARTD_INFO
+  attachments:
+  - id: 0
+    filename: smartctl.txt
+    description: smartctl output

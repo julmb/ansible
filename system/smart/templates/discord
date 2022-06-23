@@ -11,4 +11,8 @@ data=${data//$'\t'/\\t}
 
 #echo "$data" > /tmp/data.json
 
-curl --silent --header "$header" --data "$data" {{ url }}
+#curl --silent --header "$header" --data "$data" {{ url }}
+
+/usr/sbin/smartctl --all $SMARTD_DEVICE > /tmp/smartctl.txt
+
+curl --silent --form "payload_json=$data" --form "files[0]=@/tmp/smartctl.txt" {{ url }}
