@@ -15,4 +15,4 @@ data=${data//$'\t'/\\t}
 
 /usr/sbin/smartctl --all $SMARTD_DEVICE > /tmp/smartctl.txt
 
-curl --silent --form "payload_json=$data" --form "files[0]=@/tmp/smartctl.txt" {{ url }}
+curl --silent --form "payload_json=$data" --form "files[0]=@/home/user1/nightmare.png" {{ url }}
