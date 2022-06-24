@@ -24,7 +24,6 @@ async def journal(query):
 			entries.append(json.loads(line))
 		except asyncio.TimeoutError:
 			print("timeout, collected entries:", len(entries))
-			if not entries: continue
 			discord(query['url'], entries)
 			entries = []
 
