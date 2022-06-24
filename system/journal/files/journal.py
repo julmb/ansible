@@ -28,10 +28,7 @@ async def journal(query):
 			entries = []
 
 def main():
-	with open('journal.json') as config:
-		configuration = json.load(config)
-
-	for query in configuration:
-		asyncio.run(journal(query))
+	with open('journal.json') as config: configuration = json.load(config)
+	for query in configuration: asyncio.run(journal(query))
 
 main()
