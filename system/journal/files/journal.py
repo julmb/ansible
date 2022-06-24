@@ -1,9 +1,6 @@
 #!/usr/bin/python
 
-import json
-import asyncio
-import asyncio.subprocess
-import requests
+import asyncio, json, requests
 
 # read the configuration from journal.json
 def read_config():
@@ -17,14 +14,14 @@ def discord_send(url, message):
 	print(r)
 
 async def journal_listen(query):
+	# TODO: start follow without returning recent entries
 	command = ['journalctl', '--unit', query['unit'], '--follow', '--output', 'json']
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	lines = []
 	while True:
 		try:
 			print("waiting for line")
-			line = await asyncio.wait_for(process.stdout.readline(), 5)
-			lines.append(line)
+			lines.append(await asyncio.wait_for(process.stdout.readline(), 5))
 		except asyncio.TimeoutError:
 			print("timeout", "collected lines", len(lines))
 			lines = []
