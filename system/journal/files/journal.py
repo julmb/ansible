@@ -14,7 +14,7 @@ def discord(url, entries):
 
 async def journal(query):
 	# TODO: start follow without returning recent entries
-	command = ['journalctl', '--unit', query['unit'], '--follow', '--output', 'json']
+	command = ['journalctl', '--follow', '--output', 'json', '--unit', query['unit']]
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
