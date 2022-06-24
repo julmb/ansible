@@ -2,10 +2,6 @@
 
 import asyncio, json, requests
 
-# read the configuration from journal.json
-def read_config():
-	with open('journal.json') as config: return json.load(config)
-
 def discord(url, entries):
 	message = '```'
 	for entry in entries:
@@ -16,7 +12,7 @@ def discord(url, entries):
 	r = requests.post(url, headers = headers, data = json.dumps(payload))
 	print(r)
 
-async def journal_listen(query):
+async def journal(query):
 	# TODO: start follow without returning recent entries
 	command = ['journalctl', '--unit', query['unit'], '--follow', '--output', 'json']
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
@@ -33,10 +29,10 @@ async def journal_listen(query):
 			entries = []
 
 def main():
-	config = read_config()
+	with open('journal.json') as config:
+		configuration = json.load(config)
 
-	# for each query in the config, listen for the query
-	for query in config:
-		asyncio.run(journal_listen(query))
+	for query in configuration:
+		asyncio.run(journal(query))
 
 main()
