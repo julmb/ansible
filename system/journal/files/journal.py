@@ -6,8 +6,11 @@ import asyncio, json, requests
 def read_config():
 	with open('journal.json') as config: return json.load(config)
 
-# send the message to the discord webhook
-def discord_send(url, message):
+def discord(url, entries):
+	message = '```'
+	for entry in entries:
+		message += entry['MESSAGE'] + '\n'
+	message += '```'
 	payload = {'content': message}
 	headers = {'Content-Type': 'application/json'}
 	r = requests.post(url, headers = headers, data = json.dumps(payload))
@@ -17,23 +20,17 @@ async def journal_listen(query):
 	# TODO: start follow without returning recent entries
 	command = ['journalctl', '--unit', query['unit'], '--follow', '--output', 'json']
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
-	lines = []
+	entries = []
 	while True:
 		try:
 			print("waiting for line")
-			lines.append(await asyncio.wait_for(process.stdout.readline(), 5))
+			line = await asyncio.wait_for(process.stdout.readline(), 5 if entries else None)
+			entries.append(json.loads(line))
 		except asyncio.TimeoutError:
-			print("timeout", "collected lines", len(lines))
-			lines = []
-
-	# with subprocess.Popen(command, stdout = subprocess.PIPE, text = True) as process:
-	# 	while True:
-	# 		try: outs, errs = process.communicate(timeout = 5)
-	# 		except subprocess.TimeoutExpired: continue
-	# 		line = json.loads(line)
-	# 		message = '`' + line['MESSAGE'] + '`'
-	# 		print(message)
-	# 		discord_send(query['url'], message)
+			print("timeout, collected entries:", len(entries))
+			if not entries: continue
+			discord(query['url'], entries)
+			entries = []
 
 def main():
 	config = read_config()
