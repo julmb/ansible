@@ -7,10 +7,7 @@ def notify(url, file, content):
 		info = dict(fields = fields)
 
 		if len(content) + 6 < 2000:
-			if len(entries) == 1:
-				payload = { "embeds": [info | dict(description = content)] }
-			else:
-				payload = { "content": "```" + content + "```", "embeds": [info] }
+			payload = { "content": "```" + content + "```", "embeds": [info] }
 			args = dict(json = payload)
 		else:
 			payload = { "embeds": [info] }
@@ -40,7 +37,7 @@ def main():
 	for file in os.listdir("/etc/borgmatic.d"):
 		if file.endswith(".yaml"):
 			command = ["borgmatic", "--config", "/etc/borgmatic.d/" + file, "create", "--files", "--stats"]
-			process = subprocess.run(command, output = subprocess.PIPE, text = True)
+			process = subprocess.run(command, capture_output = True, text = True)
 			notify(url, file, process.stdout)
 
 main()
