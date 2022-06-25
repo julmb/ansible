@@ -15,14 +15,13 @@ colors = [0xFF0000, 0xFF0000, 0xFF0000, 0x7F0000, 0xFFFF00, 0x00FF00, 0x000000, 
 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
-	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry["_SYSTEMD_UNIT"], entry["_COMM"]
-	for (severity, identifier, unit, command), entries in itertools.groupby(entries, key):
+	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry["_SYSTEMD_UNIT"]
+	for (severity, identifier, unit), entries in itertools.groupby(entries, key):
 		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
 			dict(name = "Identifier", value = identifier, inline = True),
-			dict(name = "Unit", value = unit, inline = True),
-			dict(name = "Command", value = command, inline = True)
+			dict(name = "Unit", value = unit, inline = True)
 		]
 		info = dict(color = colors[severity], fields = fields)
 		if len(content) + 6 < 2000:
