@@ -30,7 +30,7 @@ def notify(url, entries):
 		else:
 			payload = { "embeds": [info] }
 			data = { "payload_json": json.dumps(payload) }
-			files = { "files[0]": ("log.txt", content) }
+			files = { "files[0]": ("borgmatic.log", content) }
 			r = requests.post(url, data = data, files = files)
 		print(r)
 		print(r.text)
