@@ -33,6 +33,7 @@ def notify(url, file, content):
 def main():
 	url = "<url>"
 
+	# TODO: enumerate configuration files from ansible configuration
 	# for each yaml file in /etc/borgmatic.d/ run borgmatic --config <file> using subprocess.run
 	for file in os.listdir("/etc/borgmatic.d"):
 		if file.endswith(".yaml"):
