@@ -2,15 +2,15 @@ import asyncio, json, requests
 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
-	message = "```" + "\n".join(map(lambda entry: entry['MESSAGE'], entries)) + "```"
-	payload = { 'content': message }
+	message = "```" + "\n".join(map(lambda entry: entry["MESSAGE"], entries)) + "```"
+	payload = { "content": message }
 	r = requests.post(url, json = payload)
 	print(r)
 	print(r.text)
 
 async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
-	command = ['journalctl', '--follow', '--lines', '0', '--output', 'json', '--unit', unit]
+	command = ["journalctl", "--follow", "--lines", "0", "--output", "json", "--unit", unit]
 	# TODO: check documentation of create_subprocess_exec, see if it needs with statement and how that would look like
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
@@ -30,8 +30,8 @@ async def journal(unit, timeout, notify):
 	notify(entries)
 
 def main():
-	with open('journal.json') as config: configuration = json.load(config)
+	with open("journal.json") as config: configuration = json.load(config)
 	for query in configuration:
-		asyncio.run(journal(query['unit'], 5, lambda entries: notify(query['url'], entries)))
+		asyncio.run(journal(query["unit"], 5, lambda entries: notify(query["url"], entries)))
 
 main()
