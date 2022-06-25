@@ -1,14 +1,5 @@
 import asyncio, json, requests, itertools, datetime, time
 
-# "PRIORITY": "6"
-# "_COMM": "zpool"
-# "__REALTIME_TIMESTAMP": "1656033052945870"
-# "_SYSTEMD_UNIT": "zpool-scrub@pool2.service"
-# "MESSAGE": "\t    device  ONLINE       0     0     0"
-# "_PID": "1130150"
-# "_HOSTNAME": "host1"
-# "SYSLOG_IDENTIFIER": "sh"
-
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
 colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0xAFAFAF, 0x7F7FFF]
 
