@@ -18,7 +18,11 @@
   vars:
     service: borgmatic
     description: daily borgmatic backup
-    command: borgmatic --verbosity -1 --syslog-verbosity 1 create --files --stats
+    # usually, we would use "--verbosity -1 --syslog-verbosity 1" here
+    # but borgmatic prefixes all syslog entries with the loglevel
+    # this causes bloat and does not play well with journald merging entries
+    # so we disable syslog logging and log via stdout instead
+    command: borgmatic --verbosity 1 --syslog-verbosity -1 create --files --stats
     time: "{{ timer }}"
     variance: 1h
     persistent: yes
