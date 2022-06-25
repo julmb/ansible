@@ -2,7 +2,8 @@
 
 import asyncio, json, requests
 
-def discord(url, entries):
+def notify(url, entries):
+	print("sending notification for", len(entries), "entries")
 	message = '```'
 	for entry in entries: message += entry['MESSAGE'] + '\n'
 	message += '```'
@@ -11,28 +12,30 @@ def discord(url, entries):
 	r = requests.post(url, headers = headers, data = json.dumps(payload))
 	print(r)
 
-async def journal(query):
+async def journal(unit, timeout, notify):
+	print("start watching journal for", unit)
 	# TODO: start follow without returning recent entries
-	command = ['journalctl', '--follow', '--output', 'json', '--unit', query['unit']]
+	command = ['journalctl', '--follow', '--output', 'json', '--unit', unit]
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
 		try:
-			print("waiting for line")
-			line = await asyncio.wait_for(process.stdout.readline(), 5 if entries else None)
-			if not line:
-				print("end of file")
-				print("timeout, collected entries:", len(entries))
-				discord(query['url'], entries)
-				break
-			entries.append(json.loads(line))
+			print("waiting for line, timeout", timeout if entries else None)
+			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
 		except asyncio.TimeoutError:
-			print("timeout, collected entries:", len(entries))
-			discord(query['url'], entries)
+			print("timeout")
+			notify(entries)
 			entries = []
+		else:
+			if not line: break
+			print("append entry")
+			entries.append(json.loads(line))
+	print("end of file")
+	notify(entries)
 
 def main():
 	with open('journal.json') as config: configuration = json.load(config)
-	for query in configuration: asyncio.run(journal(query))
+	for query in configuration:
+		asyncio.run(journal(query['unit'], 5, lambda entries: notify(query['url'], entries)))
 
 main()
