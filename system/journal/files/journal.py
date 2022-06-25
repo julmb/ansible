@@ -16,7 +16,7 @@ colors = [0xFF0000, 0xFF0000, 0xFF0000, 0x7F0000, 0xFFFF00, 0x00FF00, 0x000000, 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"]
-	for severity, identifier, entries in itertools.groupby(entries, key):
+	for (severity, identifier), entries in itertools.groupby(entries, key):
 		content = "```" + "\n".join(map(lambda entry: entry["MESSAGE"], entries)) + "```"
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
