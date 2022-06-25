@@ -3,6 +3,7 @@ import asyncio, json, requests, itertools, datetime, time
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
 colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0xAFAFAF, 0x7F7FFF]
 
+# TODO: post multiple embeds in single message
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry.get("_SYSTEMD_UNIT")
@@ -11,9 +12,9 @@ def notify(url, entries):
 		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
-			dict(name = "Identifier", value = identifier, inline = True),
-			dict(name = "Unit", value = unit, inline = True)
+			dict(name = "Identifier", value = identifier, inline = True)
 		]
+		if unit: fields.append(dict(name = "Unit", value = unit, inline = True))
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
 
