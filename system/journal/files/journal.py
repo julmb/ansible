@@ -33,7 +33,8 @@ def notify(url, entries):
 
 async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
-	command = ["journalctl", "--follow", "--lines", "0", "--output", "json", "--unit", unit]
+	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
+	if unit: command += ["--unit", unit]
 	# TODO: check documentation of create_subprocess_exec, see if it needs with statement and how that would look like
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
