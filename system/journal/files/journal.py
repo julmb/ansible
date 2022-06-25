@@ -32,12 +32,16 @@ def notify(url, entries):
 		
 		while True:
 			response = requests.post(url, **args)
-			print(response.status_code, response.text)
+			print("response code", response.status_code)
+			print("response headers", response.headers)
+			print("response text", response.text)
 			if response.status_code == 429:
-				data = response.json()
-				print("got response", data, response.headers)
-				print("trying again in", data["retry_after"], "seconds")
-				time.sleep(data["retry_after"])
+				print("current time", datetime.datetime.now().isoformat())
+				print("reset on", datetime.datetime.utcfromtimestamp(int(response.headers["X-RateLimit-Reset"])).isoformat())
+				print("reset in", int(response.headers["X-RateLimit-Reset-After"]))
+				print("retry after", int(response.headers["Retry-After"]))
+				print("sleeping for", int(response.headers["X-RateLimit-Reset-After"]), "seconds")
+				time.sleep(int(response.headers["X-RateLimit-Reset-After"]))
 			else: break
 
 async def journal(unit, timeout, notify):
