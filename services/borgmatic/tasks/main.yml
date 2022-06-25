@@ -13,9 +13,9 @@
   ansible.builtin.command: borgmatic init --encryption repokey
   register: result
   changed_when: result.stdout or result.stderr
-- name: script
+- name: notify script
   ansible.builtin.copy: { src: notify.py, dest: /usr/local/bin/borgmatic-notify.py, mode: 0755 }
-- name: script configuration
+- name: notify configuration
   ansible.builtin.template: { src: notify.json, dest: /etc/borgmatic-notify.json, mode: 0600 }
 - name: timer
   ansible.builtin.include_role: { name: system/timer }
