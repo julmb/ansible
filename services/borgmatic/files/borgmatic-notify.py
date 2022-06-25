@@ -36,6 +36,7 @@ def main():
 	# for each yaml file in /etc/borgmatic.d/ run borgmatic --config <file> using subprocess.run
 	for file in os.listdir("/etc/borgmatic.d"):
 		if file.endswith(".yaml"):
+			# TODO: use structured json output and generate embeds from it
 			command = ["borgmatic", "--config", "/etc/borgmatic.d/" + file, "create", "--files", "--stats"]
 			process = subprocess.run(command, capture_output = True, text = True)
 			notify(url, file, process.stdout)
