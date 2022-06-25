@@ -9,6 +9,7 @@
   zpool:
     name: "{{ item.key }}"
     hard: "{{ item.value.hard | default(omit) }}"
+    force: "{{ item.value.force | default(omit) }}"
     vdevs: "{{ item.value.vdevs }}"
     properties: "{{ item.value.properties | default(omit) }}"
   loop: "{{ pools | dict2items }}"
