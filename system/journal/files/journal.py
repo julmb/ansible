@@ -14,8 +14,7 @@ def notify(url, entries):
 
 async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
-	# TODO: start follow without returning recent entries
-	command = ['journalctl', '--follow', '--output', 'json', '--unit', unit]
+	command = ['journalctl', '--follow', '--lines', '0', '--output', 'json', '--unit', unit]
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
