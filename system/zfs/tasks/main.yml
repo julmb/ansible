@@ -20,6 +20,12 @@
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ datasets | dict2items }}"
 
+- name: fix bug in zed slack notification function
+  ansible.builtin.lineinfile:
+    path: /etc/zfs/zed.d/zed-functions.sh
+    search_string: "    msg_json=\"$(printf '{\"text\": \"*%s*\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
+    line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
+
 - name: timer scrub
   ansible.builtin.include_role: { name: system/timer }
   vars:
