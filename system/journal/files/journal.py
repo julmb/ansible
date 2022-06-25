@@ -17,7 +17,10 @@ def notify(url, entries):
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
 		if len(content) + 6 < 2000:
-			payload = { "content": "```" + content + "```", "embeds": [info] }
+			if len(entries) == 1:
+				payload = { "embeds": [info | dict(description = content)] }
+			else:
+				payload = { "content": "```" + content + "```", "embeds": [info] }
 			r = requests.post(url, json = payload)
 		else:
 			payload = { "embeds": [info] }
