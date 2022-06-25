@@ -1,7 +1,7 @@
 import asyncio, json, requests, itertools, datetime, time
 
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
-colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0xAFAFAF, 0x7F7FFF]
+colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
 
 # TODO: post multiple embeds in single message
 def notify(url, entries):
