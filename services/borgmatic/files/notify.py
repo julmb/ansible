@@ -2,18 +2,9 @@
 
 import sys, os, subprocess, json, time, asyncio, requests
 
-def notify(url, file, content):
-	fields = [dict(name = "File", value = file)]
-	info = dict(fields = fields)
-
-	if len(content) + 6 < 2000:
-		payload = { "content": "```" + content + "```", "embeds": [info] }
-		args = dict(json = payload)
-	else:
-		payload = { "embeds": [info] }
-		data = { "payload_json": json.dumps(payload) }
-		files = { "files[0]": ("borgmatic.log", content) }
-		args = dict(data = data, files = files)
+def notify(url, content):
+	if len(content) + 6 < 2000: args = dict(json = { "content": "```" + content + "```" })
+	else: args = dict(files = { "files[0]": ("borgmatic.log", content) })
 	
 	while True:
 		response = requests.post(url, **args)
@@ -40,6 +31,6 @@ def main():
 			# TODO: use structured json output and generate embeds from it
 			command = ["borgmatic", "--config", "/etc/borgmatic.d/" + file, "create", "--files", "--stats"]
 			process = subprocess.run(command, capture_output = True, text = True)
-			notify(url, file, process.stdout)
+			notify(url, process.stdout)
 
 main()
