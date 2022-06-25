@@ -20,11 +20,12 @@
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ datasets | dict2items }}"
 
-- name: fix bug in zed slack notification function
+# TODO adjust this once the bugfix from upstream is in debian
+- name: fix bug in zed slack notification function and add code block
   ansible.builtin.lineinfile:
     path: /etc/zfs/zed.d/zed-functions.sh
     search_string: "    msg_json=\"$(printf '{\"text\": \"*%s*\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
-    line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
+    line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n```%s```\"}' \"${subject}\" \"${msg_body}\" )\""
 - name: zed configuration
   ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
 
