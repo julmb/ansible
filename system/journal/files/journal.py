@@ -4,8 +4,7 @@ import asyncio, json, requests
 
 def discord(url, entries):
 	message = '```'
-	for entry in entries:
-		message += entry['MESSAGE'] + '\n'
+	for entry in entries: message += entry['MESSAGE'] + '\n'
 	message += '```'
 	payload = {'content': message}
 	headers = {'Content-Type': 'application/json'}
@@ -24,6 +23,8 @@ async def journal(query):
 			line = await asyncio.wait_for(process.stdout.readline(), 5 if entries else None)
 			if not line:
 				print("end of file")
+				print("timeout, collected entries:", len(entries))
+				discord(query['url'], entries)
 				break
 			entries.append(json.loads(line))
 		except asyncio.TimeoutError:
