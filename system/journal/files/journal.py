@@ -1,4 +1,4 @@
-import asyncio, json, requests, itertools
+import asyncio, json, requests, itertools, datetime
 
 # "PRIORITY": "6"
 # "_COMM": "zpool"
@@ -17,13 +17,15 @@ def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry["_SYSTEMD_UNIT"]
 	for (severity, identifier, unit), entries in itertools.groupby(entries, key):
+		entries = list(entries)
 		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
 			dict(name = "Identifier", value = identifier, inline = True),
 			dict(name = "Unit", value = unit, inline = True)
 		]
-		info = dict(color = colors[severity], fields = fields)
+		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
 		if len(content) + 6 < 2000:
 			payload = { "content": "```" + content + "```", "embeds": [info] }
 			r = requests.post(url, json = payload)
