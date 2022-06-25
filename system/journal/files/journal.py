@@ -68,8 +68,8 @@ async def journal(unit, timeout, notify):
 	notify(entries)
 
 def main():
-	with open("journal.json") as config: configuration = json.load(config)
-	for query in configuration:
+	with open("journal.json") as configuration: entries = json.load(configuration)
+	for name, query in entries.items():
 		asyncio.run(journal(query["unit"], 5, lambda entries: notify(query["url"], entries)))
 
 main()
