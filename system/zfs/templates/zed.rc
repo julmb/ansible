@@ -1,4 +1,6 @@
 ZED_NOTIFY_VERBOSE=1
 ZED_NOTIFY_DATA=1
 
+{% if webhook is defined %}
 ZED_SLACK_WEBHOOK_URL="https://discord.com/api/webhooks/{{ webhook.id }}/{{ webhook.token }}/slack"
+{% endif %}
