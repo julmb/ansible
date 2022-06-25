@@ -42,6 +42,7 @@ def notify(url, entries):
 				print("retry after", int(response.headers["Retry-After"]))
 				print("sleeping for", int(response.headers["X-RateLimit-Reset-After"]), "seconds")
 				time.sleep(int(response.headers["X-RateLimit-Reset-After"]))
+			# TODO: properly handle all error codes
 			else: break
 
 async def journal(unit, timeout, notify):
