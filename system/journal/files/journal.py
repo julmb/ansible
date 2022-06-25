@@ -1,11 +1,10 @@
-import asyncio, json, requests, itertools, datetime
+import asyncio, json, requests, itertools, datetime, time
 
 # "PRIORITY": "6"
 # "_COMM": "zpool"
 # "__REALTIME_TIMESTAMP": "1656033052945870"
 # "_SYSTEMD_UNIT": "zpool-scrub@pool2.service"
 # "MESSAGE": "\t    device  ONLINE       0     0     0"
-# "__MONOTONIC_TIMESTAMP": "274795432440"
 # "_PID": "1130150"
 # "_HOSTNAME": "host1"
 # "SYSLOG_IDENTIFIER": "sh"
@@ -19,12 +18,12 @@ def notify(url, entries):
 	for (severity, identifier, unit), entries in itertools.groupby(entries, key):
 		entries = list(entries)
 		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
-		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
 			dict(name = "Identifier", value = identifier, inline = True),
 			dict(name = "Unit", value = unit, inline = True)
 		]
+		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
 		if len(content) + 6 < 2000:
 			payload = { "content": "```" + content + "```", "embeds": [info] }
@@ -36,6 +35,7 @@ def notify(url, entries):
 			r = requests.post(url, data = data, files = files)
 		print(r)
 		print(r.text)
+		time.sleep(1)
 
 async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
