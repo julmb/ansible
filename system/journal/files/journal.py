@@ -5,7 +5,7 @@ colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0xAFAFAF, 
 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
-	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry["_SYSTEMD_UNIT"]
+	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry.get("_SYSTEMD_UNIT")
 	for (severity, identifier, unit), entries in itertools.groupby(entries, key):
 		entries = list(entries)
 		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
@@ -16,20 +16,28 @@ def notify(url, entries):
 		]
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
+
 		if len(content) + 6 < 2000:
 			if len(entries) == 1:
 				payload = { "embeds": [info | dict(description = content)] }
 			else:
 				payload = { "content": "```" + content + "```", "embeds": [info] }
-			r = requests.post(url, json = payload)
+			args = dict(json = payload)
 		else:
 			payload = { "embeds": [info] }
 			data = { "payload_json": json.dumps(payload) }
 			files = { "files[0]": ("borgmatic.log", content) }
-			r = requests.post(url, data = data, files = files)
-		print(r)
-		print(r.text)
-		time.sleep(1)
+			args = dict(data = data, files = files)
+		
+		while True:
+			response = requests.post(url, **args)
+			print(response.status_code, response.text)
+			if response.status_code == 429:
+				data = response.json()
+				print("got response", data, response.headers)
+				print("trying again in", data["retry_after"], "seconds")
+				time.sleep(data["retry_after"])
+			else: break
 
 async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
