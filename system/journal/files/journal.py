@@ -10,7 +10,7 @@ import asyncio, json, requests, itertools, datetime, time
 # "SYSLOG_IDENTIFIER": "sh"
 
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
-colors = [0xFF0000, 0xFF0000, 0xFF0000, 0x7F0000, 0xFFFF00, 0x00FF00, 0x000000, 0x0000FF]
+colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0xAFAFAF, 0x7F7FFF]
 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
