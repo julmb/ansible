@@ -25,9 +25,14 @@ def notify(url, entries):
 			dict(name = "Command", value = command, inline = True)
 		]
 		info = dict(color = colors[severity], fields = fields)
-		payload = { "content": "```" + content + "```", "embeds": [info] }
-		print(payload)
-		r = requests.post(url, json = payload)
+		if len(content) + 6 < 2000:
+			payload = { "content": "```" + content + "```", "embeds": [info] }
+			r = requests.post(url, json = payload)
+		else:
+			payload = { "embeds": [info] }
+			data = { "payload_json": json.dumps(payload) }
+			files = { "files[0]": ("log.txt", content) }
+			r = requests.post(url, data = data, files = files)
 		print(r)
 		print(r.text)
 
