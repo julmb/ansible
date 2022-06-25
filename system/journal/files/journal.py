@@ -4,9 +4,7 @@ import asyncio, json, requests
 
 def notify(url, entries):
 	print("sending notification for", len(entries), "entries")
-	message = '```'
-	for entry in entries: message += entry['MESSAGE'] + '\n'
-	message += '```'
+	message = "```" + "\n".join(map(lambda entry: entry['MESSAGE'], entries)) + "```"
 	payload = {'content': message}
 	headers = {'Content-Type': 'application/json'}
 	r = requests.post(url, headers = headers, data = json.dumps(payload))
