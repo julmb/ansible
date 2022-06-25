@@ -25,6 +25,8 @@
     path: /etc/zfs/zed.d/zed-functions.sh
     search_string: "    msg_json=\"$(printf '{\"text\": \"*%s*\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
     line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
+- name: zed configuration
+  ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
 
 - name: timer scrub
   ansible.builtin.include_role: { name: system/timer }
