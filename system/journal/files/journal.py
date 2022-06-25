@@ -20,7 +20,11 @@ async def journal(query):
 	while True:
 		try:
 			print("waiting for line")
+			# TODO: does this work with unicode?
 			line = await asyncio.wait_for(process.stdout.readline(), 5 if entries else None)
+			if not line:
+				print("end of file")
+				break
 			entries.append(json.loads(line))
 		except asyncio.TimeoutError:
 			print("timeout, collected entries:", len(entries))
