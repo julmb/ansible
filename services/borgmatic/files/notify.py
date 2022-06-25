@@ -6,9 +6,8 @@ def run(name):
 	print("running backup", name)
 
 	# TODO: use structured json output and generate embeds from it
-	command = ["borgmatic", "--config", "/etc/borgmatic.d/{}.yaml".format(name), "create", "--files", "--stats"]
+	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1", "--config", "/etc/borgmatic.d/{}.yaml".format(name), "create", "--files", "--stats"]
 	process = subprocess.run(command, capture_output = True, text = True)
-	print(process)
 	return process.stdout
 
 def notify(name, webhook, text):
@@ -16,7 +15,7 @@ def notify(name, webhook, text):
 
 	url = "https://discord.com/api/webhooks/{}/{}".format(webhook["id"], webhook["token"])
 
-	if len(text) + 6 < 2000: args = dict(json = { "text": "```" + text + "```" })
+	if len(text) + 6 < 2000: args = dict(json = { "content": "```" + text + "```" })
 	else: args = dict(files = { "files[0]": ("borgmatic.log", text) })
 	
 	while True:
