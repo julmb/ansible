@@ -70,7 +70,6 @@ async def watch(name, query):
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
-	watches = (watch(name, query) for name, query in entries.items())
-	await asyncio.gather(*watches)
+	await asyncio.gather(*[watch(name, query) for name, query in entries.items()])
 
 asyncio.run(main())
