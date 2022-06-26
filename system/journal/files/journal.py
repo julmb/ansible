@@ -2,25 +2,25 @@ import asyncio, json, requests, itertools, datetime, time
 
 # TODO: log to syslog, ignore entries originating from this script to avoid loops
 
-async def journal(unit, timeout, notify):
-	print("start watching journal for", unit)
+async def journal(name, unit, timeout, notify):
+	print(name, "start watching journal for", unit)
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	if unit: command += ["--unit", unit]
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
 		try:
-			print("waiting for line, timeout", timeout if entries else None)
+			print(name, "waiting for line, timeout", timeout if entries else None)
 			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
 		except asyncio.TimeoutError:
-			print("timeout")
+			print(name, "timeout")
 			notify(entries)
 			entries = []
 		else:
 			if not line: break
-			print("append entry")
+			print(name, "append entry")
 			entries.append(json.loads(line))
-	print("end of file")
+	print(name, "end of file")
 	notify(entries)
 	await process.wait()
 
@@ -61,6 +61,6 @@ def notify(entries, url):
 def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
 	for name, query in entries.items():
-		asyncio.run(journal(query["unit"], 5, lambda entries: notify(entries, query["url"])))
+		asyncio.run(journal(name, query["unit"], 5, lambda entries: notify(entries, query["url"])))
 
 main()
