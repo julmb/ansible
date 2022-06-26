@@ -34,9 +34,8 @@ def request(identifier, severity, entries):
 	else: return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
 
 def post(webhook, request):
-	url = f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}"
 	while True:
-		response = requests.post(url, **request)
+		response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
