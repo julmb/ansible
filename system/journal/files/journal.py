@@ -26,20 +26,14 @@ def request(identifier, severity, entries):
 	severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
 	colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
 
-	fields = [dict(name = "Severity", value = severities[severity])]
+	description = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
+	attachment = "{}.log".format(identifier), "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+	fields = [{"name": "Severity", "value": severities[severity]}]
 	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
-	info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
+	embed = {"title": identifier, "color": colors[severity], "fields": fields, "timestamp": timestamp}
 
-	blocks = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
-	lines = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
-	if len(blocks) < 4096:
-		payload = { "embeds": [info | dict(description = blocks)] }
-		return dict(json = payload)
-	else:
-		payload = { "embeds": [info] }
-		data = { "payload_json": json.dumps(payload) }
-		files = { "files[0]": ("{}.log".format(identifier), lines) }
-		return dict(data = data, files = files)
+	if len(description) < 4096: return dict(json = {"embeds": [embed | {"description": description}]})
+	else: return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
 
 def post(url, request):
 	while True:
