@@ -24,7 +24,7 @@ def notify(url, entries):
 		else:
 			payload = { "embeds": [info] }
 			data = { "payload_json": json.dumps(payload) }
-			files = { "files[0]": ("borgmatic.log", lines) }
+			files = { "files[0]": ("{}.log".format(identifier), lines) }
 			args = dict(data = data, files = files)
 		
 		while True:
