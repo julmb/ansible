@@ -29,7 +29,7 @@ def request(identifier, severity, entries):
 	fields = [dict(name = "Severity", value = severities[severity])]
 	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 	info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
-	
+
 	blocks = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
 	lines = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
 	if len(blocks) < 4096:
