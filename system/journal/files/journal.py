@@ -66,7 +66,7 @@ async def watch(name, query):
 		identifier, severity = key(entries[0])
 		print(f"{name}: received group of {len(entries)} entries for {identifier} with severity {severity}")
 		post(query["url"], request(identifier, severity, entries))
-	await journal(name, query["options"], 5, key, notify)
+	await journal(name, query.get("options", []), 5, key, notify)
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
