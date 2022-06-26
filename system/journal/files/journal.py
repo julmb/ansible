@@ -22,10 +22,10 @@ async def journal(unit, timeout, notify):
 	print("end of file")
 	notify(entries)
 
-severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
-colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
-
 def request(identifier, severity, entries):
+	severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
+	colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
+
 	fields = [dict(name = "Severity", value = severities[severity])]
 	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 	info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
