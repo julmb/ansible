@@ -50,7 +50,7 @@ def post(url, request):
 async def run(query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	def notify(entries): post(query["url"], request(*key(entries[0]), entries))
-	await journal(query.get("options", []), 5, key, notify)
+	await journal(query.get("options", []), query.get("timeout", 10), key, notify)
 
 async def main():
 	with open("journal.json") as configuration: queries = json.load(configuration)
