@@ -3,7 +3,7 @@
 import subprocess, json, requests, time, syslog
 
 # TODO: use structured json output and generate embeds from it
-def backup(name):
+def borgmatic(name):
 	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1"]
 	options = ["--config", f"/etc/borgmatic.d/{name}.yaml"]
 	action = ["create", "--files", "--stats"]
@@ -34,7 +34,7 @@ def post(webhook, request):
 		break
 
 def main():
-	with open("/etc/borgmatic-notify.json") as configuration: entries = json.load(configuration)
-	for name, entry in entries.items(): post(entry["webhook"], request(name, backup(name)))
+	with open("/etc/borgmatic-notify.json") as configuration: backups = json.load(configuration)
+	for name, backup in backups.items(): post(backup["webhook"], request(name, borgmatic(name)))
 
 main()
