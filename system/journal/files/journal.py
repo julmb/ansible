@@ -44,10 +44,10 @@ def post(url, request):
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
-			print("sleeping for", float(response.headers["X-RateLimit-Reset-After"]), "seconds")
-			time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
+			delay = float(response.headers["X-RateLimit-Reset-After"])
+			print(f"sleeping for {delay} seconds")
+			time.sleep(delay)
 			continue
-
 		print(f"unexpected response status code {response.status_code} ({response.reason})")
 		print(f"response content: {response.text}")
 		break
