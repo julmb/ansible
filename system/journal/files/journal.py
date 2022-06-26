@@ -9,7 +9,6 @@ def notify(url, entries):
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"]
 	for (severity, identifier), entries in itertools.groupby(entries, key):
 		entries = list(entries)
-		content = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
 			dict(name = "Identifier", value = identifier, inline = True)
@@ -17,13 +16,15 @@ def notify(url, entries):
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
 
-		if len(content) < 4096:
-			payload = { "embeds": [info | dict(description = content)] }
+		blocks = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
+		lines = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+		if len(blocks) < 4096:
+			payload = { "embeds": [info | dict(description = blocks)] }
 			args = dict(json = payload)
 		else:
 			payload = { "embeds": [info] }
 			data = { "payload_json": json.dumps(payload) }
-			files = { "files[0]": ("borgmatic.log", content) }
+			files = { "files[0]": ("borgmatic.log", lines) }
 			args = dict(data = data, files = files)
 		
 		while True:
