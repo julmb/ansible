@@ -27,7 +27,7 @@ def request(identifier, severity, entries):
 	description = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
 	attachment = "{}.log".format(identifier), "\n".join(map(lambda entry: entry["MESSAGE"], entries))
 	fields = [{"name": "Severity", "value": severities[severity]}]
-	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
+	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) * 1e-6).isoformat()
 	embed = {"title": identifier, "color": colors[severity], "fields": fields, "timestamp": timestamp}
 
 	if len(description) < 4096: return dict(json = {"embeds": [embed | {"description": description}]})
