@@ -55,7 +55,7 @@ async def run(query):
 	await journal(query.get("options", []), 5, key, notify)
 
 async def main():
-	with open("journal.json") as configuration: entries = json.load(configuration)
-	await asyncio.gather(*(run(query) for name, query in entries.items()))
+	with open("journal.json") as configuration: queries = json.load(configuration)
+	await asyncio.gather(*map(run, queries))
 
 asyncio.run(main())
