@@ -52,17 +52,16 @@ def notify_block(identifier, severity, entries, url):
     		time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
     	# TODO: properly handle all error codes
     	else: break
-    return response
 
-def notify(url, entries):
+def notify(entries, url):
+	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	print("sending notification for", len(entries), "entries")
-	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"]
-	for (severity, identifier), entries in itertools.groupby(entries, key):
+	for (identifier, severity), entries in itertools.groupby(entries, key):
 		notify_block(identifier, severity, list(entries), url)
 
 def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
 	for name, query in entries.items():
-		asyncio.run(journal(query["unit"], 5, lambda entries: notify(query["url"], entries)))
+		asyncio.run(journal(query["unit"], 5, lambda entries: notify(entries, query["url"])))
 
 main()
