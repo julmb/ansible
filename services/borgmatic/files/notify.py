@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import subprocess, json, time, asyncio, requests
+import subprocess, json, requests, time
 
 def run(name):
 	print("running backup", name)
@@ -17,21 +17,23 @@ def notify(name, webhook, text):
 
 	if len(text) + 6 < 2000: args = dict(json = { "content": "```" + text + "```" })
 	else: args = dict(files = { "files[0]": ("borgmatic.log", text) })
-	
+	post(url, args)
+
+def post(url, request):
 	while True:
-		response = requests.post(url, **args)
-		print("response code", response.status_code)
-		print("response headers", response.headers)
-		print("response text", response.text)
+		response = requests.post(url, **request)
+		if response.status_code == 200: break
+		if response.status_code == 204: break
 		if response.status_code == 429:
-			print("current time", datetime.datetime.now().isoformat())
-			print("reset on", datetime.datetime.utcfromtimestamp(int(response.headers["X-RateLimit-Reset"])).isoformat())
-			print("reset in", int(response.headers["X-RateLimit-Reset-After"]))
-			print("retry after", int(response.headers["Retry-After"]))
-			print("sleeping for", int(response.headers["X-RateLimit-Reset-After"]), "seconds")
-			time.sleep(int(response.headers["X-RateLimit-Reset-After"]))
-		# TODO: properly handle all error codes
-		else: break
+			data = response.json()
+			message = data["message"]
+			delay = float(data["retry_after"]) * 1e-3
+			syslog.syslog(syslog.LOG_INFO, f"Received status code {response.status_code} ({response.reason}): {message}")
+			syslog.syslog(syslog.LOG_INFO, f"Retrying request after {delay} seconds")
+			time.sleep(delay)
+			continue
+		syslog.syslog(syslog.LOG_ERR, f"Received unexpected status code {response.status_code} ({response.reason}): {response.text}")
+		break
 
 def main():
 	with open("/etc/borgmatic-notify.json") as configuration: entries = json.load(configuration)
