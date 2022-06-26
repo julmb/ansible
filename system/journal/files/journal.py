@@ -9,10 +9,7 @@ def notify(url, entries):
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"]
 	for (severity, identifier), entries in itertools.groupby(entries, key):
 		entries = list(entries)
-		fields = [
-			dict(name = "Severity", value = severities[severity], inline = True),
-			dict(name = "Identifier", value = identifier, inline = True)
-		]
+		fields = [dict(name = "Severity", value = severities[severity])]
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
 
