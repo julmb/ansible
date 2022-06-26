@@ -7,7 +7,7 @@ def borgmatic(name):
 	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1"]
 	options = ["--config", f"/etc/borgmatic.d/{name}.yaml"]
 	action = ["create", "--files", "--stats"]
-	process = subprocess.run(*(command + options + action), capture_output = True, text = True)
+	process = subprocess.run(command + options + action, capture_output = True, text = True)
 	return process.stdout
 
 def request(name, text):
