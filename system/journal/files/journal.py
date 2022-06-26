@@ -1,7 +1,5 @@
 import asyncio, json, requests, itertools, datetime, time, syslog
 
-# TODO: log to syslog, ignore entries originating from this script to avoid loops
-
 async def journal(name, options, timeout, key, notify):
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	options = [item for option in options for name, value in option.items() for item in ("--" + name, value)]
