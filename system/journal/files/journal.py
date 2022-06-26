@@ -21,14 +21,12 @@ async def journal(name, unit, timeout, notify):
 		else:
 			if not line: break
 			entry = json.loads(line)
-			if not entries or key(entry) == key(entries[0]):
-				print(name, "add matching entry to group")
-				entries.append(entry)
-			else:
+			if entries and key(entry) != key(entries[0]):
 				print(name, "finish group after non-matching entry")
 				notify(entries)
-				print(name, "add first entry to new group")
-				entries = [entry]
+				entries = []
+			print(name, "add new entry to group")
+			entries.append(entry)
 	print(name, "end of file")
 	if entries:
 		print(name, "finish group after end of file")
