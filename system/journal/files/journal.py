@@ -1,4 +1,4 @@
-import asyncio, json, requests, itertools, datetime, time
+import asyncio, json, requests, itertools, datetime, time, syslog
 
 # TODO: log to syslog, ignore entries originating from this script to avoid loops
 
@@ -40,11 +40,11 @@ def post(url, request):
 		if response.status_code == 204: break
 		if response.status_code == 429:
 			delay = float(response.headers["X-RateLimit-Reset-After"])
-			print(f"sleeping for {delay} seconds")
+			syslog.syslog(syslog.LOG_WARNING, f"received status code {response.status_code} ({response.reason}), sleeping for {delay} seconds")
+			syslog.syslog(syslog.LOG_WARNING, f"{response.text}")
 			time.sleep(delay)
 			continue
-		print(f"unexpected response status code {response.status_code} ({response.reason})")
-		print(f"response content: {response.text}")
+		syslog.syslog(syslog.LOG_ERR, f"received unexpected status code {response.status_code} ({response.reason}): {response.text}")
 		break
 
 async def watch(name, query):
