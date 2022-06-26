@@ -58,9 +58,12 @@ def notify(entries, url):
 	for (identifier, severity), entries in itertools.groupby(entries, key):
 		post(url, request(identifier, severity, list(entries)))
 
-def main():
-	with open("journal.json") as configuration: entries = json.load(configuration)
-	for name, query in entries.items():
-		asyncio.run(journal(name, query["unit"], 5, lambda entries: notify(entries, query["url"])))
+async def watch(name, query):
+	await journal(name, query["unit"], 5, lambda entries: notify(entries, query["url"]))
 
-main()
+async def main():
+	with open("journal.json") as configuration: entries = json.load(configuration)
+	watches = (watch(name, query) for name, query in entries.items())
+	await asyncio.gather(*watches)
+
+asyncio.run(main())
