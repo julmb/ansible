@@ -49,9 +49,7 @@ def post(url, request):
 
 async def run(query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
-	def notify(entries):
-		identifier, severity = key(entries[0])
-		post(query["url"], request(identifier, severity, entries))
+	def notify(entries): post(query["url"], request(*key(entries[0]), entries))
 	await journal(query.get("options", []), 5, key, notify)
 
 async def main():
