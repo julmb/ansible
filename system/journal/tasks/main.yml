@@ -1,6 +1,6 @@
 - name: package
   ansible.builtin.apt: { pkg: python3-requests }
-- name: configuration
-  ansible.builtin.template: { src: journal.json, dest: journal/ }
 - name: script
-  ansible.builtin.copy: { src: journal.py, dest: journal/ }
+  ansible.builtin.copy: { src: journal.py, dest: /usr/local/sbin/, mode: 0755 }
+- name: configuration
+  ansible.builtin.template: { src: journal.json, dest: /etc/, mode: 0600 }
