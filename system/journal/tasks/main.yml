@@ -1,5 +1,5 @@
-# package: python3-requests
-
+- name: package
+  ansible.builtin.apt: { pkg: python3-requests }
 - name: configuration
   ansible.builtin.template: { src: journal.json, dest: journal/ }
 - name: script
