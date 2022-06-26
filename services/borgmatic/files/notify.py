@@ -10,10 +10,10 @@ def run(name):
 	process = subprocess.run(command, capture_output = True, text = True)
 	return process.stdout
 
-def notify(name, webhook, text):
+def request(name, text):
 	print("notifying", name)
-	if len(text) + 6 < 2000: request = dict(json = { "content": "```" + text + "```" })
-	else: request = dict(files = { "files[0]": ("borgmatic.log", text) })
+	if len(text) + 6 < 2000: return dict(json = { "content": "```" + text + "```" })
+	else: return dict(files = { "files[0]": ("borgmatic.log", text) })
 	post(webhook, request)
 
 def post(webhook, request):
@@ -34,6 +34,6 @@ def post(webhook, request):
 
 def main():
 	with open("/etc/borgmatic-notify.json") as configuration: entries = json.load(configuration)
-	for name, entry in entries.items(): notify(name, entry["webhook"], run(name))
+	for name, entry in entries.items(): post(entry["webhook"], request(name, run(name)))
 
 main()
