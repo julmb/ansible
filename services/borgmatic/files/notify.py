@@ -12,16 +12,13 @@ def run(name):
 
 def notify(name, webhook, text):
 	print("notifying", name)
-
-	url = "https://discord.com/api/webhooks/{}/{}".format(webhook["id"], webhook["token"])
-
 	if len(text) + 6 < 2000: request = dict(json = { "content": "```" + text + "```" })
 	else: request = dict(files = { "files[0]": ("borgmatic.log", text) })
-	post(url, request)
+	post(webhook, request)
 
-def post(url, request):
+def post(webhook, request):
 	while True:
-		response = requests.post(url, **request)
+		response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
