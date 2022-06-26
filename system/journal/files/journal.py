@@ -5,10 +5,8 @@ import asyncio, json, requests, itertools, datetime, time
 async def journal(name, options, timeout, key, notify):
 	print(f"{name}: start watching journal")
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
-	for option in options:
-		name = next(iter(option))
-		command.extend(["--" + name, option[name]])
-	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
+	options = [item for option in options for name, value in option.items() for item in ("--" + name, value)]
+	process = await asyncio.create_subprocess_exec(*(command + options), stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
 		try:
