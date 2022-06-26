@@ -46,7 +46,7 @@ def post(url, request):
 			syslog.syslog(syslog.LOG_INFO, f"Retrying request after {delay} seconds")
 			time.sleep(delay)
 			continue
-		syslog.syslog(syslog.LOG_ERR, f"received unexpected status code {response.status_code} ({response.reason}): {response.text}")
+		syslog.syslog(syslog.LOG_ERR, f"Received unexpected status code {response.status_code} ({response.reason}): {response.text}")
 		break
 
 async def watch(name, query):
