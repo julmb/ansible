@@ -33,7 +33,8 @@ def request(identifier, severity, entries):
 	if len(description) < 4096: return dict(json = {"embeds": [embed | {"description": description}]})
 	else: return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
 
-def post(url, request):
+def post(webhook, request):
+	url = "https://discord.com/api/webhooks/{}/{}".format(webhook["id"], webhook["token"])
 	while True:
 		response = requests.post(url, **request)
 		if response.status_code == 200: break
@@ -51,7 +52,7 @@ def post(url, request):
 
 async def run(query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
-	def notify(entries): post(query["url"], request(*key(entries[0]), entries))
+	def notify(entries): post(query["webhook"], request(*key(entries[0]), entries))
 	await journal(query.get("options", []), query.get("timeout", 10), key, notify)
 
 async def main():
