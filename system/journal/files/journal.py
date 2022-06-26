@@ -9,7 +9,7 @@ def notify(url, entries):
 	def key(entry): return int(entry["PRIORITY"]), entry["SYSLOG_IDENTIFIER"], entry.get("_SYSTEMD_UNIT")
 	for (severity, identifier, unit), entries in itertools.groupby(entries, key):
 		entries = list(entries)
-		content = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+		content = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
 		fields = [
 			dict(name = "Severity", value = severities[severity], inline = True),
 			dict(name = "Identifier", value = identifier, inline = True)
@@ -18,11 +18,8 @@ def notify(url, entries):
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
 		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
 
-		if len(content) + 6 < 2000:
-			if len(entries) == 1:
-				payload = { "embeds": [info | dict(description = content)] }
-			else:
-				payload = { "content": "```" + content + "```", "embeds": [info] }
+		if len(content) < 4096:
+			payload = { "embeds": [info | dict(title = identifier, description = content)] }
 			args = dict(json = payload)
 		else:
 			payload = { "embeds": [info] }
