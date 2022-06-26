@@ -2,9 +2,7 @@ import asyncio, json, requests, itertools, datetime, time
 
 # TODO: log to syslog, ignore entries originating from this script to avoid loops
 
-def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
-
-async def journal(name, unit, timeout, notify):
+async def journal(name, unit, timeout, key, notify):
 	print(f"{name}: start watching journal")
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	if unit: command += ["--unit", unit]
@@ -63,11 +61,12 @@ def post(url, request):
 		break
 
 async def watch(name, query):
+	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	def notify(entries):
 		identifier, severity = key(entries[0])
 		print(f"{name}: received group of {len(entries)} entries for {identifier} with severity {severity}")
 		post(query["url"], request(identifier, severity, entries))
-	await journal(name, query["unit"], 5, notify)
+	await journal(name, query["unit"], 5, key, notify)
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
