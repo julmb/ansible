@@ -1,5 +1,27 @@
 import asyncio, json, requests, itertools, datetime, time
 
+async def journal(unit, timeout, notify):
+	print("start watching journal for", unit)
+	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
+	if unit: command += ["--unit", unit]
+	# TODO: check documentation of create_subprocess_exec, see if it needs with statement and how that would look like
+	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
+	entries = []
+	while True:
+		try:
+			print("waiting for line, timeout", timeout if entries else None)
+			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
+		except asyncio.TimeoutError:
+			print("timeout")
+			notify(entries)
+			entries = []
+		else:
+			if not line: break
+			print("append entry")
+			entries.append(json.loads(line))
+	print("end of file")
+	notify(entries)
+
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
 colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
 
@@ -34,28 +56,6 @@ def notify(url, entries):
 				time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
 			# TODO: properly handle all error codes
 			else: break
-
-async def journal(unit, timeout, notify):
-	print("start watching journal for", unit)
-	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
-	if unit: command += ["--unit", unit]
-	# TODO: check documentation of create_subprocess_exec, see if it needs with statement and how that would look like
-	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
-	entries = []
-	while True:
-		try:
-			print("waiting for line, timeout", timeout if entries else None)
-			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
-		except asyncio.TimeoutError:
-			print("timeout")
-			notify(entries)
-			entries = []
-		else:
-			if not line: break
-			print("append entry")
-			entries.append(json.loads(line))
-	print("end of file")
-	notify(entries)
 
 def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
