@@ -57,8 +57,7 @@ def notify(entries, url):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	print("sending notification for", len(entries), "entries")
 	for (identifier, severity), entries in itertools.groupby(entries, key):
-		request = request(identifier, severity, list(entries))
-		post(url, request)
+		post(url, request(identifier, severity, list(entries)))
 
 def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
