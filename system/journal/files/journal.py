@@ -2,6 +2,8 @@ import asyncio, json, requests, itertools, datetime, time
 
 # TODO: log to syslog, ignore entries originating from this script to avoid loops
 
+def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
+
 async def journal(name, unit, timeout, notify):
 	print(name, "start watching journal for", unit)
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
@@ -13,15 +15,24 @@ async def journal(name, unit, timeout, notify):
 			print(name, "waiting for line, timeout", timeout if entries else None)
 			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
 		except asyncio.TimeoutError:
-			print(name, "timeout")
+			print(name, "finish group after timeout")
 			notify(entries)
 			entries = []
 		else:
 			if not line: break
-			print(name, "append entry")
-			entries.append(json.loads(line))
+			entry = json.loads(line)
+			if not entries or key(entry) == key(entries[0]):
+				print(name, "add matching entry to group")
+				entries.append(entry)
+			else:
+				print(name, "finish group after non-matching entry")
+				notify(entries)
+				print(name, "add first entry to new group")
+				entries = [entry]
 	print(name, "end of file")
-	notify(entries)
+	if entries:
+		print(name, "finish group after end of file")
+		notify(entries)
 	await process.wait()
 
 def request(identifier, severity, entries):
@@ -52,14 +63,13 @@ def post(url, request):
 		print(f"response content: {response.text}")
 		break
 
-def notify(entries, url):
-	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
-	print("sending notification for", len(entries), "entries")
-	for (identifier, severity), entries in itertools.groupby(entries, key):
-		post(url, request(identifier, severity, list(entries)))
+def notify(url, entries):
+	identifier, severity = key(entries[0])
+	print(f"received group of {len(entries)} entries for {identifier} with severity {severity}")
+	post(url, request(identifier, severity, entries))
 
 async def watch(name, query):
-	await journal(name, query["unit"], 5, lambda entries: notify(entries, query["url"]))
+	await journal(name, query["unit"], 5, lambda entries: notify(query["url"], entries))
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
