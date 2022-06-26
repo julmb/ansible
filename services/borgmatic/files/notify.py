@@ -2,10 +2,12 @@
 
 import subprocess, json, requests, time
 
+# TODO: use structured json output and generate embeds from it
 def backup(name):
-	# TODO: use structured json output and generate embeds from it
-	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1", "--config", f"/etc/borgmatic.d/{name}.yaml", "create", "--files", "--stats"]
-	process = subprocess.run(command, capture_output = True, text = True)
+	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1"]
+	options = ["--config", f"/etc/borgmatic.d/{name}.yaml"]
+	action = ["create", "--files", "--stats"]
+	process = subprocess.run(*(command + options + action), capture_output = True, text = True)
 	return process.stdout
 
 def request(text):
