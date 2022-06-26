@@ -25,39 +25,40 @@ async def journal(unit, timeout, notify):
 severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
 colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
 
-# TODO: post multiple embeds in single message
-def notify_block(identifier, severity, entries, url):
-    fields = [dict(name = "Severity", value = severities[severity])]
-    timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
-    info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
-    
-    blocks = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
-    lines = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
-    if len(blocks) < 4096:
-    	payload = { "embeds": [info | dict(description = blocks)] }
-    	args = dict(json = payload)
-    else:
-    	payload = { "embeds": [info] }
-    	data = { "payload_json": json.dumps(payload) }
-    	files = { "files[0]": ("{}.log".format(identifier), lines) }
-    	args = dict(data = data, files = files)
-    
-    while True:
-    	response = requests.post(url, **args)
-    	print("response code", response.status_code)
-    	print("response headers", response.headers)
-    	print("response text", response.text)
-    	if response.status_code == 429:
-    		print("sleeping for", float(response.headers["X-RateLimit-Reset-After"]), "seconds")
-    		time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
-    	# TODO: properly handle all error codes
-    	else: break
+def request(identifier, severity, entries):
+	fields = [dict(name = "Severity", value = severities[severity])]
+	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
+	info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
+	
+	blocks = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
+	lines = "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+	if len(blocks) < 4096:
+		payload = { "embeds": [info | dict(description = blocks)] }
+		return dict(json = payload)
+	else:
+		payload = { "embeds": [info] }
+		data = { "payload_json": json.dumps(payload) }
+		files = { "files[0]": ("{}.log".format(identifier), lines) }
+		return dict(data = data, files = files)
+
+def post(url, request):
+	while True:
+		response = requests.post(url, **request)
+		print("response code", response.status_code)
+		print("response headers", response.headers)
+		print("response text", response.text)
+		if response.status_code == 429:
+			print("sleeping for", float(response.headers["X-RateLimit-Reset-After"]), "seconds")
+			time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
+		# TODO: properly handle all error codes
+		else: break
 
 def notify(entries, url):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	print("sending notification for", len(entries), "entries")
 	for (identifier, severity), entries in itertools.groupby(entries, key):
-		notify_block(identifier, severity, list(entries), url)
+		request = request(identifier, severity, list(entries))
+		post(url, request)
 
 def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
