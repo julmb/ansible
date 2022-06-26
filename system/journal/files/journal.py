@@ -47,7 +47,7 @@ def post(url, request):
 		syslog.syslog(syslog.LOG_ERR, f"Received unexpected status code {response.status_code} ({response.reason}): {response.text}")
 		break
 
-async def watch(name, query):
+async def run(name, query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	def notify(entries):
 		identifier, severity = key(entries[0])
@@ -56,6 +56,6 @@ async def watch(name, query):
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
-	await asyncio.gather(*(watch(name, query) for name, query in entries.items()))
+	await asyncio.gather(*(run(name, query) for name, query in entries.items()))
 
 asyncio.run(main())
