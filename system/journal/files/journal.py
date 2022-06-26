@@ -6,7 +6,6 @@ async def journal(unit, timeout, notify):
 	print("start watching journal for", unit)
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	if unit: command += ["--unit", unit]
-	# TODO: check documentation of create_subprocess_exec, see if it needs with statement and how that would look like
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
@@ -23,6 +22,7 @@ async def journal(unit, timeout, notify):
 			entries.append(json.loads(line))
 	print("end of file")
 	notify(entries)
+	await process.wait()
 
 def request(identifier, severity, entries):
 	severities = ["Emergency", "Alert", "Critical", "Error", "Warning", "Notice", "Information", "Debug"]
