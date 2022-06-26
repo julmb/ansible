@@ -6,6 +6,7 @@ async def journal(name, options, timeout, key, notify):
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	options = [item for option in options for name, value in option.items() for item in ("--" + name, value)]
 	process = await asyncio.create_subprocess_exec(*(command + options), stdout = asyncio.subprocess.PIPE)
+
 	entries = []
 	while True:
 		try: line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
@@ -16,6 +17,7 @@ async def journal(name, options, timeout, key, notify):
 			if entries and key(entry) != key(entries[0]): notify(entries); entries = []
 			entries.append(entry)
 	if entries: notify(entries)
+
 	await process.wait()
 
 def request(identifier, severity, entries):
