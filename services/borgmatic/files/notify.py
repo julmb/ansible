@@ -15,9 +15,9 @@ def notify(name, webhook, text):
 
 	url = "https://discord.com/api/webhooks/{}/{}".format(webhook["id"], webhook["token"])
 
-	if len(text) + 6 < 2000: args = dict(json = { "content": "```" + text + "```" })
-	else: args = dict(files = { "files[0]": ("borgmatic.log", text) })
-	post(url, args)
+	if len(text) + 6 < 2000: request = dict(json = { "content": "```" + text + "```" })
+	else: request = dict(files = { "files[0]": ("borgmatic.log", text) })
+	post(url, request)
 
 def post(url, request):
 	while True:
