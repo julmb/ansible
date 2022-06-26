@@ -1,6 +1,6 @@
 import asyncio, json, requests, datetime, time, syslog
 
-async def journal(name, options, timeout, key, notify):
+async def journal(options, timeout, key, notify):
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	options = [item for option in options for name, value in option.items() for item in ("--" + name, value)]
 	process = await asyncio.create_subprocess_exec(*(command + options), stdout = asyncio.subprocess.PIPE)
@@ -47,15 +47,15 @@ def post(url, request):
 		syslog.syslog(syslog.LOG_ERR, f"Received unexpected status code {response.status_code} ({response.reason}): {response.text}")
 		break
 
-async def run(name, query):
+async def run(query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	def notify(entries):
 		identifier, severity = key(entries[0])
 		post(query["url"], request(identifier, severity, entries))
-	await journal(name, query.get("options", []), 5, key, notify)
+	await journal(query.get("options", []), 5, key, notify)
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
-	await asyncio.gather(*(run(name, query) for name, query in entries.items()))
+	await asyncio.gather(*(run(query) for name, query in entries.items()))
 
 asyncio.run(main())
