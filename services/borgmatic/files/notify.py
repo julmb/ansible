@@ -2,7 +2,7 @@
 
 import subprocess, json, requests, time
 
-def run(name):
+def backup(name):
 	# TODO: use structured json output and generate embeds from it
 	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1", "--config", f"/etc/borgmatic.d/{name}.yaml", "create", "--files", "--stats"]
 	process = subprocess.run(command, capture_output = True, text = True)
@@ -31,6 +31,6 @@ def post(webhook, request):
 
 def main():
 	with open("/etc/borgmatic-notify.json") as configuration: entries = json.load(configuration)
-	for name, entry in entries.items(): post(entry["webhook"], request(run(name)))
+	for name, entry in entries.items(): post(entry["webhook"], request(backup(name)))
 
 main()
