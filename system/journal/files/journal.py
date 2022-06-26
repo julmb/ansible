@@ -34,7 +34,6 @@ def request(identifier, severity, entries):
 def post(url, request):
 	while True:
 		response = requests.post(url, **request)
-		print(f"response status code {response.status_code} ({response.reason})")
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
@@ -50,7 +49,6 @@ async def watch(name, query):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 	def notify(entries):
 		identifier, severity = key(entries[0])
-		print(f"{name}: received group of {len(entries)} entries for {identifier} with severity {severity}")
 		post(query["url"], request(identifier, severity, entries))
 	await journal(name, query.get("options", []), 5, key, notify)
 
