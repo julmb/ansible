@@ -62,13 +62,13 @@ def post(url, request):
 		print(f"response content: {response.text}")
 		break
 
-def notify(url, entries):
+def notify(name, url, entries):
 	identifier, severity = key(entries[0])
-	print(f"received group of {len(entries)} entries for {identifier} with severity {severity}")
+	print(f"{name}: received group of {len(entries)} entries for {identifier} with severity {severity}")
 	post(url, request(identifier, severity, entries))
 
 async def watch(name, query):
-	await journal(name, query["unit"], 5, lambda entries: notify(query["url"], entries))
+	await journal(name, query["unit"], 5, lambda entries: notify(name, query["url"], entries))
 
 async def main():
 	with open("journal.json") as configuration: entries = json.load(configuration)
