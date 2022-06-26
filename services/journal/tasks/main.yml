@@ -4,3 +4,8 @@
   ansible.builtin.copy: { src: notify.py, dest: /usr/local/sbin/journal-notify.py, mode: 0755 }
 - name: configuration
   ansible.builtin.template: { src: notify.json, dest: /etc/journal-notify.json, mode: 0600 }
+- name: service
+  ansible.builtin.import_role: { name: system/service }
+  vars: { service: journal-notify, description: journal notifications, command: journal-notify.py, target: multi-user }
+- name: service enabled
+  ansible.builtin.systemd: { name: journal-notify, enabled: yes, state: started, daemon_reload: yes }
