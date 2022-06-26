@@ -1,4 +1,4 @@
-import asyncio, json, requests, itertools, datetime, time, syslog
+import asyncio, json, requests, datetime, time, syslog
 
 async def journal(name, options, timeout, key, notify):
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
