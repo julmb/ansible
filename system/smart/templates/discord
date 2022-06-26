@@ -15,4 +15,6 @@ data=${data//$'\t'/\\t}
 
 /usr/sbin/smartctl --all $SMARTD_DEVICE > /tmp/smartctl.txt
 
-curl --silent --form "payload_json=$data" --form "files[0]=@/home/user1/nightmare.png" {{ url }}
+url = "https://discord.com/api/webhooks/{{ webhook.id }}/{{ webhook.token }}"
+
+curl --silent --form "payload_json=$data" --form "files[0]=@/home/user1/nightmare.png" "$url"
