@@ -42,8 +42,8 @@ def post(url, request):
 			data = response.json()
 			message = data["message"]
 			delay = float(data["retry_after"]) * 1e-3
-			syslog.syslog(syslog.LOG_WARNING, f"received status code {response.status_code} ({response.reason}): {message}")
-			syslog.syslog(syslog.LOG_WARNING, f"sleeping for {delay} seconds")
+			syslog.syslog(syslog.LOG_INFO, f"Received status code {response.status_code} ({response.reason}): {message}")
+			syslog.syslog(syslog.LOG_INFO, f"Retrying request after {delay} seconds")
 			time.sleep(delay)
 			continue
 		syslog.syslog(syslog.LOG_ERR, f"received unexpected status code {response.status_code} ({response.reason}): {response.text}")
