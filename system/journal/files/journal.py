@@ -5,31 +5,32 @@ import asyncio, json, requests, itertools, datetime, time
 def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
 
 async def journal(name, unit, timeout, notify):
-	print(name, "start watching journal for", unit)
+	print(f"{name}: start watching journal")
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]
 	if unit: command += ["--unit", unit]
 	process = await asyncio.create_subprocess_exec(*command, stdout = asyncio.subprocess.PIPE)
 	entries = []
 	while True:
 		try:
-			print(name, "waiting for line, timeout", timeout if entries else None)
+			print(f"{name}: waiting for line, timeout {timeout if entries else None}")
 			line = await asyncio.wait_for(process.stdout.readline(), timeout if entries else None)
 		except asyncio.TimeoutError:
-			print(name, "finish group after timeout")
+			print(f"{name}: finish group after timeout")
 			notify(entries)
 			entries = []
 		else:
 			if not line: break
+			print(f"{name}: received line")
 			entry = json.loads(line)
 			if entries and key(entry) != key(entries[0]):
-				print(name, "finish group after non-matching entry")
+				print(f"{name}: finish group after non-matching entry")
 				notify(entries)
 				entries = []
-			print(name, "add new entry to group")
+			print(f"{name}: add new entry to group")
 			entries.append(entry)
-	print(name, "end of file")
+	print(f"{name}: end of file")
 	if entries:
-		print(name, "finish group after end of file")
+		print(f"{name}: finish group after end of file")
 		notify(entries)
 	await process.wait()
 
