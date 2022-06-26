@@ -6,7 +6,7 @@ def run(name):
 	print("running backup", name)
 
 	# TODO: use structured json output and generate embeds from it
-	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1", "--config", "/etc/borgmatic.d/{}.yaml".format(name), "create", "--files", "--stats"]
+	command = ["borgmatic", "--verbosity", "1", "--syslog-verbosity", "-1", "--config", f"/etc/borgmatic.d/{name}.yaml", "create", "--files", "--stats"]
 	process = subprocess.run(command, capture_output = True, text = True)
 	return process.stdout
 
