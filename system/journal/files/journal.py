@@ -39,9 +39,11 @@ def post(url, request):
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
-			delay = float(response.headers["X-RateLimit-Reset-After"])
-			syslog.syslog(syslog.LOG_WARNING, f"received status code {response.status_code} ({response.reason}), sleeping for {delay} seconds")
-			syslog.syslog(syslog.LOG_WARNING, f"{response.text}")
+			data = response.json()
+			message = data["message"]
+			delay = float(data["retry_after"]) * 1e-3
+			syslog.syslog(syslog.LOG_WARNING, f"received status code {response.status_code} ({response.reason}): {message}")
+			syslog.syslog(syslog.LOG_WARNING, f"sleeping for {delay} seconds")
 			time.sleep(delay)
 			continue
 		syslog.syslog(syslog.LOG_ERR, f"received unexpected status code {response.status_code} ({response.reason}): {response.text}")
