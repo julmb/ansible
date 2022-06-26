@@ -33,12 +33,8 @@ def notify(url, entries):
 			print("response headers", response.headers)
 			print("response text", response.text)
 			if response.status_code == 429:
-				print("current time", datetime.datetime.now().isoformat())
-				print("reset on", datetime.datetime.utcfromtimestamp(int(response.headers["X-RateLimit-Reset"])).isoformat())
-				print("reset in", int(response.headers["X-RateLimit-Reset-After"]))
-				print("retry after", int(response.headers["Retry-After"]))
-				print("sleeping for", int(response.headers["X-RateLimit-Reset-After"]), "seconds")
-				time.sleep(int(response.headers["X-RateLimit-Reset-After"]))
+				print("sleeping for", float(response.headers["X-RateLimit-Reset-After"]), "seconds")
+				time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
 			# TODO: properly handle all error codes
 			else: break
 
