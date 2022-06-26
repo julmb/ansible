@@ -16,10 +16,10 @@ def notify(url, entries):
 		]
 		if unit: fields.append(dict(name = "Unit", value = unit, inline = True))
 		timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) / 1e6).isoformat()
-		info = dict(color = colors[severity], fields = fields, timestamp = timestamp)
+		info = dict(title = identifier, color = colors[severity], fields = fields, timestamp = timestamp)
 
 		if len(content) < 4096:
-			payload = { "embeds": [info | dict(title = identifier, description = content)] }
+			payload = { "embeds": [info | dict(description = content)] }
 			args = dict(json = payload)
 		else:
 			payload = { "embeds": [info] }
