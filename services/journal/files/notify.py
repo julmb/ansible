@@ -25,7 +25,7 @@ def request(identifier, severity, entries):
 	colors = [0xFF00FF, 0xFF007F, 0xFF0000, 0xFF3F3F, 0xFFFF7F, 0x7FFF7F, 0x7F7FFF, 0xAFAFAF]
 
 	description = "".join(map(lambda entry: "```" + entry["MESSAGE"] + "```", entries))
-	attachment = "{}.log".format(identifier), "\n".join(map(lambda entry: entry["MESSAGE"], entries))
+	attachment = f"{identifier}.log", "\n".join(map(lambda entry: entry["MESSAGE"], entries))
 	fields = [{"name": "Severity", "value": severities[severity]}]
 	timestamp = datetime.datetime.utcfromtimestamp(int(entries[0]["__REALTIME_TIMESTAMP"]) * 1e-6).isoformat()
 	embed = {"title": identifier, "color": colors[severity], "fields": fields, "timestamp": timestamp}
