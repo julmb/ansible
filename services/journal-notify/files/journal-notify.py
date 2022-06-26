@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import asyncio, json, requests, datetime, time, syslog
 
 async def journal(options, timeout, key, notify):
