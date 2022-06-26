@@ -40,14 +40,17 @@ def request(identifier, severity, entries):
 def post(url, request):
 	while True:
 		response = requests.post(url, **request)
-		print("response code", response.status_code)
-		print("response headers", response.headers)
-		print("response text", response.text)
+		print(f"response status code {response.status_code} ({response.reason})")
+		if response.status_code == 200: break
+		if response.status_code == 204: break
 		if response.status_code == 429:
 			print("sleeping for", float(response.headers["X-RateLimit-Reset-After"]), "seconds")
 			time.sleep(float(response.headers["X-RateLimit-Reset-After"]))
-		# TODO: properly handle all error codes
-		else: break
+			continue
+
+		print(f"unexpected response status code {response.status_code} ({response.reason})")
+		print(f"response content: {response.text}")
+		break
 
 def notify(entries, url):
 	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
