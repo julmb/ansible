@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import asyncio, json, requests, datetime, time, syslog
+import time, asyncio, syslog
+import json, datetime, requests
 
 async def journal(options, timeout, key, notify):
 	command = ["journalctl", "--follow", "--lines", "0", "--output", "json"]

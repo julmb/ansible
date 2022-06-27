@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import subprocess, json, requests, time, syslog
+import time, subprocess, syslog
+import json, requests
 
 # TODO: use structured json output and generate embeds from it
 def borgmatic(name):

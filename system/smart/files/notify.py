@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import subprocess, json, os, requests, datetime, time, syslog
+import os, time, subprocess, syslog
+import json, datetime, requests
 
 def smartctl(device): return subprocess.run(["/usr/sbin/smartctl", "--all", device], capture_output = True, text = True).stdout
 
