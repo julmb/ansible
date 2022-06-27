@@ -1,8 +1,13 @@
 - name: package
   ansible.builtin.package: { name: smartmontools }
 
-- name: webhook
-  ansible.builtin.template: { src: discord, dest: /etc/smartmontools/smartd_warning.d/, mode: 0755 }
+- name: notify prerequisites
+  ansible.builtin.apt: { pkg: python3-requests }
+- name: notify script
+  ansible.builtin.copy: { src: notify.py, dest: /etc/smartmontools/smartd_warning.d/, mode: 0755 }
+- name: notify configuration
+  ansible.builtin.template: { src: notify.json, dest: /etc/smartd-notify.json, mode: 0600 }
+
 - name: configuration
   ansible.builtin.template: { src: smartd.conf, dest: /etc/ }
   notify: restart smart
