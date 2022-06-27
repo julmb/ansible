@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-import json, os, requests, datetime, time, syslog
+import subprocess, json, os, requests, datetime, time, syslog
+
+def smartctl(device): return subprocess.run(["/usr/sbin/smartctl", "--all", device], capture_output = True, text = True).stdout
 
 def request():
 	title = os.environ["SMARTD_SUBJECT"]
@@ -8,9 +10,8 @@ def request():
 	fields = [{"name": "Device Information", "value": os.environ["SMARTD_DEVICEINFO"]}]
 	timestamp = datetime.datetime.utcfromtimestamp(int(os.environ["SMARTD_TFIRSTEPOCH"])).isoformat()
 	embed = {"title": title, "description": description, "color": 0xFF3F3F, "fields": fields, "timestamp": timestamp}
-
-	return dict(json = {"embeds": [embed]})
-	# return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
+	attachment = "smartctl.txt", smartctl(os.environ["SMARTD_DEVICE"])
+	return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
 
 def post(webhook, request):
 	while True:
