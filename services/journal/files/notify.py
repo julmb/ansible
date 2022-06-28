@@ -39,7 +39,12 @@ def request(identifier, severity, entries):
 def post(webhook, request):
 	while True:
 		try: response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
-		except requests.exceptions.ConnectionError: time.sleep(10); continue
+		except requests.exceptions.ConnectionError as error:
+			delay = 10
+			syslog.syslog(syslog.LOG_INFO, f"Connection error: {error}")
+			syslog.syslog(syslog.LOG_INFO, f"Retrying request after {delay} seconds")
+			time.sleep(delay)
+			continue
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
