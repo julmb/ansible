@@ -34,6 +34,8 @@ def request(identifier, severity, entries):
 	if len(description) < 4096: return dict(json = {"embeds": [embed | {"description": description}]})
 	else: return dict(data = {"payload_json": json.dumps({"embeds": [embed]})}, files = {"files[0]": attachment})
 
+# TODO: maybe it's easier to just catch the exception, log an error, and retry indefinitely
+# TODO: this came across an entry without an identifier, figure out what that is
 def post(webhook, request):
 	while True:
 		response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
