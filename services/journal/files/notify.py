@@ -38,7 +38,8 @@ def request(identifier, severity, entries):
 # TODO: this came across an entry without an identifier, figure out what that is
 def post(webhook, request):
 	while True:
-		response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
+		try: response = requests.post(f"https://discord.com/api/webhooks/{webhook['id']}/{webhook['token']}", **request)
+		except requests.exceptions.ConnectionError: time.sleep(10); continue
 		if response.status_code == 200: break
 		if response.status_code == 204: break
 		if response.status_code == 429:
