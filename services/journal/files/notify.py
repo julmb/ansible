@@ -59,7 +59,13 @@ def post(webhook, request):
 		break
 
 async def run(query):
-	def key(entry): return entry["SYSLOG_IDENTIFIER"], int(entry["PRIORITY"])
+	def identifier(entry):
+		if "SYSLOG_IDENTIFIER" in entry: return entry["SYSLOG_IDENTIFIER"]
+		if "_SYSTEMD_UNIT" in entry: return entry["_SYSTEMD_UNIT"].removesuffix(".service")
+		if "_COMM" in entry: return entry["_COMM"]
+		return None
+	def severity(entry): return int(entry["PRIORITY"]) if "PRIORITY" in entry else 6
+	def key(entry): return identifier(entry), severity(entry)
 	def notify(entries): post(query["webhook"], request(*key(entries[0]), entries))
 	await journal(query.get("options", []), query.get("timeout", 10), key, notify)
 
