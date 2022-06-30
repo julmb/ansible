@@ -4,6 +4,7 @@ services:
   main:
     image: jellyfin/jellyfin
     restart: unless-stopped
+    hostname: {{ inventory_hostname }}
     volumes:
     - ./config:/config
     - ./cache:/cache
