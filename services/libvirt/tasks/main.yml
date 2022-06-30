@@ -1,4 +1,4 @@
-- name: package
+- name: packages
   ansible.builtin.apt:
     name:
     - libvirt-daemon-system
