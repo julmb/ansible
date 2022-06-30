@@ -6,3 +6,5 @@
 - name: hosts
   ansible.builtin.template: { src: dnsmasq.hosts, dest: /etc/ }
   notify: restart dnsmasq
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
