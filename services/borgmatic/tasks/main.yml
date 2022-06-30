@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.package: { name: borgmatic }
+  ansible.builtin.apt: { name: borgmatic }
 - name: directory
   ansible.builtin.file: { path: /etc/borgmatic.d, state: directory, mode: 0600 }
 - name: configuration

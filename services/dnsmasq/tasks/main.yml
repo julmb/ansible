@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.package: { name: dnsmasq }
+  ansible.builtin.apt: { name: dnsmasq }
 - name: configuration
   ansible.builtin.template: { src: dnsmasq.conf, dest: /etc/ }
   notify: restart dnsmasq

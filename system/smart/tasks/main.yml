@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.package: { name: smartmontools }
+  ansible.builtin.apt: { name: smartmontools }
 - name: configuration
   ansible.builtin.template: { src: smartd.conf, dest: /etc/ }
   notify: restart smart

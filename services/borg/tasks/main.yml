@@ -1,2 +1,2 @@
 - name: package
-  ansible.builtin.package: { name: borgbackup }
+  ansible.builtin.apt: { name: borgbackup }
