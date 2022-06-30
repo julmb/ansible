@@ -13,3 +13,5 @@ services:
 {% endfor %}
     ports:
     - {{ '{}:80:8096'.format(address) if address is defined else '80:8096' }}
+    - {{ '{}:1900:1900/udp'.format(address) if address is defined else '1900:1900/udp' }}
+    - {{ '{}:7359:7359/udp'.format(address) if address is defined else '7359:7359/udp' }}
