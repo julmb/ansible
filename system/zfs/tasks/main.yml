@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { pkg: zfsutils-linux }
+  ansible.builtin.apt: { name: zfsutils-linux }
 - name: configuration
   ansible.builtin.template: { src: zfs.conf, dest: /etc/modprobe.d/ }
 - name: kernel module

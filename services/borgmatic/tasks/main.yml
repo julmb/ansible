@@ -15,7 +15,7 @@
   changed_when: result.stdout or result.stderr
 
 - name: notify prerequisites
-  ansible.builtin.apt: { pkg: python3-requests }
+  ansible.builtin.apt: { name: python3-requests }
 - name: notify script
   ansible.builtin.copy: { src: notify.py, dest: /usr/local/sbin/borgmatic-notify.py, mode: 0755 }
 - name: notify configuration

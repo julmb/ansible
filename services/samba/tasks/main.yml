@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { pkg: samba }
+  ansible.builtin.apt: { name: samba }
 
 - name: user share
   ansible.builtin.user: { name: share, create_home: false }

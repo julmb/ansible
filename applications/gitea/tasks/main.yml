@@ -1,5 +1,5 @@
 - name: docker package
-  ansible.builtin.apt: { pkg: [docker.io, docker-compose] }
+  ansible.builtin.apt: { name: [docker.io, docker-compose] }
 - name: docker compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: docker compose up

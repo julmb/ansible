@@ -5,7 +5,7 @@
   notify: restart smart
 
 - name: notify prerequisites
-  ansible.builtin.apt: { pkg: python3-requests }
+  ansible.builtin.apt: { name: python3-requests }
 - name: notify script
   ansible.builtin.copy: { src: notify.py, dest: /etc/smartmontools/smartd_warning.d/, mode: 0755 }
 - name: notify configuration
