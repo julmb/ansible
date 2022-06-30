@@ -7,6 +7,8 @@
     - ovmf
     - dnsmasq-base
     install_recommends: no
+- name: service
+  ansible.builtin.systemd: { name: libvirtd, enabled: yes, state: started }
 
 - name: pools
   ansible.builtin.include_tasks: pool.yml

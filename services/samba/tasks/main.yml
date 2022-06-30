@@ -1,5 +1,7 @@
 - name: package
   ansible.builtin.apt: { name: samba }
+- name: service
+  ansible.builtin.systemd: { name: smbd, enabled: yes, state: started }
 
 - name: user share
   ansible.builtin.user: { name: share, create_home: false }
