@@ -1,8 +1,9 @@
 - name: configuration
   ansible.builtin.template: { src: sshd.conf, dest: /etc/ssh/sshd_config.d/ }
   notify: restart ssh
-- name: host key
-  ansible.builtin.template: { src: private_key, dest: /etc/ssh/{{ system.host_key.name }}, mode: 0600 }
-  vars: { key: "{{ system.host_key.key }}" }
-  when: system.host_key is defined
+- name: host keys
+  ansible.builtin.template: { src: private_key, dest: /etc/ssh/{{ item.key }}, mode: 0600 }
+  vars: { key: "{{ item.value }}" }
+  loop: "{{ system.host_keys | dict2items }}"
+  when: system.host_keys is defined
   notify: restart ssh
