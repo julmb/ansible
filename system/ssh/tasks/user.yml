@@ -6,7 +6,6 @@
     src: private_key
     dest: ~{{ user.key }}/.ssh/{{ item.key }}
     mode: 0600
-  vars: { key: "{{ item.value }}" }
   loop: "{{ user.value.private_keys | dict2items }}"
   when: user.value.private_keys is defined
 
