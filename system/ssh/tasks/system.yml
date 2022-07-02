@@ -11,3 +11,4 @@
     mode: 0600
   vars: { key: "{{ system.host_key.key }}" }
   when: system.host_key is defined
+  notify: restart ssh
