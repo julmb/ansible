@@ -20,7 +20,7 @@
     service: borgmatic
     description: borgmatic backup
     command: borgmatic --verbosity -1 --syslog-verbosity 1 create
-    time: "{{ timer }}"
+    time: "{{ timer | default('*-*-* 00:00:00') }}"
     variance: 1h
     persistent: yes
 - name: timer enabled
