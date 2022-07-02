@@ -1,6 +1,6 @@
 - name: configuration
   ansible.builtin.template:
-    src: configuration
+    src: sshd.conf
     dest: /etc/ssh/sshd_config.d/
   notify: restart ssh
 
