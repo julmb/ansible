@@ -1,13 +1,14 @@
 - name: directory
   ansible.builtin.file: { path: "~{{ user.key }}/.ssh", state: directory }
 
-- name: private key
+- name: private keys
   ansible.builtin.template:
     src: private_key
-    dest: ~{{ user.key }}/.ssh/{{ user.value.private_key.name }}
+    dest: ~{{ user.key }}/.ssh/{{ item.key }}
     mode: 0600
-  vars: { key: "{{ user.value.private_key.key }}" }
-  when: user.value.private_key is defined
+  vars: { key: "{{ item.value }}" }
+  loop: "{{ user.value.private_keys | dict2items }}"
+  when: user.value.private_keys is defined
 
 - name: known hosts
   ansible.builtin.known_hosts:
