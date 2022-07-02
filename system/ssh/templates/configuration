@@ -1,0 +1,4 @@
+{% if system.address is defined %}
+ListenAddress {{ system.address }}
+{% endif %}
+#Port 22
