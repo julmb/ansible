@@ -4,6 +4,6 @@
 - name: keys
   ansible.builtin.template: { src: private_key, dest: "/etc/ssh/{{ item.key }}", mode: 0600 }
   vars: { key: "{{ item.value }}" }
-  loop: "{{ system.keys | dict2items }}"
-  when: system.keys is defined
+  loop: "{{ system['keys'] | dict2items }}"
+  when: system['keys'] is defined
   notify: restart ssh
