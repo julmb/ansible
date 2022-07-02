@@ -1,1 +1,0 @@
-{{ backups | to_json }}
