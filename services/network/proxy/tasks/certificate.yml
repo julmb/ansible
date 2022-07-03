@@ -8,6 +8,7 @@
     installer: --webroot --webroot-path /webroot --domain {{ item.key }}
   register: certbot
   changed_when: not 'no action taken' in certbot.stdout
+  notify: restart nginx service
 - name: "{{ item.key }} configuration"
   ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
   notify: restart nginx service
