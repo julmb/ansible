@@ -8,7 +8,7 @@
   notify: restart jourdis
 - name: service
   ansible.builtin.import_role: { name: tools/service }
-  vars: { service: jourdis, description: journal notifications, command: jourdis.py, target: multi-user }
+  vars: { service: jourdis, description: journald discord notifications, command: jourdis.py, target: multi-user }
 - name: service enabled
   ansible.builtin.systemd: { name: jourdis, enabled: yes, state: started, daemon_reload: yes }
 - name: flush handlers
