@@ -1,10 +1,10 @@
 - name: package
   ansible.builtin.apt: { name: [python3, python3-requests] }
 - name: script
-  ansible.builtin.copy: { src: jourdis.py, dest: /usr/local/sbin/jourdis.py, mode: 0755 }
+  ansible.builtin.copy: { src: jourdis.py, dest: /usr/local/sbin/, mode: 0755 }
   notify: restart jourdis
 - name: configuration
-  ansible.builtin.template: { src: jourdis.json, dest: /etc/jourdis.json, mode: 0600 }
+  ansible.builtin.template: { src: jourdis.json, dest: /etc/, mode: 0600 }
   notify: restart jourdis
 - name: service
   ansible.builtin.import_role: { name: tools/service }
