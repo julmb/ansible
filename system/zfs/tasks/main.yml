@@ -30,7 +30,7 @@
   ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
 
 - name: timer scrub
-  ansible.builtin.include_role: { name: system/timer }
+  ansible.builtin.include_role: { name: tools/timer }
   vars:
     service: zpool-scrub@
     description: zpool scrub on %i
@@ -48,7 +48,7 @@
   loop: "{{ pools | dict2items }}"
 
 - name: timer trim
-  ansible.builtin.include_role: { name: system/timer }
+  ansible.builtin.include_role: { name: tools/timer }
   vars:
     service: zpool-trim@
     description: zpool trim on %i
