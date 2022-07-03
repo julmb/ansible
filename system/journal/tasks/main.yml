@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { name: python3-requests }
+  ansible.builtin.apt: { name: [python3, python3-requests] }
 - name: script
   ansible.builtin.copy: { src: notify.py, dest: /usr/local/sbin/journal-notify.py, mode: 0755 }
   notify: restart journal-notify
