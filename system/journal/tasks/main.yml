@@ -7,7 +7,7 @@
   ansible.builtin.template: { src: notify.json, dest: /etc/journal-notify.json, mode: 0600 }
   notify: restart journal-notify
 - name: service
-  ansible.builtin.import_role: { name: system/service }
+  ansible.builtin.import_role: { name: tools/service }
   vars: { service: journal-notify, description: journal notifications, command: journal-notify.py, target: multi-user }
 - name: service enabled
   ansible.builtin.systemd: { name: journal-notify, enabled: yes, state: started, daemon_reload: yes }
