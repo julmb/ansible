@@ -68,7 +68,7 @@ async def run(query):
 	await journal(query.get("options", []), query.get("timeout", 10), key, notify)
 
 async def main():
-	with open("/etc/journal-notify.json") as configuration: queries = json.load(configuration)
+	with open("/etc/jourdis.json") as configuration: queries = json.load(configuration)
 	await asyncio.gather(*map(run, queries))
 
 asyncio.run(main())

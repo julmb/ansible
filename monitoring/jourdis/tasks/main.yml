@@ -1,15 +1,15 @@
 - name: package
   ansible.builtin.apt: { name: [python3, python3-requests] }
 - name: script
-  ansible.builtin.copy: { src: notify.py, dest: /usr/local/sbin/journal-notify.py, mode: 0755 }
-  notify: restart journal-notify
+  ansible.builtin.copy: { src: jourdis.py, dest: /usr/local/sbin/jourdis.py, mode: 0755 }
+  notify: restart jourdis
 - name: configuration
-  ansible.builtin.template: { src: notify.json, dest: /etc/journal-notify.json, mode: 0600 }
-  notify: restart journal-notify
+  ansible.builtin.template: { src: jourdis.json, dest: /etc/jourdis.json, mode: 0600 }
+  notify: restart jourdis
 - name: service
   ansible.builtin.import_role: { name: tools/service }
-  vars: { service: journal-notify, description: journal notifications, command: journal-notify.py, target: multi-user }
+  vars: { service: jourdis, description: journal notifications, command: jourdis.py, target: multi-user }
 - name: service enabled
-  ansible.builtin.systemd: { name: journal-notify, enabled: yes, state: started, daemon_reload: yes }
+  ansible.builtin.systemd: { name: jourdis, enabled: yes, state: started, daemon_reload: yes }
 - name: flush handlers
   ansible.builtin.meta: flush_handlers

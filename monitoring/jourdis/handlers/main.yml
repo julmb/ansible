@@ -1,2 +1,2 @@
-- name: restart journal-notify
-  ansible.builtin.service: { name: journal-notify, state: restarted }
+- name: restart jourdis
+  ansible.builtin.service: { name: jourdis, state: restarted }
