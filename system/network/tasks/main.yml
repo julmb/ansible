@@ -9,6 +9,6 @@
   loop: "{{ interfaces | dict2items }}"
   notify: restart networking
 - name: nameservers
-  ansible.builtin.template: { src: resolv.conf, dest: "/etc/" }
+  ansible.builtin.template: { src: resolv.conf, dest: /etc/ }
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
