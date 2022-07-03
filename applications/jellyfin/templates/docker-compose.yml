@@ -8,8 +8,8 @@ services:
     volumes:
     - ./config:/config
     - ./cache:/cache
-{% for target, path in media.items() %}
-    - {{ path }}:/media/{{ target }}:ro
+{% for name, path in media.items() %}
+    - {{ path }}:/media/{{ name }}:ro
 {% endfor %}
     ports:
     - {{ '{}:80:8096'.format(address) if address is defined else '80:8096' }}
