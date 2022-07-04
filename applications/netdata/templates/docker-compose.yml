@@ -4,6 +4,7 @@ services:
   main:
     image: netdata/netdata
     restart: unless-stopped
+    hostname: {{ inventory_hostname }}
     cap_add: [SYS_PTRACE]
     security_opt: [apparmor:unconfined]
     volumes:
