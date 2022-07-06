@@ -1,11 +1,9 @@
-- name: download net install image
-  ansible.builtin.get_url:
-    url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso
-    dest: preseed/
+- name: download image
+  ansible.builtin.get_url: { url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso, dest: ~/preseed/debian-11.3.0-amd64-netinst.iso }
 - name: directory
-  ansible.builtin.file: { path: preseed/iso, state: directory }
-- name: extract net install image
+  ansible.builtin.file: { path: ~/preseed/iso, state: directory }
+- name: extract image
   ansible.builtin.unarchive:
-    src: preseed/debian-11.3.0-amd64-netinst.iso
-    dest: preseed/iso/
+    src: ~/preseed/debian-11.3.0-amd64-netinst.iso
+    dest: ~/preseed/iso/
     remote_src: yes
