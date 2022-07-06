@@ -3,7 +3,5 @@
 - name: directory
   ansible.builtin.file: { path: ~/preseed/iso, state: directory }
 - name: extract image
-  ansible.builtin.unarchive:
-    src: ~/preseed/debian-11.3.0-amd64-netinst.iso
-    dest: ~/preseed/iso/
-    remote_src: yes
+  ansible.builtin.command:
+    cmd: bsdtar --directory ~/preseed/iso -xf ~/preseed/debian-11.3.0-amd64-netinst.iso
