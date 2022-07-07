@@ -2,7 +2,7 @@
   ansible.builtin.file: { path: "{{ directory }}", state: directory }
 - name: image
   ansible.builtin.get_url: { url: "{{ url }}{{ image }}", dest: "{{ directory }}{{ image }}" }
-- name: preseed
+- name: preseed configuration
   ansible.builtin.copy: { src: preseed.cfg, dest: "{{ directory }}" }
 - name: grub configuration
   ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}" }
