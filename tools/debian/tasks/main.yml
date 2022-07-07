@@ -7,8 +7,9 @@
 - name: repack iso
   ansible.builtin.command: |
     xorriso
+    -boot_image any keep
     -indev ~/preseed/debian-11.3.0-amd64-netinst.iso
     -outdev ~/preseed/out.iso
-    -boot_image any keep
     -map ~/preseed/preseed.cfg preseed.cfg
     -map ~/preseed/grub.cfg boot/grub/grub.cfg
+  args: { creates: ~/preseed/out.iso }
