@@ -1,33 +1,14 @@
 - name: download image
   ansible.builtin.get_url: { url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso, dest: ~/preseed/debian-11.3.0-amd64-netinst.iso }
-- name: extract image
-  ansible.builtin.shell: |
-    mkdir ~/preseed/iso
-    bsdtar --directory ~/preseed/iso -xf ~/preseed/debian-11.3.0-amd64-netinst.iso
-  args: { creates: ~/preseed/iso }
-# - name: adjust permissions
-#   ansible.builtin.file: { path: ~/preseed/iso/install.amd, mode: 0755 }
 - name: add preseed
-  ansible.builtin.copy: { src: preseed.cfg, dest: ~/preseed/iso/ }
+  ansible.builtin.copy: { src: preseed.cfg, dest: ~/preseed/ }
+- name: add grub configurtaion
+  ansible.builtin.copy: { src: grub.cfg, dest: ~/preseed/ }
 - name: repack iso
   ansible.builtin.command: |
     xorriso
-    -as mkisofs
-    -r
-    -V 'Debian 11.3.0 amd64 n'
-    -o ~/preseed/out.iso
-    -J -joliet-long
-    -cache-inodes
-    -b isolinux/isolinux.bin
-    -c isolinux/boot.cat
-    -boot-load-size 4
-    -boot-info-table
-    -no-emul-boot
-    -eltorito-alt-boot
-    -e boot/grub/efi.img
-    -no-emul-boot
-    -isohybrid-gpt-basdat
-    -isohybrid-apm-hfsplus
-    ~/preseed/iso
-
-# -isohybrid-mbr syslinux/usr/lib/ISOLINUX/isohdpfx.bin
+    -indev ~/preseed/debian-11.3.0-amd64-netinst.iso
+    -outdev ~/preseed/out.iso
+    -boot_image any keep
+    -map ~/preseed/preseed.cfg preseed.cfg
+    -map ~/preseed/grub.cfg boot/grub/grub.cfg
