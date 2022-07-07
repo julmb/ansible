@@ -1,15 +1,17 @@
-- name: download image
-  ansible.builtin.get_url: { url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso, dest: ~/preseed/debian-11.3.0-amd64-netinst.iso }
-- name: add preseed
-  ansible.builtin.copy: { src: preseed.cfg, dest: ~/preseed/ }
-- name: add grub configurtaion
-  ansible.builtin.copy: { src: grub.cfg, dest: ~/preseed/ }
-- name: repack iso
+- name: directory
+  ansible.builtin.file: { path: "{{ directory }}", state: directory }
+- name: image
+  ansible.builtin.get_url: { url: "{{ url }}{{ image }}", dest: "{{ directory }}{{ image }}" }
+- name: preseed
+  ansible.builtin.copy: { src: preseed.cfg, dest: "{{ directory }}" }
+- name: grub configuration
+  ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}" }
+- name: iso
   ansible.builtin.command: |
     xorriso
     -boot_image any keep
-    -indev ~/preseed/debian-11.3.0-amd64-netinst.iso
-    -outdev ~/preseed/out.iso
-    -map ~/preseed/preseed.cfg preseed.cfg
-    -map ~/preseed/grub.cfg boot/grub/grub.cfg
-  args: { creates: ~/preseed/out.iso }
+    -indev {{ directory }}{{ image }}
+    -outdev {{ directory }}{{ output }}
+    -map {{ directory }}/preseed.cfg preseed.cfg
+    -map {{ directory }}/grub.cfg boot/grub/grub.cfg
+  args: { creates: "{{ directory }}{{ output }}" }
