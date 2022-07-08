@@ -4,7 +4,7 @@
 - name: image
   ansible.builtin.get_url: { url: "{{ url }}{{ image }}", dest: "{{ directory }}{{ image }}" }
 - name: preseed configuration
-  ansible.builtin.copy: { src: preseed.cfg, dest: "{{ directory }}" }
+  ansible.builtin.template: { src: preseed.cfg, dest: "{{ directory }}" }
 - name: grub configuration
   ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}" }
 - name: iso
