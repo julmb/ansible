@@ -1,5 +1,6 @@
 - name: configuration
   ansible.builtin.template: { src: sshd.conf, dest: /etc/ssh/sshd_config.d/ }
+  when: system.configuration is defined
   notify: restart ssh
 - name: host keys
   ansible.builtin.template: { src: private_key, dest: "/etc/ssh/{{ item.key }}", mode: 0600 }
