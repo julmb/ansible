@@ -4,7 +4,7 @@
 - name: image
   ansible.builtin.get_url: { url: "{{ url }}{{ image }}", dest: "{{ directory }}{{ image }}" }
 - name: preseed configuration
-  ansible.builtin.template: { src: preseed.cfg, dest: "{{ directory }}" }
+  ansible.builtin.template: { src: preseed.cfg, dest: "{{ directory }}{{ inventory_hostname }}.cfg" }
 - name: grub configuration
   ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}" }
 - name: iso
@@ -12,7 +12,7 @@
     xorriso
     -boot_image any keep
     -indev {{ directory }}{{ image }}
-    -outdev {{ directory }}{{ output }}
-    -map {{ directory }}/preseed.cfg preseed.cfg
+    -outdev {{ directory }}{{ inventory_hostname }}.iso
+    -map {{ directory }}{{ inventory_hostname }}.cfg preseed.cfg
     -map {{ directory }}/grub.cfg boot/grub/grub.cfg
-  args: { creates: "{{ directory }}{{ output }}" }
+  args: { creates: "{{ directory }}{{ inventory_hostname }}.iso" }
