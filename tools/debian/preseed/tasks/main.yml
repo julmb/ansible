@@ -2,17 +2,17 @@
 - name: directory
   ansible.builtin.file: { path: "{{ directory }}", state: directory }
 - name: image
-  ansible.builtin.get_url: { url: "{{ url }}", dest: "{{ directory }}{{ url | basename }}" }
+  ansible.builtin.get_url: { url: "{{ url }}", dest: "{{ directory }}/{{ url | basename }}" }
 - name: preseed configuration
-  ansible.builtin.template: { src: preseed.cfg, dest: "{{ directory }}{{ inventory_hostname }}.cfg" }
+  ansible.builtin.template: { src: preseed.cfg, dest: "{{ directory }}/{{ inventory_hostname }}.cfg" }
 - name: grub configuration
-  ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}" }
+  ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}/" }
 - name: iso
   ansible.builtin.command: |
     xorriso
     -boot_image any keep
-    -indev {{ directory }}{{ url | basename }}
-    -outdev {{ directory }}{{ inventory_hostname }}.iso
-    -map {{ directory }}{{ inventory_hostname }}.cfg preseed.cfg
+    -indev {{ directory }}/{{ url | basename }}
+    -outdev {{ directory }}/{{ inventory_hostname }}.iso
+    -map {{ directory }}/{{ inventory_hostname }}.cfg preseed.cfg
     -map {{ directory }}/grub.cfg boot/grub/grub.cfg
-  args: { creates: "{{ directory }}{{ inventory_hostname }}.iso" }
+  args: { creates: "{{ directory }}/{{ inventory_hostname }}.iso" }
