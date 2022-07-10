@@ -9,10 +9,10 @@
 - name: grub configuration
   ansible.builtin.copy: { src: grub.cfg, dest: "{{ directory }}/" }
   register: grub
-- name: remove iso
+- name: preseeded image absent
   ansible.builtin.file: { path: "{{ directory }}/{{ inventory_hostname }}.iso", state: absent }
   when: image.changed or preseed.changed or grub.changed
-- name: iso
+- name: preseeded image
   ansible.builtin.command: |
     xorriso
     -boot_image any keep
