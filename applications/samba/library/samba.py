@@ -25,8 +25,8 @@ def adjust(module, name, expected, actual):
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, nt_hash, password, check):
-	if not nt_hash: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
-	expected = dict(nt_hash = nt_hash) if state == "present" else None
+	if not nt_hash: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest()
+	expected = dict(nt_hash = nt_hash.upper()) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
 	if actual != expected and not check: adjust(module, name, expected, actual)
