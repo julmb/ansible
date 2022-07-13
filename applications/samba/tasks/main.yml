@@ -9,7 +9,7 @@
   ansible.builtin.user: { name: "{{ item.key }}", groups: [share], create_home: false, append: true }
   loop: "{{ users | dict2items }}"
 - name: users samba
-  samba: { name: "{{ item.key }}", password: "{{ item.value.password }}" }
+  samba: { name: "{{ item.key }}", nt_hash: "{{ item.value.hash }}" }
   loop: "{{ users | dict2items }}"
 
 - name: share directories
