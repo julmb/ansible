@@ -28,6 +28,8 @@
     line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n```%s```\"}' \"${subject}\" \"${msg_body}\" )\""
 - name: zed configuration
   ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
+- name: zed service
+  ansible.builtin.systemd: { name: zfs-zed, enabled: yes, state: started }
 
 - name: timer scrub
   ansible.builtin.include_role: { name: tools/timer }
