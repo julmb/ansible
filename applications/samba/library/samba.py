@@ -24,9 +24,9 @@ def adjust(module, name, expected, actual):
 	elif expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
-def process(module, name, state, password, check):
+def process(module, name, state, nt_hash, password, check):
 	# echo -n <password> | iconv -t utf16le | openssl md4
-	nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
+	if not nt_hash: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest().upper()
 	expected = dict(nt_hash = nt_hash) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
@@ -36,10 +36,12 @@ def process(module, name, state, password, check):
 def main():
 	name = dict(type = "str", required = True)
 	state = dict(type = "str", choices = ["present", "absent"], default = "present")
+	nt_hash = dict(type = "str", no_log = True)
 	password = dict(type = "str", default = "", no_log = True)
-	parameters = dict(name = name, state = state, password = password)
-	module = AnsibleModule(parameters, supports_check_mode = True)
-	result = process(module, module.params["name"], module.params["state"], module.params["password"], module.check_mode)
+	parameters = dict(name = name, state = state, nt_hash = nt_hash, password = password)
+	mutually_exclusive = [("nt_hash", "password")]
+	module = AnsibleModule(parameters, mutually_exclusive = mutually_exclusive, supports_check_mode = True)
+	result = process(module, module.params["name"], module.params["state"], module.params["nt_hash"], module.params["password"], module.check_mode)
 	module.exit_json(**result)
 
 if __name__ == "__main__": main()
