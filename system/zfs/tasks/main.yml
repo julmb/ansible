@@ -33,6 +33,13 @@
 - name: zed service
   ansible.builtin.systemd: { name: zfs-zed, enabled: yes, state: started }
 
+# TODO:
+# debian uses the return code of zfs get to determine if the user-defined properties for scrubs and trims exist
+# however, zfs get always succeeds on user-defined properties, so scrubs and trims run despite missing property
+# this is most likely a bug, and we do not want to rely on this bug continuing to exist, so we remove the crontab
+- name: no debian zfs cron job
+  ansible.builtin.file: { path: /etc/cron.d/zfsutils-linux, state: absent }
+
 - name: timer scrub
   ansible.builtin.include_role: { name: tools/timer }
   vars:
