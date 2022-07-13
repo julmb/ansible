@@ -20,6 +20,8 @@
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ datasets | dict2items }}"
 
+- name: curl package
+  ansible.builtin.apt: { name: curl }
 # TODO: adjust this once the bugfix from upstream is in debian
 - name: fix bug in zed slack notification function and add code block
   ansible.builtin.lineinfile:
