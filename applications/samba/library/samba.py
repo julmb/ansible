@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 import hashlib
-import ansible.module_utils.basic
+
+from ansible.module_utils.basic import AnsibleModule
 
 def parse(line):
 	key, value = line.split(":", maxsplit = 1)
@@ -37,7 +38,7 @@ def main():
 	state = dict(type = "str", choices = ["present", "absent"], default = "present")
 	password = dict(type = "str", default = "", no_log = True)
 	parameters = dict(name = name, state = state, password = password)
-	module = ansible.module_utils.basic.AnsibleModule(parameters, supports_check_mode = True)
+	module = AnsibleModule(parameters, supports_check_mode = True)
 	result = process(module, module.params["name"], module.params["state"], module.params["password"], module.check_mode)
 	module.exit_json(**result)
 
