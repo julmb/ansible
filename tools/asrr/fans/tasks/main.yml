@@ -1,7 +1,7 @@
 - name: ipmitool package
   ansible.builtin.apt: { name: ipmitool }
 - name: fan duty service
-  import_role: { name: tools/service }
+  ansible.builtin.import_role: { name: tools/service }
   vars: { service: fan-duty, command: "ipmitool raw 0x3a 0x05 0x01 0x00 {{ duty | join(' ') }}", target: multi-user }
 - name: fan duty enabled
   ansible.builtin.systemd: { name: fan-duty, enabled: yes, daemon_reload: yes }
