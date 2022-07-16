@@ -11,7 +11,8 @@
 - name: users samba
   samba:
     name: "{{ item.key }}"
-    nt_hash: "{{ item.value.hash }}"
+    nt_hash: "{{ item.value.hash | default(omit) }}"
+    password: "{{ item.value.password | default(omit) }}"
   loop: "{{ users | dict2items }}"
 
 - name: share directories
