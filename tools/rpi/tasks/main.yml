@@ -1,3 +1,6 @@
+- name: remove nopasswd configuration
+  ansible.builtin.file: { path: /etc/sudoers.d/010_pi-nopasswd, state: absent }
+
 - name: package facts
   ansible.builtin.package_facts:
 - name: check raspberrypi-net-mods
