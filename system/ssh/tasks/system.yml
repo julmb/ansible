@@ -7,3 +7,8 @@
   loop: "{{ system.host_keys | dict2items }}"
   when: system.host_keys is defined
   notify: restart ssh
+- name: no public host keys
+  ansible.builtin.file: { path: "/etc/ssh/{{ item.key }}.pub", state: absent }
+  loop: "{{ system.host_keys | dict2items }}"
+  when: system.host_keys is defined
+  notify: restart ssh
