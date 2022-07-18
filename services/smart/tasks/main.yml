@@ -2,6 +2,7 @@
   ansible.builtin.apt: { name: smartmontools }
 - name: service
   ansible.builtin.systemd: { name: smartd, enabled: yes, state: started }
+# TODO: in future versions of smartd, this can be set per-device in smartd.conf, making this configuration file obsolete
 - name: configuration service
   ansible.builtin.template: { src: smartmontools, dest: /etc/default/ }
   notify: restart smart
