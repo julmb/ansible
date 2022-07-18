@@ -2,7 +2,10 @@
   ansible.builtin.apt: { name: smartmontools }
 - name: service
   ansible.builtin.systemd: { name: smartd, enabled: yes, state: started }
-- name: configuration
+- name: configuration service
+  ansible.builtin.template: { src: smartmontools, dest: /etc/default/ }
+  notify: restart smart
+- name: configuration daemon
   ansible.builtin.template: { src: smartd.conf, dest: /etc/ }
   notify: restart smart
 - name: flush handlers

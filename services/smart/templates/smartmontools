@@ -1,0 +1,3 @@
+{% if interval is defined %}
+smartd_opts="--interval={{ interval }}"
+{% endif %}
