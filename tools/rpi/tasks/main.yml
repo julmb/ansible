@@ -1,13 +1,3 @@
-- name: no nopasswd configuration
-  ansible.builtin.file: { path: /etc/sudoers.d/010_pi-nopasswd, state: absent }
-  register: fresh
-- name: full upgrade
-  ansible.builtin.apt: { update_cache: yes, upgrade: full }
-  when: fresh.changed
-- name: reboot
-  ansible.builtin.reboot:
-  when: fresh.changed
-
 - name: no net mods
   ansible.builtin.apt: { name: raspberrypi-net-mods, state: absent, purge: yes, autoremove: yes }
   register: net_mods
@@ -20,6 +10,16 @@
 - name: reboot
   ansible.builtin.reboot:
   when: net_mods.changed
+
+- name: no nopasswd configuration
+  ansible.builtin.file: { path: /etc/sudoers.d/010_pi-nopasswd, state: absent }
+  register: fresh
+- name: full upgrade
+  ansible.builtin.apt: { update_cache: yes, upgrade: full }
+  when: fresh.changed
+- name: reboot
+  ansible.builtin.reboot:
+  when: fresh.changed
 
 - name: raspberry pi kernel headers
   ansible.builtin.apt: { name: raspberrypi-kernel-headers }
