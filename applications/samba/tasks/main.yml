@@ -15,6 +15,8 @@
     password: "{{ item.value.password | default(omit) }}"
   loop: "{{ users | dict2items }}"
 
+# TODO: samba should not be the one to manage users and directories, extract into TWO separate roles
+# TODO: maybe ssh user configuration should also happen as part of the user role
 - name: share directories
   ansible.builtin.file:
     path: "{{ item.value.path }}"
