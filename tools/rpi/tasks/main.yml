@@ -13,3 +13,6 @@
 - name: reboot
   ansible.builtin.reboot:
   when: net_mods.changed
+
+- name: raspberry pi kernel headers
+  ansible.builtin.apt: { name: raspberrypi-kernel-headers }
