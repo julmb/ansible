@@ -1,17 +1,15 @@
-- name: remove nopasswd configuration
+- name: no nopasswd configuration
   ansible.builtin.file: { path: /etc/sudoers.d/010_pi-nopasswd, state: absent }
 
-- name: package facts
-  ansible.builtin.package_facts:
-- name: check raspberrypi-net-mods
-  ansible.builtin.set_fact: { fresh: "{{ 'raspberrypi-net-mods' in ansible_facts.packages }}" }
-
+- name: no net mods
+  ansible.builtin.apt: { name: raspberrypi-net-mods, state: absent, purge: yes, autoremove: yes }
+  register: net_mods
 - name: interfaces
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
-  when: fresh
+  when: net_mods
 - name: plain network
   ansible.builtin.apt: { name: [dhcpcd, dhcpcd5, resolvconf, openresolv], state: absent, purge: yes, autoremove: yes }
-  when: fresh
+  when: net_mods
 - name: reboot
   ansible.builtin.reboot:
-  when: fresh
+  when: net_mods
