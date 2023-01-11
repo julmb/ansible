@@ -1,3 +1,5 @@
+- name: package
+  ansible.builtin.apt: { name: bridge-utils }
 - name: base
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
   notify: restart networking
