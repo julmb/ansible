@@ -12,3 +12,8 @@
   args: { executable: bash }
   register: result
   changed_when: "'pool definition changed' in result.stdout"
+- name: "{{ pool.key }} activation"
+  ansible.builtin.command: virsh pool-start {{ pool.key }}
+  register: result
+  failed_when: result.rc != 0 and 'already active' not in result.stderr
+  changed_when: result.rc == 0
