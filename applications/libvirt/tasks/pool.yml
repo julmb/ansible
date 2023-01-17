@@ -19,5 +19,5 @@
   changed_when: result.rc == 0
 - name: "{{ pool.key }} volumes"
   ansible.builtin.include_tasks: volume.yml
-  loop: "{{ pool.value.volumes }}"
+  loop: "{{ pool.value.volumes | dict2items }}"
   when: pool.value.volumes is defined
