@@ -19,7 +19,9 @@
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
   loop_control: { loop_var: pool }
+  when: pools is defined
 - name: domains
   ansible.builtin.include_tasks: domain.yml
   loop: "{{ domains | dict2items }}"
   loop_control: { loop_var: domain }
+  when: domains is defined
