@@ -22,9 +22,9 @@
 {% for entry in domain.value.storage %}
     <disk type="{{ entry.type }}" device="{{ entry.device.type }}">
 {% if entry.type == 'file' %}
-      <source file="{{ entry.path }}"/>
+      <source file="{{ entry.source }}"/>
 {% elif entry.type == 'volume' %}
-      <source pool="{{ entry.volume.pool }}" volume="{{ entry.volume.name }}"/>
+      <source pool="{{ entry.source.pool }}" volume="{{ entry.source.volume }}"/>
 {% endif %}
       <target dev="{{ entry.device.name }}" bus="{{ entry.device.bus }}"/>
 {% if entry.device.boot is defined %}
