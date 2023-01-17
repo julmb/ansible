@@ -36,8 +36,8 @@
 {% for entry in domain.value.interfaces %}
     <interface type="{{ entry.type }}">
       <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key + '-' + loop.index | string) }}"/>
-      <model type="{{ entry.device.model }}"/>
-      <source network="{{ entry.device.network }}"/>
+      <model type="{{ entry.model }}"/>
+      <source network="{{ entry.source }}"/>
     </interface>
 {% endfor %}
 
