@@ -9,11 +9,11 @@
     install_recommends: no
 - name: service
   ansible.builtin.systemd: { name: libvirtd, enabled: yes, state: started }
-- name: configuration
-  ansible.builtin.copy: { src: qemu.conf, dest: /etc/libvirt/qemu.conf }
-  notify: restart libvirtd
-- name: flush handlers
-  ansible.builtin.meta: flush_handlers
+# - name: configuration
+#   ansible.builtin.copy: { src: qemu.conf, dest: /etc/libvirt/qemu.conf }
+#   notify: restart libvirtd
+# - name: flush handlers
+#   ansible.builtin.meta: flush_handlers
 
 - name: pools
   ansible.builtin.include_tasks: pool.yml
