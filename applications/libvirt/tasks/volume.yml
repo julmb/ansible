@@ -1,5 +1,5 @@
-- name: "{{ pool.key }}/{{ item.key }} definition"
-  ansible.builtin.command: virsh vol-create-as {{ pool.key }} {{ item.key }} {{ item.value.size }} --format {{ item.value.format }}
+- name: "{{ pool.key }}/{{ volume.key }} definition"
+  ansible.builtin.command: virsh vol-create-as {{ pool.key }} {{ volume.key }} {{ volume.value.size }} --format {{ volume.value.format }}
   register: result
   failed_when: result.rc != 0 and 'exists already' not in result.stderr
   changed_when: result.rc == 0

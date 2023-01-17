@@ -20,4 +20,5 @@
 - name: "{{ pool.key }} volumes"
   ansible.builtin.include_tasks: volume.yml
   loop: "{{ pool.value.volumes | dict2items }}"
+  loop_control: { loop_var: volume }
   when: pool.value.volumes is defined
