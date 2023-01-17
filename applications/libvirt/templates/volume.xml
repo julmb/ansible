@@ -1,4 +1,7 @@
 <volume type="file">
   <name>{{ volume.key }}</name>
   <capacity>{{ volume.value.capacity }}</capacity>
+  <target>
+    <format type="{{ volume.value.format }}"/>
+  </target>
 </volume>
