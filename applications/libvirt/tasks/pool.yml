@@ -20,3 +20,4 @@
 - name: "{{ pool.key }} volumes"
   ansible.builtin.include_tasks: volume.yml
   loop: "{{ pool.value.volumes }}"
+  when: pool.value.volumes is defined
