@@ -37,7 +37,11 @@
     <interface type="{{ entry.type }}">
       <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key + '-' + loop.index | string) }}"/>
       <model type="{{ entry.model }}"/>
+{% if entry.type == 'network' %}
       <source network="{{ entry.source }}"/>
+{% elif entry.type == 'bridge' %}
+      <source bridge="{{ entry.source }}"/>
+{% endif %}
     </interface>
 {% endfor %}
 
