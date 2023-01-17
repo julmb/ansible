@@ -15,7 +15,7 @@
 
   <cpu mode="host-passthrough"/>
   <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
-  <memory unit="bytes">{{ domain.value.hardware.memory }}</memory>
+  <memory unit="{{ domain.value.hardware.memory.unit }}">{{ domain.value.hardware.memory.value }}</memory>
 
   <devices>
 
