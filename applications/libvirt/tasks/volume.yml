@@ -1,5 +1,9 @@
-- name: "{{ pool.key }}/{{ volume.key }} definition"
-  ansible.builtin.command: virsh vol-create-as {{ pool.key }} {{ volume.key }} {{ volume.value.size }} --format {{ volume.value.format }}
-  register: result
-  failed_when: result.rc != 0 and 'exists already' not in result.stderr
-  changed_when: result.rc == 0
+- name: "{{ pool.key }}/{{ volume.key }} check"
+  ansible.builtin.command: virsh vol-info --pool {{ pool.key }} --vol {{ volume.key }}
+  register: check
+  failed_when: check.rc != 0 and 'Storage volume not found' not in check.stderr
+  changed_when: "'Storage volume not found' in check.stderr"
+- name: "{{ pool.key }}/{{ volume.key }} create"
+  ansible.builtin.shell: virsh vol-create {{ pool.key }} <(echo '{{ lookup('template', 'volume.xml') }}')
+  args: { executable: bash }
+  when: check.changed

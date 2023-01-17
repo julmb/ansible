@@ -1,0 +1,5 @@
+<volume type="file">
+  <name>{{ volume.key }}</name>
+  <!-- TODO: rename to capacity -->
+  <capacity>{{ volume.value.size }}</capacity>
+</volume>
