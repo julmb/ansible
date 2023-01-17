@@ -2,6 +2,6 @@
   <name>{{ pool.key }}</name>
   <uuid>{{ pool.key | to_uuid }}</uuid>
   <target>
-    <path>{{ pool.value }}</path>
+    <path>{{ pool.value.path }}</path>
   </target>
 </pool>

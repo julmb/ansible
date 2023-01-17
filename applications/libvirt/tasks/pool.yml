@@ -17,3 +17,6 @@
   register: result
   failed_when: result.rc != 0 and 'already active' not in result.stderr
   changed_when: result.rc == 0
+- name: "{{ pool.key }} volumes"
+  ansible.builtin.include_tasks: volume.yml
+  loop: "{{ pool.value.volumes }}"

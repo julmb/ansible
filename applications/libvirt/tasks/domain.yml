@@ -1,8 +1,3 @@
-- name: "{{ domain.key }} volumes"
-  ansible.builtin.include_tasks: volume.yml
-  vars: { volume: "{{ item.volume }}" }
-  when: item.type == 'volume'
-  loop: "{{ domain.value.storage }}"
 - name: "{{ domain.key }} definition"
   ansible.builtin.shell: |
     before=$(virsh dumpxml {{ domain.key }})
