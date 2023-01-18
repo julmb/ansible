@@ -9,7 +9,7 @@
     <loader type="pflash" readonly="yes">/usr/share/OVMF/OVMF_CODE_4M.fd</loader>
 {% endif %}
   </os>
-  <features><acpi/></features>
+  <features><acpi/><apic/></features>
   <pm><suspend-to-mem enabled="no"/><suspend-to-disk enabled="no"/></pm>
 
   <cpu mode="host-passthrough"/>
