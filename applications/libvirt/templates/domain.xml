@@ -39,11 +39,16 @@
 {% endfor %}
 
 {% for entry in domain.value.interfaces %}
-    <interface type="{{ entry.type }}">
-{% if entry.type == 'network' %}
-      <source network="{{ entry.source }}"/>
-{% elif entry.type == 'bridge' %}
-      <source bridge="{{ entry.source }}"/>
+{% if entry.network is defined %}
+{% set type = 'network' %}
+{% elif entry.bridge is defined %}
+{% set type = 'bridge' %}
+{% endif %}
+    <interface type="{{ type }}">
+{% if entry.network is defined %}
+      <source network="{{ entry.network }}"/>
+{% elif entry.bridge is defined %}
+      <source bridge="{{ entry.bridge }}"/>
 {% endif %}
       <model type="{{ entry.model }}"/>
       <mac address="{{ '52:54:00' | community.general.random_mac(seed = domain.key + '-' + loop.index | string) }}"/>
