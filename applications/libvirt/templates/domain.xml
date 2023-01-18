@@ -20,11 +20,16 @@
   <devices>
 
 {% for entry in domain.value.storage %}
-    <disk type="{{ entry.type }}" device="{{ entry.device.type }}">
-{% if entry.type == 'file' %}
-      <source file="{{ entry.source }}"/>
-{% elif entry.type == 'volume' %}
-      <source pool="{{ entry.source.pool }}" volume="{{ entry.source.volume }}"/>
+{% if entry.file is defined %}
+{% set type = 'file' %}
+{% elif entry.volume is defined %}
+{% set type = 'volume' %}
+{% endif %}
+    <disk type="{{ type }}" device="{{ entry.device.type }}">
+{% if entry.file is defined %}
+      <source file="{{ entry.file }}"/>
+{% elif entry.volume is defined %}
+      <source pool="{{ entry.volume.pool }}" volume="{{ entry.volume.name }}"/>
 {% endif %}
       <target dev="{{ entry.device.name }}" bus="{{ entry.device.bus }}"/>
 {% if entry.device.boot is defined %}
