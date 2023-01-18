@@ -6,6 +6,8 @@
     - qemu-utils
     - ovmf
     - dnsmasq-base
+    # - lxc
+    # - libvirt-daemon-driver-lxc
     install_recommends: no
 - name: service
   ansible.builtin.systemd: { name: libvirtd, enabled: yes, state: started }
