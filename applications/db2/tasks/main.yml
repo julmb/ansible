@@ -1,0 +1,6 @@
+- name: docker package
+  ansible.builtin.apt: { name: [docker.io, docker-compose] }
+- name: docker compose definition
+  ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
+- name: docker compose up
+  community.docker.docker_compose: { project_src: "{{ path }}" }
