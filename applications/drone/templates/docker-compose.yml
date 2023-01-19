@@ -8,7 +8,7 @@ services:
     ports:
     - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
     environment:
-    - DRONE_SERVER_PROTO: http
+    - DRONE_SERVER_PROTO: {{ protocol }}
     - DRONE_SERVER_HOST: {{ server }}
     - DRONE_GITEA_SERVER: {{ gitea }}
     - DRONE_GITEA_CLIENT_ID: {{ client_id }}
