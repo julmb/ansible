@@ -8,10 +8,10 @@ services:
     ports:
     - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
     environment:
-    - DRONE_SERVER_PROTO: {{ protocol }}
-    - DRONE_SERVER_HOST: {{ server }}
-    - DRONE_GITEA_SERVER: {{ gitea }}
-    - DRONE_GITEA_CLIENT_ID: {{ client_id }}
-    - DRONE_GITEA_CLIENT_SECRET: {{ client_secret }}
-    - DRONE_RPC_SECRET: {{ rpc_secret }}
-    #- DRONE_GIT_ALWAYS_AUTH: "true"
+      DRONE_SERVER_PROTO: {{ protocol }}
+      DRONE_SERVER_HOST: {{ server }}
+      DRONE_GITEA_SERVER: {{ gitea }}
+      DRONE_GITEA_CLIENT_ID: {{ client_id }}
+      DRONE_GITEA_CLIENT_SECRET: {{ client_secret }}
+      DRONE_RPC_SECRET: {{ rpc_secret }}
+      # DRONE_GIT_ALWAYS_AUTH: "true"
