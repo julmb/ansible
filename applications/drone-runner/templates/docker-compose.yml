@@ -10,6 +10,6 @@ services:
     environment:
       DRONE_RUNNER_NAME: {{ runner.name }}
       DRONE_RUNNER_CAPACITY: {{ runner.capacity }}
-      DRONE_RPC_PROTO: {{ rpc.protocol }}
-      DRONE_RPC_HOST: {{ rpc.host }}
-      DRONE_RPC_SECRET: {{ rpc.secret }}
+      DRONE_RPC_PROTO: {{ server.protocol }}
+      DRONE_RPC_HOST: {{ server.host }}
+      DRONE_RPC_SECRET: {{ server.secret }}
