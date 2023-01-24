@@ -12,3 +12,17 @@
   args: { executable: bash }
   register: result
   changed_when: "'domain definition changed' in result.stdout"
+- name: "{{ domain.key }} autostart"
+  ansible.builtin.shell: |
+    want={{ "enable" if domain.value.autostart else "disable" }}
+    status=$(virsh dominfo {{ domain.key }} | awk '/Autostart/ {print $2}')
+    if [[ $want == enable && $status == disable ]]; then
+      virsh autostart {{ domain.key }}
+      echo "autostart changed"
+    elif [[ $want == disable && $status == enable ]]; then
+      virsh autostart --disable {{ domain.key }}
+      echo "autostart changed"
+    fi
+  args: { executable: bash }
+  register: result
+  changed_when: "'autostart changed' in result.stdout"
