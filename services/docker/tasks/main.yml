@@ -1,0 +1,5 @@
+- name: package
+  ansible.builtin.apt: { name: [docker.io, docker-compose] }
+- name: configuration
+  ansible.builtin.template: { src: daemon.json, dest: /etc/docker/ }
+  notify: restart docker
