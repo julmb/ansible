@@ -3,3 +3,5 @@
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: /etc/docker/ }
   notify: restart docker
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
