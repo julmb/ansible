@@ -7,4 +7,6 @@ services:
     volumes: [./data:/var/lib/postgresql/data]
     ports: [{{ '{}:5432:5432'.format(address) if address is defined else '5432:5432' }}]
     environment:
+      POSTGRES_USER: {{ username }}
       POSTGRES_PASSWORD: {{ password }}
+      POSTGRES_DB: {{ database }}
