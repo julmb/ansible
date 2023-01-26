@@ -5,8 +5,7 @@ services:
     image: ibmcom/db2
     restart: unless-stopped
     volumes: [./data:/database]
-    ports:
-    - {{ '{}:50000:50000'.format(address) if address is defined else '50000:50000' }}
+    ports: [{{ '{}:50000:50000'.format(address) if address is defined else '50000:50000' }}]
     cap_add: [IPC_OWNER]
     environment:
       LICENSE: accept
