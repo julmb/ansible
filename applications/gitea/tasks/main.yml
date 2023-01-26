@@ -1,6 +1,6 @@
-- name: docker compose definition
+- name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
-- name: docker compose up
+- name: compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }
   register: docker_compose_up
 
