@@ -5,7 +5,6 @@ services:
     image: postgres
     restart: unless-stopped
     volumes: [./data:/var/lib/postgresql/data]
-    ports:
-    - {{ '{}:5432:5432'.format(address) if address is defined else '5432:5432' }}
+    ports: [{{ '{}:5432:5432'.format(address) if address is defined else '5432:5432' }}]
     environment:
       POSTGRES_PASSWORD: {{ password }}
