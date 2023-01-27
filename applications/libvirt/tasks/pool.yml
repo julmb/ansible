@@ -1,3 +1,5 @@
+- name: "{{ pool.key }} directory"
+  ansible.builtin.file: { path: "{{ pool.value.path }}", state: directory }
 - name: "{{ pool.key }} definition"
   ansible.builtin.shell: |
     before=$(virsh pool-dumpxml {{ pool.key }})
