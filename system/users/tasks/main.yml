@@ -1,5 +1,5 @@
 - name: users
-  ansible.builtin.user: { name: "{{ user.key }}", password: "{{ hash }}" }
+  ansible.builtin.user: { name: "{{ user.key }}", password: "{{ hash }}", update_password: on_create }
   vars:
     salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user.key) }}"
     hash: "{{ user.value.password | string | password_hash('sha512', salt) }}"
