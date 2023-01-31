@@ -1,5 +1,9 @@
 - name: directory
-  ansible.builtin.file: { path: "~{{ user.key }}/.ssh", state: directory }
+  ansible.builtin.file:
+    path: "~{{ user.key }}/.ssh"
+    state: directory
+    owner: "{{ user.key }}"
+    group: "{{ user.key }}"
 
 - name: private keys
   ansible.builtin.template:
