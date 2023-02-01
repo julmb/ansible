@@ -19,5 +19,5 @@
     -outdev {{ directory }}/{{ inventory_hostname }}.iso
     -map {{ directory }}/{{ inventory_hostname }}.cfg preseed.cfg
     -map {{ directory }}/grub.cfg boot/grub/grub.cfg
-    -boot_image any keep
+    -boot_image any replay
   args: { creates: "{{ directory }}/{{ inventory_hostname }}.iso" }
