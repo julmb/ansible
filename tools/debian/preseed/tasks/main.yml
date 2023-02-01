@@ -15,9 +15,9 @@
 - name: preseeded image
   ansible.builtin.command: |
     xorriso
-    -boot_image any keep
     -indev {{ directory }}/{{ url | basename }}
     -outdev {{ directory }}/{{ inventory_hostname }}.iso
     -map {{ directory }}/{{ inventory_hostname }}.cfg preseed.cfg
     -map {{ directory }}/grub.cfg boot/grub/grub.cfg
+    -boot_image any keep
   args: { creates: "{{ directory }}/{{ inventory_hostname }}.iso" }
