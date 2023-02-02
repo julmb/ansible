@@ -1,13 +1,17 @@
 - name: packages
   ansible.builtin.apt:
     name:
+    # libvirt
     - libvirt-daemon-system
+    - libvirt-daemon-driver-lxc 
+    - libvirt-daemon-driver-qemu # already installed by libvirt-daemon-system
+    - dnsmasq-base # network server for virtual networks
+    # lxc
+    - lxc
+    # qemu
     - qemu-system
-    - qemu-utils
-    - ovmf
-    - dnsmasq-base
-    # - lxc
-    # - libvirt-daemon-driver-lxc
+    - qemu-utils # includes qemu-img, needed for non-raw images
+    - ovmf # firmware for efi support
     install_recommends: no
 - name: service
   ansible.builtin.systemd: { name: libvirtd, enabled: yes, state: started }
