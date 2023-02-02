@@ -17,6 +17,10 @@
 # - name: flush handlers
 #   ansible.builtin.meta: flush_handlers
 
+- name: users
+  ansible.builtin.user: { name: "{{ item }}", groups: [libvirt], append: true }
+  loop: "{{ users }}"
+
 - name: pools
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
