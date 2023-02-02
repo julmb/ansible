@@ -5,7 +5,7 @@
     - libvirt-daemon-system
     - libvirt-daemon-driver-lxc 
     - libvirt-daemon-driver-qemu # already installed by libvirt-daemon-system
-    - dnsmasq-base # network server for virtual networks
+    - dnsmasq-base # dhcp server for virtual networks
     # lxc
     - lxc
     # qemu
