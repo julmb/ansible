@@ -9,4 +9,6 @@ services:
     environment:
       POSTGRES_USER: {{ username }}
       POSTGRES_PASSWORD: {{ password }}
+{% if database is defined %}
       POSTGRES_DB: {{ database }}
+{% endif %}
