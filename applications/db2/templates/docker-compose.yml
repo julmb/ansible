@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  main:
+  database:
     image: ibmcom/db2
     restart: unless-stopped
     volumes: [./data:/database]

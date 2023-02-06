@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  main:
+  database:
     image: postgres
     restart: unless-stopped
     volumes: [./data:/var/lib/postgresql/data]
