@@ -1,10 +1,32 @@
 version: "3"
 
+{% if ansible_os_family == 'Windows' %}
+# workaround for containers failing to restart
+# https://github.com/docker/for-win/issues/2194
+# apparently, docker on windows fails to properly clean up the network reference
+# this causes containers to not be able to restart on reboot
+# this workaround instead manually connects the container to the default nat network
+networks: { drone-runner: { external: { name: nat } } }
+{% endif %}
+
 services:
   main:
+{% if ansible_os_family == 'Windows' %}
+    # TODO: get pull request https://github.com/drone-runners/drone-runner-docker/pull/35 merged and use official image
+    image: jooles/drone-runner-docker:windows-2022-shell
+{% else %}
     image: drone/drone-runner-docker
+{% endif %}
     restart: unless-stopped
+{% if ansible_os_family == 'Windows' %}
+    volumes: [{ source: \\.\pipe\docker_engine, target: \\.\pipe\docker_engine, type: npipe }]
+{% else %}
     volumes: [/var/run/docker.sock:/var/run/docker.sock]
+{% endif %}
+{% if ansible_os_family == 'Windows' %}
+    # workaround for containers failing to restart
+    networks: [drone-runner]
+{% endif %}
     ports: [{{ '{}:3000:3000'.format(address) if address is defined else '3000:3000' }}]
     environment:
       DRONE_RUNNER_NAME: {{ runner.name }}
