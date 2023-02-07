@@ -1,4 +1,8 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
+  ansible.windows.win_command: docker-compose --project-directory {{ path }} up --detach
+  when: ansible_os_family == "Windows"
+- name: compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }
+  when: ansible_os_family != "Windows"
