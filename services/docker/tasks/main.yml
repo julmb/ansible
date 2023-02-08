@@ -1,7 +1,15 @@
 - name: package
   ansible.builtin.apt: { name: [docker.io, docker-compose] }
+  when: ansible_os_family == "Debian"
+- name: feature
+  win_feature: { name: Containers }
+  when: ansible_os_family == "Windows"
+- name: package
+  win_chocolatey: { name: [docker-engine, docker-compose] }
+  when: ansible_os_family == "Windows"
 - name: configuration
-  ansible.builtin.template: { src: daemon.json, dest: /etc/docker/ }
-  notify: restart docker
+  ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
+  vars: { path: { Debian: /etc/docker/, Windows: /ProgramData/docker/config/ } }
+  notify: [restart docker debian, restart docker windows]
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
