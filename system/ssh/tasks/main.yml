@@ -29,9 +29,15 @@
   loop_control: { loop_var: user }
   when: users is defined
 
-- name: windows
+- name: administrator authorized keys
   ansible.builtin.template: { src: authorized_keys, dest: /ProgramData/ssh/administrators_authorized_keys }
-  vars: { authorized_keys: "{{ windows.authorized_keys }}" }
+  vars: { authorized_keys: "{{ administrator.authorized_keys }}" }
+  when: ansible_os_family == "Windows"
+- name: administrator instantiate permissions
+  ansible.windows.win_acl_inheritance: { path: /ProgramData/ssh/administrators_authorized_keys, reorganize: yes }
+  when: ansible_os_family == "Windows"
+- name: administrator restrict permissions
+  ansible.windows.win_acl: { path: /ProgramData/ssh/administrators_authorized_keys, user: Authenticated Users, type: allow, rights: ReadAndExecute, state: absent }
   when: ansible_os_family == "Windows"
 
 - name: flush handlers
