@@ -29,5 +29,10 @@
   loop_control: { loop_var: user }
   when: users is defined
 
+- name: windows
+  ansible.builtin.template: { src: authorized_keys, dest: /ProgramData/ssh/administrators_authorized_keys }
+  vars: { authorized_keys: "{{ windows.authorized_keys }}" }
+  when: ansible_os_family == "Windows"
+
 - name: flush handlers
   ansible.builtin.meta: flush_handlers

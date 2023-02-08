@@ -1,0 +1,3 @@
+{% for name, entry in authorized_keys.items() %}
+{{ entry.type }} {{ entry.key }} {{ name }}
+{% endfor %}
