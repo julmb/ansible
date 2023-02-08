@@ -16,6 +16,9 @@
 - name: service
   ansible.builtin.service: { name: ssh, enabled: yes, state: started }
   when: ansible_os_family == "Debian"
+- name: service
+  ansible.windows.win_service: { name: sshd, start_mode: auto, state: started }
+  when: ansible_os_family == "Windows"
 
 - name: system
   ansible.builtin.include_tasks: system.yml
