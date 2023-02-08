@@ -1,6 +1,17 @@
 - name: package
   ansible.builtin.apt: { name: openssh-server }
   when: ansible_os_family == "Debian"
+  # TODO: hopefully there will soon be a win_capability module
+  #       https://github.com/ansible-collections/community.windows/issues/270
+- name: capability
+  win_shell: |
+    $result = Get-WindowsCapability -Online -Name OpenSSH.Server | Where-Object State -EQ Installed
+    if (!$result) { Add-WindowsCapability -Online -Name OpenSSH.Server }
+  become: yes
+  become_method: runas
+  register: result
+  changed_when: result.stdout != ""
+  when: ansible_os_family == "Windows"
 
 - name: system
   ansible.builtin.include_tasks: system.yml
