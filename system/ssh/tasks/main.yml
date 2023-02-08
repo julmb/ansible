@@ -13,6 +13,10 @@
   changed_when: result.stdout != ""
   when: ansible_os_family == "Windows"
 
+- name: service
+  ansible.builtin.service: { name: ssh, enabled: yes, state: started }
+  when: ansible_os_family == "Debian"
+
 - name: system
   ansible.builtin.include_tasks: system.yml
   when: system is defined
