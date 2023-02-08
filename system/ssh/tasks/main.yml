@@ -4,7 +4,7 @@
   # TODO: hopefully there will soon be a win_capability module
   #       https://github.com/ansible-collections/community.windows/issues/270
 - name: capability
-  win_shell: |
+  ansible.windows.win_shell: |
     $result = Get-WindowsCapability -Online -Name OpenSSH.Server | Where-Object State -EQ Installed
     if (!$result) { Add-WindowsCapability -Online -Name OpenSSH.Server }
   become: yes
