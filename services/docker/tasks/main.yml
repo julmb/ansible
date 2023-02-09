@@ -3,7 +3,11 @@
   when: ansible_os_family == "Debian"
 - name: feature
   ansible.windows.win_feature: { name: Containers }
+  register: feature
   when: ansible_os_family == "Windows"
+- name: reboot
+  ansible.windows.win_reboot:
+  when: ansible_os_family == "Windows" and feature.reboot_required
 - name: package
   win_chocolatey: { name: [docker-engine, docker-compose] }
   when: ansible_os_family == "Windows"
