@@ -2,7 +2,7 @@
   ansible.builtin.apt: { name: [docker.io, docker-compose] }
   when: ansible_os_family == "Debian"
 - name: feature
-  win_feature: { name: Containers }
+  ansible.windows.win_feature: { name: Containers }
   when: ansible_os_family == "Windows"
 - name: package
   win_chocolatey: { name: [docker-engine, docker-compose] }
