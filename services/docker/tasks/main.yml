@@ -10,7 +10,11 @@
   when: ansible_os_family == "Windows" and feature.reboot_required
 - name: package
   win_chocolatey: { name: [docker-engine, docker-compose] }
+  register: package
   when: ansible_os_family == "Windows"
+- name: reboot
+  ansible.windows.win_reboot:
+  when: ansible_os_family == "Windows" and package.rc == 3010
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
   vars: { path: { Debian: /etc/docker/, Windows: /ProgramData/docker/config/ } }
