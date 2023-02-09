@@ -15,9 +15,11 @@
 - name: reboot
   ansible.windows.win_reboot:
   when: ansible_os_family == "Windows" and package.rc == 3010
+
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
   vars: { path: { Debian: /etc/docker/, Windows: /ProgramData/docker/config/ } }
   notify: [restart docker debian, restart docker windows]
+
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
