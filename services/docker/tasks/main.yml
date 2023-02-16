@@ -16,6 +16,15 @@
   ansible.windows.win_reboot:
   when: ansible_os_family == "Windows" and package.rc == 3010
 
+- name: exceptions
+  ansible.builtin.import_role: { name: services/nftables }
+  vars:
+    configuration: |
+      flush chain filter DOCKER-USER
+      {% for exception in exceptions %}
+      add rule filter DOCKER-USER iifname {{ exception }} oifname {{ exception }} accept
+      {% endfor %}
+
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
   vars: { path: { Debian: /etc/docker/, Windows: /ProgramData/docker/config/ } }
