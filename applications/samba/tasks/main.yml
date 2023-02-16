@@ -27,7 +27,7 @@
 
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
-  notify: restart samba
+  notify: reload samba
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
