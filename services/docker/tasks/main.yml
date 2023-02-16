@@ -18,12 +18,7 @@
 
 - name: exceptions
   ansible.builtin.import_role: { name: services/nftables }
-  vars:
-    configuration: |
-      flush chain filter DOCKER-USER
-      {% for exception in exceptions %}
-      add rule filter DOCKER-USER iifname {{ exception }} oifname {{ exception }} accept
-      {% endfor %}
+  vars: { configuration: "{{ lookup('template', 'exceptions.conf') }}" }
   when: ansible_os_family == "Debian" and exceptions is defined
 
 - name: configuration
