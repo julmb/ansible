@@ -2,7 +2,7 @@
   ansible.builtin.apt: { name: nftables }
 - name: configuration
   ansible.builtin.template: { src: nftables.conf, dest: /etc/ }
-  notify: restart nftables
+  notify: reload nftables
 - name: service
   ansible.builtin.systemd: { name: nftables, enabled: yes, state: started }
 - name: flush handlers
