@@ -2,6 +2,9 @@
   ansible.builtin.apt: { name: dnsmasq }
 - name: service
   ansible.builtin.systemd: { name: dnsmasq, enabled: yes, state: started }
+  # TODO: use dhcp-hostsfile, dhcp-optsfile, addn-hosts, these are updated on service reload (SIGHUP)
+  #       use restart on configuration change, reload on change of other files
+  # TODO: use resolv-file instead of configuration directives (also responds to SIGHUP if no-poll is set)
 - name: configuration
   ansible.builtin.template: { src: dnsmasq.conf, dest: /etc/ }
   notify: restart dnsmasq
