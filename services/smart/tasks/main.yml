@@ -9,6 +9,6 @@
   notify: restart smart
 - name: configuration daemon
   ansible.builtin.template: { src: smartd.conf, dest: /etc/ }
-  notify: restart smart
+  notify: reload smart
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
