@@ -1,8 +1,5 @@
 - name: packages
   ansible.builtin.apt: { name: bridge-utils }
-# TODO: this is needed for the docker workaround using the up/down hooks
-- name: iptables
-  ansible.builtin.apt: { name: iptables }
 - name: base
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
   notify: restart networking
