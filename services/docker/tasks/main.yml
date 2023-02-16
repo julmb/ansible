@@ -24,6 +24,7 @@
       {% for exception in exceptions %}
       add rule filter DOCKER-USER iifname {{ exception }} oifname {{ exception }} accept
       {% endfor %}
+  when: ansible_os_family == "Debian" and exceptions is defined
 
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
