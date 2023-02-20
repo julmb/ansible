@@ -1,4 +1,8 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
+- name: data directory
+  ansible.builtin.file: { path: "{{ path }}/data", state: directory, owner: 1000, group: 1000 }
+- name: database file
+  ansible.builtin.file: { path: "{{ path }}/database.sqlite", state: touch, owner: 1000, group: 1000 }
 - name: compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }

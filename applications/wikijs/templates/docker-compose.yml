@@ -4,7 +4,9 @@ services:
   main:
     image: requarks/wiki
     restart: unless-stopped
-    #volumes: [./wiki:/wiki]
+    volumes:
+    - ./data:/wiki/data
+    - ./database.sqlite:/wiki/database.sqlite
     ports: [{{ '{}:80:3000'.format(address) if address is defined else '80:3000' }}]
     environment:
       DB_TYPE: sqlite
