@@ -1,6 +1,9 @@
 - name: package
   ansible.builtin.apt: { name: [docker.io, docker-compose] }
   when: ansible_os_family == "Debian"
+- name: service
+  ansible.builtin.service: { name: docker, state: started }
+  when: ansible_os_family == "Debian"
 - name: feature
   ansible.windows.win_feature: { name: Containers }
   register: feature
@@ -15,6 +18,9 @@
 - name: reboot
   ansible.windows.win_reboot:
   when: ansible_os_family == "Windows" and package.rc == 3010
+- name: service
+  ansible.windows.win_service: { name: docker, state: started }
+  when: ansible_os_family == "Windows"
 
 - name: exceptions
   ansible.builtin.import_role: { name: services/nftables }
