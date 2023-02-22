@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  main:
+    image: mediawiki
+    restart: unless-stopped
+    volumes:
+    - ./LocalSettings.php:/var/www/html/LocalSettings.php
+    - data:/var/www/data
+    - images:/var/www/html/images
+    ports: [{{ '{}:80:80'.format(address) if address is defined else '80:80' }}]
+volumes:
+    data:
+    images:
