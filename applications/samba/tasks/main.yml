@@ -6,7 +6,7 @@
 - name: user share
   ansible.builtin.user: { name: share, create_home: false }
 - name: users system
-  ansible.builtin.user: { name: "{{ item.key }}", groups: [share], create_home: false, append: true }
+  ansible.builtin.user: { name: "{{ item.key }}", create_home: false }
   loop: "{{ users | dict2items }}"
 - name: users samba
   samba:
@@ -21,7 +21,7 @@
     state: directory
     owner: "{{ item.value.users[0] if single else 'share' }}"
     group: "{{ item.value.users[0] if single else 'share' }}"
-    mode: "{{ '0755' if single else '02775' }}"
+    mode: "{{ '0755' if single else '0775' }}"
   vars: { single: "{{ item.value.users | default | length == 1 }}" }
   loop: "{{ shares | dict2items }}"
 
