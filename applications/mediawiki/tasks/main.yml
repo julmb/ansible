@@ -1,7 +1,7 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: settings
-  ansible.builtin.copy: { src: LocalSettings.php, dest: "{{ path }}/" }
+  ansible.builtin.file: { path: "{{ path }}/LocalSettings.php", state: touch, owner: 33, group: 33 }
 - name: data directory
   ansible.builtin.file: { path: "{{ path }}/data", state: directory, owner: 33, group: 33 }
 - name: images directory
