@@ -1,7 +1,5 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
-- name: settings
-  ansible.builtin.file: { path: "{{ path }}/LocalSettings.php", state: touch, owner: 33, group: 33 }
 - name: assets directory
   ansible.builtin.file: { path: "{{ path }}/assets", state: directory, owner: 33, group: 33 }
 - name: data directory
