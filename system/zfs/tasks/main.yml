@@ -13,12 +13,14 @@
     vdevs: "{{ item.value.vdevs }}"
     properties: "{{ item.value.properties | default(omit) }}"
   loop: "{{ pools | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
 - name: datasets
   community.general.zfs:
     name: "{{ item.key }}"
     state: present
     extra_zfs_properties: "{{ item.value | default(omit, true) }}"
   loop: "{{ datasets | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
 
 - name: curl package
   ansible.builtin.apt: { name: curl }
@@ -57,6 +59,7 @@
     daemon_reload: yes
   vars: { enabled: "{{ item.value.scrub | default(false) }}" }
   loop: "{{ pools | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
 
 - name: timer trim
   ansible.builtin.include_role: { name: tools/timer }
@@ -75,3 +78,4 @@
     daemon_reload: yes
   vars: { enabled: "{{ item.value.trim | default(false) }}" }
   loop: "{{ pools | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
