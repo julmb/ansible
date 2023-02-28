@@ -9,6 +9,7 @@
 - name: interfaces
   ansible.builtin.template: { src: interface.cfg, dest: "/etc/network/interfaces.d/{{ item.key }}.cfg" }
   loop: "{{ interfaces | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
   notify: restart networking
 - name: nameservers
   ansible.builtin.template: { src: resolv.conf, dest: /etc/ }
