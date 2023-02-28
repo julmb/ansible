@@ -18,7 +18,7 @@
 
   <devices>
 
-{% for entry in domain.value.storage %}
+{% for entry in domain.value.storage | default %}
 {% if entry.file is defined %}
 {% set type = 'file' %}
 {% elif entry.volume is defined %}
@@ -37,7 +37,7 @@
     </disk>
 {% endfor %}
 
-{% for entry in domain.value.interfaces %}
+{% for entry in domain.value.interfaces | default %}
 {% if entry.network is defined %}
 {% set type = 'network' %}
 {% elif entry.bridge is defined %}
