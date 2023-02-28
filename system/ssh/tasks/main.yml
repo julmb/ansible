@@ -27,7 +27,7 @@
 - name: users
   ansible.builtin.include_tasks: user.yml
   loop: "{{ users | dict2items }}"
-  loop_control: { loop_var: user }
+  loop_control: { loop_var: user, label: "{{ user.key }}" }
   when: users is defined
 
 - name: administrator authorized keys

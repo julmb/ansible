@@ -11,6 +11,7 @@
     dest: ~{{ user.key }}/.ssh/{{ item.key }}
     mode: 0600
   loop: "{{ user.value.private_keys | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
   when: user.value.private_keys is defined
 
 - name: known hosts
@@ -19,6 +20,7 @@
     name: "{{ item.key }}"
     key: "{{ item.key }} {{ item.value.type }} {{ item.value.key }}"
   loop: "{{ user.value.known_hosts | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
   when: user.value.known_hosts is defined
 
 - name: authorized keys
@@ -27,4 +29,5 @@
     key: "{{ item.value.type }} {{ item.value.key }} {{ item.key }}"
     key_options: "{{ item.value.options | join(',') if item.value.options is defined else omit }}"
   loop: "{{ user.value.authorized_keys | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
   when: user.value.authorized_keys is defined
