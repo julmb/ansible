@@ -23,10 +23,10 @@
 - name: pools
   ansible.builtin.include_tasks: pool.yml
   loop: "{{ pools | dict2items }}"
-  loop_control: { loop_var: pool }
+  loop_control: { loop_var: pool, label: "{{ pool.key }}" }
   when: pools is defined
 - name: domains
   ansible.builtin.include_tasks: domain.yml
   loop: "{{ domains | dict2items }}"
-  loop_control: { loop_var: domain }
+  loop_control: { loop_var: domain, label: "{{ domain.key }}" }
   when: domains is defined
