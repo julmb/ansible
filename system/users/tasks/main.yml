@@ -1,11 +1,11 @@
 - name: users
   ansible.builtin.user:
-    name: "{{ user.key }}"
-    password: "{{ user.value.password | password_hash('sha512', salt) }}"
+    name: "{{ item.key }}"
+    password: "{{ item.value.password | password_hash('sha512', salt) }}"
     update_password: on_create
-    groups: "{{ user.value.groups | default }}"
+    groups: "{{ item.value.groups | default }}"
     append: yes
     shell: /bin/bash
-  vars: { salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user.key) }}" }
+  vars: { salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + item.key) }}" }
   loop: "{{ users | dict2items }}"
-  loop_control: { loop_var: user }
+  loop_control: { label: "{{ item.key }}" }
