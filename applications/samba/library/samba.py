@@ -27,8 +27,7 @@ def adjust(module, name, expected, actual):
 # TODO: adjust control flow to only change password if force is enabled
 #       maybe simply merge adjust into process
 def process(module, name, state, force, nt_hash, password, check):
-	# TODO: this does not work if state is "absent" and neither nt_hash nor password are specified
-	if not nt_hash: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest()
+	if password: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest()
 	expected = dict(nt_hash = nt_hash.upper()) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
