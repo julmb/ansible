@@ -22,6 +22,7 @@ def adjust(module, name, expected, actual):
 	if expected and not actual: pdbedit_create(module, name); pdbedit_modify(module, name, expected["nt_hash"])
 	elif not expected and actual: pdbedit_delete(module, name)
 	elif expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
+	else: raise ValueError("impossible violation of actual vs. expected state")
 
 def process(module, name, state, force, nt_hash, password, check):
 	if not nt_hash: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest()
@@ -29,7 +30,7 @@ def process(module, name, state, force, nt_hash, password, check):
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
 	if not force and expected and actual: expected["nt_hash"] = actual["nt_hash"]
-	if not check: adjust(module, name, expected, actual)
+	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
 def main():
