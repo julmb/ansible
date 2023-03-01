@@ -24,13 +24,12 @@ def adjust(module, name, expected, actual):
 	elif expected["nt_hash"] != actual["nt_hash"]: pdbedit_modify(module, name, expected["nt_hash"])
 	else: raise ValueError("impossible violation of actual vs. expected state")
 
-# TODO: adjust control flow to only change password if force is enabled
-#       maybe simply merge adjust into process
 def process(module, name, state, force, nt_hash, password, check):
 	if password: nt_hash = hashlib.new("md4", password.encode("utf-16-le")).hexdigest()
 	expected = dict(nt_hash = nt_hash.upper()) if state == "present" else None
 	entries = pdbedit_user(module, name)
 	actual = dict(nt_hash = entries["NT hash"]) if entries else None
+	if not force and expected and actual: expected["nt_hash"] = actual["nt_hash"]
 	if actual != expected and not check: adjust(module, name, expected, actual)
 	return dict(changed = actual != expected, expected = expected, actual = actual)
 
