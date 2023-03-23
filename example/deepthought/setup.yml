@@ -10,7 +10,7 @@
       locale: { language: en, country: US, keymap: us }
       user:
         name: john
-        password: qwerty # can be stored in ansible vault
+        password: qwerty
         # authorized_keys:
         #   john:
         #     type: ssh-ed25519
