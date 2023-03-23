@@ -11,7 +11,10 @@
       user:
         name: john
         password: qwerty # can be stored in ansible vault
-        # authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } }
+        # authorized_keys:
+        #   john:
+        #     type: ssh-ed25519
+        #     key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
       storage: { devices: [/dev/vda] }
       software: { tasks: [standard, ssh-server] }
       exit: halt
