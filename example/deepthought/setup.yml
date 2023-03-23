@@ -6,7 +6,7 @@
     delegate_to: localhost
     vars:
       url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.6.0-amd64-netinst.iso
-      directory: preseed/
+      directory: "{{ lookup('env', 'PWD') }}/preseed/"
       locale: { language: en, country: US, keymap: us }
       user:
         name: john
