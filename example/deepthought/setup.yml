@@ -1,0 +1,17 @@
+- hosts: deepthought
+  gather_facts: no
+  serial: 1
+  tasks:
+  - import_role: { name: setup/debian }
+    delegate_to: localhost
+    vars:
+      url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.6.0-amd64-netinst.iso
+      directory: preseed/
+      locale: { language: en, country: US, keymap: us }
+      user:
+        name: john
+        password: qwerty # can be stored in ansible vault
+        # authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } }
+      storage: { devices: [/dev/vda] }
+      software: { tasks: [standard, ssh-server] }
+      exit: halt
