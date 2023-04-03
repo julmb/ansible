@@ -12,3 +12,15 @@
       john: { authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } } }
       jack: { authorized_keys: { jack: { type: ssh-ed25519, key: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB } } }
   - role: system/apt
+
+  - role: system/zfs
+    pools:
+      chell:
+        scrub: yes
+        properties: { ashift: 12 }
+        vdevs:
+        - raidz1: [vdb, vdc, vdd, vde]
+    datasets:
+      chell: { mountpoint: /mnt/chell, compression: lz4, atime: off, xattr: off }
+      chell/services/gitea:
+      chell/files: { recordsize: "1048576" }
