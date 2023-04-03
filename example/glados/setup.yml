@@ -11,5 +11,5 @@
       network: { hostname: glados }
       user: { name: john, password: qwerty, authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } } }
       storage: { devices: [/dev/vda] }
-      software: { tasks: [standard, ssh-server] }
+      software: { sources: { contrib: true }, tasks: [standard, ssh-server] }
       exit: halt
