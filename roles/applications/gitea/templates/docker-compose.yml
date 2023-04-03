@@ -14,8 +14,10 @@ services:
       GITEA__SERVER__DOMAIN: {{ server.http }}
       GITEA__SERVER__SSH_DOMAIN: {{ server.ssh }}
       GITEA__SERVER__ROOT_URL: {{ server.url }}
+{% if configuration is defined %}
 {% for section, entries in configuration.items() %}
 {% for name, value in entries.items() %}
       GITEA__{{ section }}__{{ name }}: "{{ value }}"
 {% endfor %}
 {% endfor %}
+{% endif %}
