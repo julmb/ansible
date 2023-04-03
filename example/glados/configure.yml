@@ -27,6 +27,16 @@
 
   - role: services/docker
 
+  - role: applications/samba
+    users:
+      john: { password: "{{ people.john.password }}" }
+      jill: { password: "{{ people.jill.password }}" }
+    shares:
+      public: { path: /mnt/chell/files/public }
+      shared: { path: /mnt/chell/files/shared, users: [] }
+      john: { path: /mnt/chell/files/john, users: [john] }
+      jill: { path: /mnt/chell/files/jill, users: [jill] }
+      jill-games: { path: /mnt/chell/files/jill-games, users: [jill], case_sensitive: no }
   - role: applications/gitea
     path: /mnt/chell/services/gitea
     title: Gitea
