@@ -26,3 +26,9 @@
       chell/files: { recordsize: "1048576" }
 
   - role: services/docker
+
+  - role: applications/gitea
+    path: /mnt/chell/services/gitea
+    title: Gitea
+    server: { http: glados.local, ssh: glados.local, url: http://glados.local }
+    admin: { username: john, password: "{{ people.john.password }}", email: john@example.com }
