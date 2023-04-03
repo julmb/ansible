@@ -9,7 +9,7 @@
       directory: "{{ lookup('env', 'PWD') }}/preseed/"
       locale: { language: en, country: US, keymap: us }
       network: { hostname: glados }
-      user: { name: john, password: qwerty, authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } } }
+      user: { name: john, password: "{{ people.john.password }}", authorized_keys: "{{ people.john.authorized_keys }}" }
       storage: { devices: [/dev/vda] }
       software: { sources: { contrib: true }, tasks: [standard, ssh-server] }
       exit: halt
