@@ -4,13 +4,13 @@
   - role: system/hostname
   - role: system/users
     users:
-      john: { password: qwerty, groups: [sudo] }
-      jack: { password: asdfgh, groups: [sudo] }
-      jill: { password: zxcvbn }
+      john: { password: "{{ people.john.password }}", groups: [sudo] }
+      jack: { password: "{{ people.jack.password }}", groups: [sudo] }
+      jill: { password: "{{ people.jill.password }}" }
   - role: system/ssh
     users:
-      john: { authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } } }
-      jack: { authorized_keys: { jack: { type: ssh-ed25519, key: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB } } }
+      john: { authorized_keys: "{{ people.john.authorized_keys }}" }
+      jack: { authorized_keys: "{{ people.jack.authorized_keys }}" }
   - role: system/apt
 
   - role: system/zfs
