@@ -8,14 +8,8 @@
       url: https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.6.0-amd64-netinst.iso
       directory: "{{ lookup('env', 'PWD') }}/preseed/"
       locale: { language: en, country: US, keymap: us }
-      network: { hostname: glados } # this can be left out if your DHCP server assigns a hostname
-      user:
-        name: john
-        password: qwerty
-        # authorized_keys:
-        #   john:
-        #     type: ssh-ed25519
-        #     key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+      network: { hostname: glados }
+      user: { name: john, password: qwerty, authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } } }
       storage: { devices: [/dev/vda] }
       software: { tasks: [standard, ssh-server] }
       exit: halt
