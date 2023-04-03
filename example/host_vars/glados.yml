@@ -3,10 +3,10 @@ people:
     password: qwerty # better to use ansible vault
     authorized_keys: { john: { type: ssh-ed25519, key: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA } }
   jack:
-    password: asdfgh
+    password: asdfgh # better to use ansible vault
     authorized_keys: { jack: { type: ssh-ed25519, key: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB } }
   jill:
-    password: zxcvbn
+    password: zxcvbn # better to use ansible vault
 
 ansible_password: "{{ people.john.password }}" # better to use ssh keys
 ansible_become_password: "{{ people.john.password }}"
