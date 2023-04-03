@@ -24,3 +24,5 @@
       chell: { mountpoint: /mnt/chell, compression: lz4, atime: off, xattr: off }
       chell/services/gitea:
       chell/files: { recordsize: "1048576" }
+
+  - role: services/docker
