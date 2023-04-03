@@ -16,6 +16,7 @@
   - role: system/zfs
     pools:
       chell:
+        hard: yes # this will try to create the pool if it does not exist rather than try to import it
         scrub: yes
         properties: { ashift: 12 }
         vdevs:
