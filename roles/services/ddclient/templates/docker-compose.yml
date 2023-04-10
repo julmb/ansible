@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  ddclient:
+  main:
     image: linuxserver/ddclient
     restart: unless-stopped
     volumes: [./configuration:/config]
