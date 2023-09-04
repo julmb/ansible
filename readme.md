@@ -53,6 +53,7 @@ Roles in this section can be found in the `applications` subdirectory.
 | `dnsmasq`      | DHCP and DNS server           |
 | `drone`        | Continuous integration server |
 | `drone-runner` | Continuous integration runner |
+| `act-runner`   | Automation runner             |
 | `gitea`        | Forge software                |
 | `jellyfin`     | Media server                  |
 | `libvirt`      | Virtualization host           |
