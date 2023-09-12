@@ -19,5 +19,5 @@
       --password {{ admin.password }}
       --email {{ admin.email }}
   register: result
-  failed_when: result.rc != 0 and 'user already exists' not in result.stdout
+  failed_when: result.rc != 0 and 'user already exists' not in result.stderr
   changed_when: result.rc == 0
