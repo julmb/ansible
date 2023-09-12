@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  main:
+    image: gitea/act_runner
+    restart: unless-stopped
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - ./data:/data
+    environment:
+      GITEA_INSTANCE_URL: {{ instance }}
+      GITEA_RUNNER_NAME: {{ runner.name }}
+      GITEA_RUNNER_REGISTRATION_TOKEN: {{ runner.token }}
+      GITEA_RUNNER_LABELS: {{ runner.labels }}
