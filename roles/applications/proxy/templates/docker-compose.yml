@@ -5,6 +5,7 @@ services:
     image: nginx
     restart: unless-stopped
     volumes:
+    - ./entrypoint:/docker-entrypoint.d:ro
     - ./configuration:/etc/nginx/conf.d:ro
     - ./letsencrypt:/etc/letsencrypt:ro
     - ./webroot:/usr/share/nginx/html:ro
