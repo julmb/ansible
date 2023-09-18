@@ -1,6 +1,0 @@
-# TODO: this is only necessary because certbot images are not multiarch
-#       check back on this and see if it can be removed
-certbot_architecture:
-  armv6l: arm32v6
-  aarch64: arm64v8
-  x86_64: amd64

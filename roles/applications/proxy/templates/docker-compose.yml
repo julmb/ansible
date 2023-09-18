@@ -13,9 +13,7 @@ services:
     - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
     - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
   certbot:
-    build:
-      context: https://github.com/julmb/certbot.git#main
-      args: { tag: {{ certbot_architecture[ansible_architecture] }}-latest }
+    image: certbot/certbot
     restart: unless-stopped
     depends_on: [nginx]
     volumes:
