@@ -3,7 +3,7 @@
 - name: compose up
   community.docker.docker_compose: { project_src: "{{ path }}" }
 
-- name: entrypoint
+- name: entrypoint reload
   ansible.builtin.copy: { src: reload.sh, dest: "{{ path }}/entrypoint/", mode: 0755 }
   notify: restart nginx service
 - name: flush handlers
@@ -14,6 +14,9 @@
   notify: reload nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
+
+- name: daily renew
+  ansible.builtin.copy: { src: renew.sh, dest: "{{ path }}/daily/", mode: 0755 }
 
 - name: certificates
   ansible.builtin.include_tasks: certificate.yml

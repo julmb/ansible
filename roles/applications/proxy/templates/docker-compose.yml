@@ -16,6 +16,8 @@ services:
     image: certbot/certbot
     restart: unless-stopped
     depends_on: [nginx]
+    entrypoint: crond -f -d 8
     volumes:
+    - ./daily:/etc/periodic/daily:ro
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot
