@@ -1,13 +1,10 @@
-# this script will get sourced by docker-entrypoint.sh in the nginx image
-# it will execute an infinite loop in the background
-# this loop will reload the nginx configuration every 24 hours
-
-echo "reload.sh: starting nginx reload loop"
+# this script should be mounted under /docker-entrypoint in the nginx container
+# it will then get sourced by docker-entrypoint.sh
+# it executes a loop in the background that reloads the nginx configuration every 24 hours
+# docker-entrypoint.sh hands off control to nginx, orphaning the loop which will reparent
 
 while true
 do
-	echo "reload.sh: waiting"
-	sleep 60
-	echo "reload.sh: reloading nginx configuration"
+	sleep 24h
 	nginx -s reload
 done &
