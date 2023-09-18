@@ -4,7 +4,7 @@
   community.docker.docker_compose: { project_src: "{{ path }}" }
 
 - name: entrypoint
-  ansible.builtin.copy: { src: reload.sh, dest: "{{ path }}/entrypoint/" }
+  ansible.builtin.copy: { src: reload.sh, dest: "{{ path }}/entrypoint/", mode: 0755 }
   notify: restart nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
