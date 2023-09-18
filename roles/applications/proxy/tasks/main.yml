@@ -5,7 +5,7 @@
 
 - name: default configuration
   ansible.builtin.copy: { src: default.conf, dest: "{{ path }}/configuration/" }
-  notify: restart nginx service
+  notify: reload nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
 
