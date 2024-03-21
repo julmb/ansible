@@ -11,4 +11,4 @@ services:
       GITEA_INSTANCE_URL: {{ instance }}
       GITEA_RUNNER_NAME: {{ runner.name }}
       GITEA_RUNNER_REGISTRATION_TOKEN: {{ runner.token }}
-      GITEA_RUNNER_LABELS: {{ runner.labels }}
+      GITEA_RUNNER_LABELS: {{ runner.labels if runner.labels is defined }}
