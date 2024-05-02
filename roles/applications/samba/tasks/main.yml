@@ -3,12 +3,6 @@
 - name: service
   ansible.builtin.systemd: { name: smbd, enabled: yes, state: started }
 
-- name: user share
-  ansible.builtin.user: { name: share, create_home: false }
-- name: users system
-  ansible.builtin.user: { name: "{{ item.key }}", create_home: false }
-  loop: "{{ users | dict2items }}"
-  loop_control: { label: "{{ item.key }}" }
 - name: users samba
   samba:
     name: "{{ item.key }}"
