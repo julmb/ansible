@@ -1,7 +1,7 @@
 - name: users
   ansible.builtin.user:
     name: "{{ item.key }}"
-    password: "{{ item.value.password | password_hash('sha512', salt) }}"
+    password: "{{ item.value.password | password_hash('sha512', salt) if item.value.password is defined else omit }}"
     update_password: on_create
     groups: "{{ item.value.groups | default }}"
     append: yes
