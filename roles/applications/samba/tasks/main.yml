@@ -2,7 +2,6 @@
   ansible.builtin.apt: { name: samba }
 - name: service
   ansible.builtin.systemd: { name: smbd, enabled: yes, state: started }
-
 - name: users samba
   samba:
     name: "{{ item.key }}"
@@ -10,21 +9,8 @@
     password: "{{ item.value.password | default(omit) }}"
   loop: "{{ users | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
-
-- name: share directories
-  ansible.builtin.file:
-    path: "{{ item.value.path }}"
-    state: directory
-    owner: "{{ item.value.users[0] if single else 'share' }}"
-    group: "{{ item.value.users[0] if single else 'share' }}"
-    mode: "{{ '0755' if single else '0775' }}"
-  vars: { single: "{{ item.value.users | default | length == 1 }}" }
-  loop: "{{ shares | dict2items }}"
-  loop_control: { label: "{{ item.key }}" }
-
 - name: configuration
   ansible.builtin.template: { src: smb.conf, dest: /etc/samba/, validate: testparm --suppress-prompt %s }
   notify: reload samba
-
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
