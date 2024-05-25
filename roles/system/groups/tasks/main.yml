@@ -2,5 +2,5 @@
   ansible.builtin.group:
     name: "{{ item.key }}"
     gid: "{{ item.value.id | default(omit) }}"
-  loop: "{{ groups | dict2items }}"
+  loop: "{{ groups_ | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
