@@ -3,7 +3,7 @@
     path: "{{ item.key }}"
     state: directory
     owner: "{{ item.value.owner }}"
-    group: "{{ item.value.owner }}"
+    group: "{{ item.value.group }}"
     mode: "{{ item.value.mode }}"
   loop: "{{ directories | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
