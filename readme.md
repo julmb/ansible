@@ -60,7 +60,7 @@ Roles in this section can be found in the `applications` subdirectory.
 | `mediawiki`    | Wiki software                 |
 | `postgres`     | Database server               |
 | `proxy`        | HTTPS reverse proxy           |
-| `registry`	 | Docker registry               |
+| `registry`     | Docker registry               |
 | `samba`        | SMB file server               |
 
 # Example
