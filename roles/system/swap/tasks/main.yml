@@ -13,4 +13,5 @@
   ansible.builtin.lineinfile: { path: /etc/fstab, line: "{{ path }} none swap sw 0 0" }
 - name: enable
   ansible.builtin.command: swapon {{ path }}
+  register: result
   changed_when: result.rc == 0
