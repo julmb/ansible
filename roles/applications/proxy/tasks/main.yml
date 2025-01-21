@@ -1,7 +1,7 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
 
 - name: entrypoint reload
   ansible.builtin.copy: { src: reload.sh, dest: "{{ path }}/entrypoint/", mode: 0755 }
