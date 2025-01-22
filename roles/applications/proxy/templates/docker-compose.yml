@@ -8,8 +8,8 @@ services:
     - ./letsencrypt:/etc/letsencrypt:ro
     - ./webroot:/usr/share/nginx/html:ro
     ports:
-    - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
-    - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
+    - {{ forward.http | default(80) }}:80
+    - {{ forward.https | default(443) }}:443
   certbot:
     image: certbot/certbot
     restart: unless-stopped
