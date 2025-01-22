@@ -7,9 +7,13 @@ services:
     - ./configuration:/etc/nginx/conf.d:ro
     - ./letsencrypt:/etc/letsencrypt:ro
     - ./webroot:/usr/share/nginx/html:ro
+{% if forward is defined %}
     ports:
     - {{ forward.http | default(80) }}:80
     - {{ forward.https | default(443) }}:443
+{% else %}
+    network_mode: host
+{% endif %}
   certbot:
     image: certbot/certbot
     restart: unless-stopped
