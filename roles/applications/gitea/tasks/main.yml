@@ -1,7 +1,7 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
   register: docker_compose_up
 
 - name: wait for container initialization
@@ -9,8 +9,9 @@
   when: docker_compose_up.changed
 
 - name: administrator
-  community.docker.docker_container_exec:
-    container: gitea_main_1
+  community.docker.docker_compose_v2_exec:
+    project_src: "{{ path }}"
+    service: main
     user: git
     command: >
       gitea admin user create
