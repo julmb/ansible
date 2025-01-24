@@ -25,7 +25,7 @@ services:
     # workaround for containers failing to restart
     networks: [drone-runner]
 {% endif %}
-    ports: [{{ '{}:3000:3000'.format(address) if address is defined else '3000:3000' }}]
+    ports: [{{ forward | default(3000) }}:3000]
     environment:
       DRONE_RUNNER_NAME: {{ runner.name }}
       DRONE_RUNNER_CAPACITY: {{ runner.capacity }}

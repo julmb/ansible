@@ -3,4 +3,4 @@ services:
     image: registry
     restart: unless-stopped
     volumes: [./data:/var/lib/registry]
-    ports: [{{ '{}:5000:5000'.format(address) if address is defined else '5000:5000' }}]
+    ports: [{{ forward | default(5000) }}:5000]

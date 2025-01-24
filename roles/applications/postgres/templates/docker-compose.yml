@@ -3,7 +3,7 @@ services:
     image: {{ 'postgres:{}'.format(version) if version is defined else 'postgres' }}
     restart: unless-stopped
     volumes: [./data:/var/lib/postgresql/data]
-    ports: [{{ '{}:5432:5432'.format(address) if address is defined else '5432:5432' }}]
+    ports: [{{ forward | default(5432) }}:5432]
     environment:
 {% if username is defined %}
       POSTGRES_USER: {{ username }}
