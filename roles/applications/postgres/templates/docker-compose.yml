@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   database:
     image: {{ 'postgres:{}'.format(version) if version is defined else 'postgres' }}

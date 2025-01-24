@@ -7,5 +7,5 @@
   # TODO: this is a hack, hopefully there will soon be a docker_compose module for windows
   changed_when: result.stderr != "drone-runner_main_1 is up-to-date\r\n"
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
   when: ansible_os_family != "Windows"

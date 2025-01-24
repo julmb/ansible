@@ -1,5 +1,3 @@
-version: "3"
-
 {% if ansible_os_family == 'Windows' %}
 # workaround for containers failing to restart
 # https://github.com/docker/for-win/issues/2194
