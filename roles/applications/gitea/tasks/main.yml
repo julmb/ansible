@@ -2,11 +2,11 @@
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
   community.docker.docker_compose_v2: { project_src: "{{ path }}" }
-  register: docker_compose_up
+  register: result
 
 - name: wait for container initialization
   ansible.builtin.pause: { seconds: 5 }
-  when: docker_compose_up.changed
+  when: result.changed
 
 - name: administrator
   community.docker.docker_compose_v2_exec:
