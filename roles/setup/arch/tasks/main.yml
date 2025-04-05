@@ -17,4 +17,6 @@
   loop_control: { label: "{{ item.key }}" }
 
 - name: pacstrap
-  ansible.builtin.shell: pacstrap -K /mnt {{ packages | join(' ') }} 1> /dev/tty1 2>&1
+  ansible.builtin.shell:
+    cmd: pacstrap -K /mnt {{ packages | join(' ') }} 1> /dev/tty1 2>&1
+    creates: /mnt/etc/arch-release
