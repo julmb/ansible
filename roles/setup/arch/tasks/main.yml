@@ -37,12 +37,23 @@
     src: /mnt/usr/share/zoneinfo/{{ setup.timezone }}
     dest: /etc/localtime
     state: link
-- name: set hardware clock
+- name: hardware clock
   ansible.builtin.command: arch-chroot /mnt hwclock --utc --systohc
 
 - name: locale.conf
   ansible.builtin.template: { src: locale.conf, dest: /mnt/etc/ }
 - name: locale.gen
   ansible.builtin.template: { src: locale.gen, dest: /mnt/etc/ }
-- name: generate locales
+- name: locale-gen
   ansible.builtin.command: arch-chroot /mnt locale-gen
+
+- name: bootctl
+  ansible.builtin.command: arch-chroot /mnt bootctl install
+- name: loader.conf
+  ansible.builtin.template: { src: loader.conf, dest: /mnt/boot/loader/ }
+- name: arch.conf
+  ansible.builtin.template: { src: arch.conf, dest: /mnt/boot/loader/entries/ }
+
+# TODO: create user
+# TODO: unmount
+# TODO: reboot
