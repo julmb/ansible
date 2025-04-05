@@ -1,0 +1,15 @@
+- name: partition
+  community.general.parted:
+    device: "/dev/{{ device.key }}"
+    label: gpt
+    number: "{{ ansible_loop.index }}"
+    flags: "{{ partition.flags | default(omit) }}"
+    fs_type: "{{ partition.filesystem }}"
+    part_start: "{{ partition.start }}"
+    part_end: "{{ partition.end }}"
+    state: present
+- name: filesystem
+  community.general.filesystem:
+    dev: "/dev/{{ device.key }}{{ ansible_loop.index }}"
+    fstype: "{{ filesystem[partition.filesystem] }}"
+  vars: { filesystem: { fat32: vfat, ext4: ext4 } }

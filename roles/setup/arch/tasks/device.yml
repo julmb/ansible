@@ -1,0 +1,4 @@
+- name: partitions
+  ansible.builtin.include_tasks: partition.yml
+  loop: "{{ device.value }}"
+  loop_control: { extended: true, loop_var: partition, label: "{{ ansible_loop.index }}" }

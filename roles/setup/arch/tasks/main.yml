@@ -1,25 +1,4 @@
-- name: create efi system partition
-  community.general.parted:
-    device: /dev/vda
-    label: gpt
-    number: 1
-    flags: [esp]
-    fs_type: fat32
-    part_end: 1GiB
-    state: present
-- name: create root partition
-  community.general.parted:
-    device: /dev/vda
-    label: gpt
-    number: 2
-    fs_type: ext4
-    part_start: 1GiB
-    state: present
-- name: create efi filesystem
-  community.general.filesystem:
-    dev: /dev/vda1
-    fstype: vfat
-- name: create root filesystem
-  community.general.filesystem:
-    dev: /dev/vda2
-    fstype: ext4
+- name: devices
+  ansible.builtin.include_tasks: device.yml
+  loop: "{{ devices | dict2items }}"
+  loop_control: { loop_var: device, label: "{{ device.key }}" }
