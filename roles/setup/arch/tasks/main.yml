@@ -20,3 +20,10 @@
   ansible.builtin.shell:
     cmd: pacstrap -K /mnt {{ packages | join(' ') }} 1> /dev/tty1 2>&1
     creates: /mnt/etc/arch-release
+
+- name: generate fstab
+  ansible.builtin.command: genfstab -U /mnt
+  register: result
+  changed_when: false
+- name: write fstab
+  ansible.builtin.copy: { content: "{{ result.stdout }}", dest: /mnt/etc/fstab }
