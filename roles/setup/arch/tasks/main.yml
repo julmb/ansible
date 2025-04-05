@@ -38,17 +38,23 @@
     dest: /etc/localtime
     state: link
 - name: hardware clock
-  ansible.builtin.command: arch-chroot /mnt hwclock --utc --systohc
+  ansible.builtin.command:
+    cmd: arch-chroot /mnt hwclock --utc --systohc
+    creates: /mnt/etc/adjtime
 
 - name: locale.conf
   ansible.builtin.template: { src: locale.conf, dest: /mnt/etc/ }
 - name: locale.gen
   ansible.builtin.template: { src: locale.gen, dest: /mnt/etc/ }
 - name: locale-gen
-  ansible.builtin.command: arch-chroot /mnt locale-gen
+  ansible.builtin.command:
+    cmd: arch-chroot /mnt locale-gen
+    creates: /mnt/usr/lib/locale/locale-archive
 
 - name: bootctl
-  ansible.builtin.command: arch-chroot /mnt bootctl install
+  ansible.builtin.command:
+    cmd: arch-chroot /mnt bootctl install
+    creates: /mnt/boot/EFI/systemd/systemd-bootx64.efi
 - name: loader.conf
   ansible.builtin.template: { src: loader.conf, dest: /mnt/boot/loader/ }
 - name: arch.conf
