@@ -3,10 +3,10 @@
     device: /dev/{{ device.key }}
     label: gpt
     number: "{{ ansible_loop.index }}"
-    flags: "{{ partition.flags | default(omit) }}"
     fs_type: "{{ filesystem[partition.filesystem] }}"
     part_start: "{{ partition.start }}"
     part_end: "{{ partition.end }}"
+    flags: "{{ partition.flags | default(omit) }}"
     state: present
   vars: { filesystem: { swap: linux-swap, vfat: fat32, ext4: ext4 } }
 - name: filesystem
