@@ -4,12 +4,12 @@
     label: gpt
     number: "{{ ansible_loop.index }}"
     flags: "{{ partition.flags | default(omit) }}"
-    fs_type: "{{ partition.filesystem }}"
+    fs_type: "{{ filesystem[partition.filesystem] }}"
     part_start: "{{ partition.start }}"
     part_end: "{{ partition.end }}"
     state: present
+  vars: { filesystem: { swap: linux-swap, vfat: fat32, ext4: ext4 } }
 - name: filesystem
   community.general.filesystem:
     dev: /dev/{{ device.key }}{{ ansible_loop.index }}
-    fstype: "{{ filesystem[partition.filesystem] }}"
-  vars: { filesystem: { fat32: vfat, ext4: ext4 } }
+    fstype: "{{ partition.filesystem }}"
