@@ -1,6 +1,6 @@
 - name: partition
   community.general.parted:
-    device: "/dev/{{ device.key }}"
+    device: /dev/{{ device.key }}
     label: gpt
     number: "{{ ansible_loop.index }}"
     flags: "{{ partition.flags | default(omit) }}"
@@ -10,6 +10,6 @@
     state: present
 - name: filesystem
   community.general.filesystem:
-    dev: "/dev/{{ device.key }}{{ ansible_loop.index }}"
+    dev: /dev/{{ device.key }}{{ ansible_loop.index }}
     fstype: "{{ filesystem[partition.filesystem] }}"
   vars: { filesystem: { fat32: vfat, ext4: ext4 } }
