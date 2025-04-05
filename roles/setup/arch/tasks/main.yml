@@ -15,3 +15,6 @@
   changed_when: result.rc == 0
   loop: "{{ mount | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
+
+- name: pacstrap
+  ansible.builtin.command: pacstrap -K /mnt {{ packages | join(' ') }}
