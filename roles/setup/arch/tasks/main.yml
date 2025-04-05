@@ -2,3 +2,9 @@
   ansible.builtin.include_tasks: device.yml
   loop: "{{ devices | dict2items }}"
   loop_control: { loop_var: device, label: "{{ device.key }}" }
+- name: swap
+  ansible.builtin.command: swapon /dev/{{ item }}
+  register: result
+  failed_when: result.rc != 0 and 'Device or resource busy' not in result.stderr
+  changed_when: result.rc == 0
+  loop: "{{ swap }}"
