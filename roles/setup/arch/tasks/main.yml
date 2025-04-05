@@ -8,3 +8,10 @@
   failed_when: result.rc != 0 and 'Device or resource busy' not in result.stderr
   changed_when: result.rc == 0
   loop: "{{ swap }}"
+- name: mount
+  ansible.builtin.command: mount --onlyonce --mkdir /dev/{{ item.key }} /mnt{{ item.value }}
+  register: result
+  failed_when: result.rc != 0 and 'filesystem already mounted' not in result.stderr
+  changed_when: result.rc == 0
+  loop: "{{ mount | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
