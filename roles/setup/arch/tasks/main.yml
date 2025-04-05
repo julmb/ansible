@@ -60,6 +60,11 @@
 - name: arch.conf
   ansible.builtin.template: { src: arch.conf, dest: /mnt/boot/loader/entries/ }
 
+- name: unmount
+  ansible.builtin.command: umount --recursive /mnt
+  register: result
+  failed_when: result.rc != 0 and 'not mounted' not in result.stderr
+  changed_when: result.rc == 0
+
 # TODO: create user
-# TODO: unmount
 # TODO: reboot
