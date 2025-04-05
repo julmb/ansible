@@ -27,3 +27,22 @@
   changed_when: false
 - name: write fstab
   ansible.builtin.copy: { content: "{{ result.stdout }}", dest: /mnt/etc/fstab }
+
+# TODO: this might not be needed with the DNS server
+- name: host name
+  ansible.builtin.template: { src: hostname, dest: /mnt/etc/ }
+
+- name: time zone
+  ansible.builtin.file:
+    src: /mnt/usr/share/zoneinfo/{{ setup.timezone }}
+    dest: /etc/localtime
+    state: link
+- name: set hardware clock
+  ansible.builtin.command: arch-chroot /mnt hwclock --utc --systohc
+
+- name: locale.conf
+  ansible.builtin.template: { src: locale.conf, dest: /mnt/etc/ }
+- name: locale.gen
+  ansible.builtin.template: { src: locale.gen, dest: /mnt/etc/ }
+- name: generate locales
+  ansible.builtin.command: arch-chroot /mnt locale-gen
