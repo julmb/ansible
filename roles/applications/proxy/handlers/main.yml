@@ -1,2 +1,4 @@
 - name: restart nginx service
-  community.docker.docker_compose: { project_src: "{{ path }}", services: nginx, restarted: yes }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}", services: nginx, state: restarted }
+- name: reload nginx service
+  community.docker.docker_compose_v2_exec: { project_src: "{{ path }}", service: nginx, command: nginx -s reload }

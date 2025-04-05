@@ -1,13 +1,11 @@
-version: "3"
-
 services:
   main:
     image: gitea/gitea
     restart: unless-stopped
     volumes: [./data:/data]
     ports:
-    - {{ '{}:80:3000'.format(address) if address is defined else '80:3000' }}
-    - {{ '{}:22:22'.format(address) if address is defined else '22:22' }}
+    - {{ forward.http | default(80) }}:3000
+    - {{ forward.ssh | default(22) }}:22
     environment:
       GITEA____APP_NAME: {{ title }}
       GITEA__SECURITY__INSTALL_LOCK: "true"

@@ -1,9 +1,6 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
 - name: configuration
   ansible.builtin.template: { src: ddclient.conf, dest: "{{ path }}/configuration/" }
-  notify: restart ddclient service
-- name: flush handlers
-  ansible.builtin.meta: flush_handlers

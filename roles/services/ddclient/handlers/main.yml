@@ -1,2 +1,0 @@
-- name: restart ddclient service
-  community.docker.docker_compose: { project_src: "{{ path }}", services: ddclient, restarted: yes }

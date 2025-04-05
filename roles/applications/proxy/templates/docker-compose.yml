@@ -1,25 +1,19 @@
-version: "3"
-
 services:
   nginx:
     image: nginx
     restart: unless-stopped
     volumes:
+    - ./entrypoint:/docker-entrypoint.d:ro
     - ./configuration:/etc/nginx/conf.d:ro
     - ./letsencrypt:/etc/letsencrypt:ro
     - ./webroot:/usr/share/nginx/html:ro
-    ports:
-    - {{ '{}:80:80'.format(address) if address is defined else '80:80' }}
-    - {{ '{}:443:443'.format(address) if address is defined else '443:443' }}
-  # TODO: the certbot container will automatically renew certificates, but nginx will not serve them until restarted
-  #       the certbot executable has a "--deploy-hook" switch and a "deploy-hook" ini configuration option
-  #       figure out how to use these to restart nginx after certificate renewal
+    network_mode: host
   certbot:
-    build:
-      context: https://github.com/julmb/certbot.git#main
-      args: { tag: {{ certbot_architecture[ansible_architecture] }}-latest }
+    image: certbot/certbot
     restart: unless-stopped
     depends_on: [nginx]
+    entrypoint: crond -f -d 8
     volumes:
+    - ./daily:/etc/periodic/daily:ro
     - ./letsencrypt:/etc/letsencrypt
     - ./webroot:/webroot

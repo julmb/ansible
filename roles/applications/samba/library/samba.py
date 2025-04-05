@@ -9,7 +9,7 @@ def parse(line):
 	return key.strip(), value.strip() or None
 
 def pdbedit_user(module, name):
-	rc, out, _ = module.run_command("pdbedit --user {} --verbose --smbpasswd-style".format(name))
+	rc, out, _ = module.run_command("pdbedit --debuglevel 1 --user {} --verbose --smbpasswd-style".format(name))
 	return dict(map(parse, out.splitlines())) if rc == 0 else None
 def pdbedit_create(module, name):
 	module.run_command("pdbedit --create --user {} --password-from-stdin".format(name), check_rc = True, data = "\n\n")

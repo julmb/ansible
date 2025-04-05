@@ -7,4 +7,4 @@
 - name: images directory
   ansible.builtin.file: { path: "{{ path }}/images", state: directory, owner: 33, group: 33 }
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }

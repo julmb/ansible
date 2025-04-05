@@ -1,6 +1,7 @@
 - name: "{{ item.key }} certificate"
-  community.docker.docker_container_exec:
-    container: proxy_certbot_1
+  community.docker.docker_compose_v2_exec:
+    project_src: "{{ path }}"
+    service: certbot
     command: certbot certonly --non-interactive {{ agree_tos }} {{ email }} {{ installer }}
   vars:
     agree_tos: "{{ '--agree-tos' if acme.agree_tos is defined and acme.agree_tos }}"
@@ -8,7 +9,7 @@
     installer: --webroot --webroot-path /webroot --domain {{ item.key }}
   register: certbot
   changed_when: not 'no action taken' in certbot.stdout
-  notify: restart nginx service
+  notify: reload nginx service
 - name: "{{ item.key }} configuration"
   ansible.builtin.template: { src: proxy.conf, dest: "{{ path }}/configuration/{{ item.key }}.conf" }
-  notify: restart nginx service
+  notify: reload nginx service

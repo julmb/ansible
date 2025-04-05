@@ -1,13 +1,22 @@
 - name: compose definition
   ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
 - name: compose up
-  community.docker.docker_compose: { project_src: "{{ path }}" }
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
 
-- name: default configuration
-  ansible.builtin.copy: { src: default.conf, dest: "{{ path }}/configuration/" }
+- name: entrypoint reload
+  ansible.builtin.copy: { src: reload.sh, dest: "{{ path }}/entrypoint/", mode: 0755 }
   notify: restart nginx service
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
+
+- name: default configuration
+  ansible.builtin.template: { src: default.conf, dest: "{{ path }}/configuration/" }
+  notify: reload nginx service
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: daily renew
+  ansible.builtin.copy: { src: renew.sh, dest: "{{ path }}/daily/", mode: 0755 }
 
 - name: certificates
   ansible.builtin.include_tasks: certificate.yml

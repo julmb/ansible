@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   main:
     image: mediawiki
@@ -9,4 +7,4 @@ services:
     - ./assets:/var/www/html/resources/assets/extra
     - ./data:/var/www/data
     - ./images:/var/www/html/images
-    ports: [{{ '{}:80:80'.format(address) if address is defined else '80:80' }}]
+    ports: [{{ forward | default(80) }}:80]
