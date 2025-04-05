@@ -17,4 +17,4 @@
   loop_control: { label: "{{ item.key }}" }
 
 - name: pacstrap
-  ansible.builtin.command: pacstrap -K /mnt {{ packages | join(' ') }} 1> /dev/tty1 2>&1
+  ansible.builtin.shell: pacstrap -K /mnt {{ packages | join(' ') }} 1> /dev/tty1 2>&1
