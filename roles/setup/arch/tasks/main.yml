@@ -60,11 +60,21 @@
 - name: arch.conf
   ansible.builtin.template: { src: arch.conf, dest: /mnt/boot/loader/entries/ }
 
+- name: user
+  ansible.builtin.command:
+    cmd: arch-chroot /mnt useradd --create-home --password {{ password }} {{ user_name }}
+    creates: /home/{{ user_name }}
+  vars:
+    password: "{{ user_password | password_hash('sha512', salt) }}"
+    salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user_name) }}"
+- name: sudoers
+  ansible.builtin.template: { src: sudoers, dest: /mnt/etc/sudoers.d/ }
+
 - name: unmount
   ansible.builtin.command: umount --recursive /mnt
   register: result
   failed_when: result.rc != 0 and 'not mounted' not in result.stderr
   changed_when: result.rc == 0
 
-# TODO: create user
-# TODO: reboot
+- name: reboot
+  ansible.builtin.reboot:
