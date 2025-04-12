@@ -33,10 +33,7 @@
   when: setup.hostname is defined
 
 - name: time zone
-  ansible.builtin.file:
-    src: /usr/share/zoneinfo/{{ setup.timezone }}
-    dest: /mnt/etc/localtime
-    state: link
+  ansible.builtin.file: { state: link, src: "/usr/share/zoneinfo/{{ setup.timezone }}", dest: /mnt/etc/localtime }
 - name: hardware clock
   ansible.builtin.command:
     cmd: arch-chroot /mnt hwclock --utc --systohc
