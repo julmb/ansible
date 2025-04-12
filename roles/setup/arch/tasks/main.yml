@@ -79,6 +79,3 @@
   register: result
   failed_when: result.rc != 0 and 'not mounted' not in result.stderr
   changed_when: result.rc == 0
-
-- name: reboot
-  ansible.builtin.reboot:
