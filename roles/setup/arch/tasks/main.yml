@@ -69,6 +69,8 @@
     salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user.name) }}"
 - name: sudoers
   ansible.builtin.template: { src: sudoers, dest: /mnt/etc/sudoers.d/ }
+- name: authorized keys
+  ansible.builtin.template: { src: authorized_keys, owner: 1000, group: 1000, dest: "/mnt/home/{{ user.name }}/.ssh/" }
 
 - name: unmount
   ansible.builtin.command: umount --recursive /mnt
