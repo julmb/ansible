@@ -28,10 +28,9 @@
 - name: write fstab
   ansible.builtin.copy: { content: "{{ result.stdout }}", dest: /mnt/etc/fstab }
 
-# TODO: this might not be needed with the DNS server
-# TODO: maybe we want to use the ansible hostname for this? although it's the same in preseed
 - name: host name
   ansible.builtin.copy: { content: "{{ setup.hostname }}", dest: /mnt/etc/hostname }
+  when: setup.hostname is defined
 
 - name: time zone
   ansible.builtin.file:
