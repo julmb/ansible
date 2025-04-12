@@ -48,6 +48,11 @@
     cmd: arch-chroot /mnt locale-gen
     creates: /mnt/usr/lib/locale/locale-archive
 
+  # systemctl provides no output when run inside arch-chroot, so we cannot determine changed status
+- name: services
+  ansible.builtin.command: arch-chroot /mnt systemctl enable {{ item }}
+  loop: "{{ services }}"
+
 - name: bootctl
   ansible.builtin.command:
     cmd: arch-chroot /mnt bootctl install
