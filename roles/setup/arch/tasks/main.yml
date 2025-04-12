@@ -34,8 +34,8 @@
 
 - name: time zone
   ansible.builtin.file:
-    src: /mnt/usr/share/zoneinfo/{{ setup.timezone }}
-    dest: /etc/localtime
+    src: /usr/share/zoneinfo/{{ setup.timezone }}
+    dest: /mnt/etc/localtime
     state: link
 - name: hardware clock
   ansible.builtin.command:
