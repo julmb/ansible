@@ -64,7 +64,7 @@
 - name: user
   ansible.builtin.command:
     cmd: arch-chroot /mnt useradd --create-home --password {{ password }} {{ user_name }}
-    creates: /home/{{ user_name }}
+    creates: /mnt/home/{{ user_name }}
   vars:
     password: "{{ user_password | password_hash('sha512', salt) }}"
     salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user_name) }}"
