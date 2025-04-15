@@ -1,3 +1,7 @@
+# https://wiki.archlinux.org/title/Install_Arch_Linux_via_SSH
+#   boot from live image
+#   run `passwd` to set root password
+
 - name: devices
   ansible.builtin.include_tasks: device.yml
   loop: "{{ devices | dict2items }}"

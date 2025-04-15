@@ -1,4 +1,0 @@
-https://wiki.archlinux.org/title/Install_Arch_Linux_via_SSH
-	boot from installation image
-	set password: passwd
-	copy ssh public key: scp .ssh/id_ed25519.pub treecko:.ssh/authorized_keys
