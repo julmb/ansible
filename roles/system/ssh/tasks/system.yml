@@ -1,16 +1,16 @@
 - name: configuration
   ansible.builtin.template: { src: sshd.conf, dest: /etc/ssh/sshd_config.d/, validate: sshd -t -f %s }
   when: system.configuration is defined
-  notify: restart ssh
+  notify: restart ssh linux
 - name: host keys
   ansible.builtin.template: { src: private_key, dest: "/etc/ssh/{{ item.key }}", mode: 0600, validate: ssh-keygen -y -f %s }
   loop: "{{ system.host_keys | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
   when: system.host_keys is defined
-  notify: restart ssh
+  notify: restart ssh linux
 - name: no public host keys
   ansible.builtin.file: { path: "/etc/ssh/{{ item.key }}.pub", state: absent }
   loop: "{{ system.host_keys | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
   when: system.host_keys is defined
-  notify: restart ssh
+  notify: restart ssh linux
