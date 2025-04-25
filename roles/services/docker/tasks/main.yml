@@ -13,7 +13,7 @@
   when: ansible_os_family == "Debian"
 - name: service
   ansible.builtin.service: { name: docker, state: started }
-  when: ansible_os_family == "Debian"
+  when: ansible_os_family != "Windows"
 - name: feature
   ansible.windows.win_feature: { name: Containers }
   register: feature
@@ -35,7 +35,7 @@
 - name: exceptions
   ansible.builtin.import_role: { name: services/nftables }
   vars: { configuration: "{{ lookup('template', 'exceptions.conf') }}" }
-  when: ansible_os_family == "Debian" and exceptions is defined
+  when: ansible_os_family != "Windows" and exceptions is defined
 
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
