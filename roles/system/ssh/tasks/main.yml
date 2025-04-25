@@ -16,7 +16,7 @@
   when: ansible_os_family == "Windows"
 
 - name: service
-  ansible.builtin.service: { name: ssh, enabled: yes, state: started }
+  ansible.builtin.service: { name: sshd, enabled: yes, state: started }
   when: ansible_os_family != "Windows"
 - name: service
   ansible.windows.win_service: { name: sshd, start_mode: auto, state: started }
