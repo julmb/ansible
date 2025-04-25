@@ -1,3 +1,0 @@
-{% for name, entry in user.authorized_keys.items() %}
-{{ entry.type }} {{ entry.key }} {{ name }}
-{% endfor %}
