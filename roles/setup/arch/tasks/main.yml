@@ -52,6 +52,8 @@
     cmd: arch-chroot /mnt locale-gen
     creates: /mnt/usr/lib/locale/locale-archive
 
+- name: sudoers
+  ansible.builtin.template: { src: sudoers, dest: /mnt/etc/sudoers.d/ }
   # systemctl provides no output when run inside arch-chroot, so we cannot determine changed status
 - name: services
   ansible.builtin.command: arch-chroot /mnt systemctl enable {{ item }}
@@ -68,13 +70,11 @@
 
 - name: user
   ansible.builtin.command:
-    cmd: arch-chroot /mnt useradd --create-home --password {{ password }} {{ user.name }}
+    cmd: arch-chroot /mnt useradd --create-home --groups wheel --password {{ password }} {{ user.name }}
     creates: /mnt/home/{{ user.name }}
   vars:
     password: "{{ user.password | password_hash('sha512', salt) }}"
     salt: "{{ '%016x' % (2 ** 64) | random(seed = inventory_hostname + ':' + user.name) }}"
-- name: sudoers
-  ansible.builtin.template: { src: sudoers, dest: /mnt/etc/sudoers.d/ }
 - name: authorized keys
   ansible.builtin.template: { src: authorized_keys, owner: 1000, group: 1000, dest: "/mnt/home/{{ user.name }}/.ssh/" }
 
