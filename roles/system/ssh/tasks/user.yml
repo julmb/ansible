@@ -6,11 +6,11 @@
     group: "{{ user.key }}"
 
 - name: private keys
-  ansible.builtin.template:
-    src: private_key
-    dest: ~{{ user.key }}/.ssh/{{ item.key }}
-    mode: 0600
-    validate: ssh-keygen -y -f %s
+  community.crypto.openssh_keypair:
+    type: "{{ item.key }}"
+    passphrase: "{{ item.value }}"
+    comment: "{{ user.key }}@{{ ansible_host }}"
+    path: ~{{ user.key }}.ssh/id_{{ item.key }}
   loop: "{{ user.value.private_keys | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
   when: user.value.private_keys is defined

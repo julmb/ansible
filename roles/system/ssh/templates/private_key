@@ -1,3 +1,0 @@
------BEGIN OPENSSH PRIVATE KEY-----
-{{ item.value }}
------END OPENSSH PRIVATE KEY-----
