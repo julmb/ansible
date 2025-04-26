@@ -10,6 +10,7 @@
     src: private_key
     dest: ~{{ user.key }}/.ssh/{{ item.key }}
     mode: 0600
+    validate: ssh-keygen -y -f %s
   loop: "{{ user.value.private_keys | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
   when: user.value.private_keys is defined
