@@ -1,2 +1,2 @@
 - name: package
-  community.general.pacman: { name: "{{ name }}" }
+  community.general.pacman: { name: "{{ package }}" }
