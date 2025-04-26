@@ -11,6 +11,8 @@
     passphrase: "{{ item.value }}"
     comment: "{{ user.key }}@{{ ansible_host }}"
     path: ~{{ user.key }}/.ssh/id_{{ item.key }}
+    owner: "{{ user.key }}"
+    group: "{{ user.key }}"
   loop: "{{ user.value.private_keys | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
   when: user.value.private_keys is defined
