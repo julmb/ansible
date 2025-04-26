@@ -1,6 +1,9 @@
 - name: package
   ansible.builtin.apt: { name: openssh-server }
   when: ansible_os_family == "Debian"
+- name: package
+  community.general.pacman: { name: openssh }
+  when: ansible_os_family == "Archlinux"
   # TODO: hopefully there will be a win_capability module at some point
   #       https://github.com/ansible-collections/ansible.windows/issues/96
   #       https://github.com/ansible-collections/community.windows/issues/270
