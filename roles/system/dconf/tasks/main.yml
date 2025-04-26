@@ -1,0 +1,4 @@
+- name: entries
+  community.general.dconf: { key: "{{ item.key }}", value: "{{ item.value }}" }
+  loop: "{{ entries | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
