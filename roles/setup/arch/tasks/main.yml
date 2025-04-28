@@ -2,6 +2,10 @@
   ansible.builtin.include_tasks: device.yml
   loop: "{{ devices | dict2items }}"
   loop_control: { loop_var: device, label: "{{ device.key }}" }
+- name: filesystems
+  community.general.filesystem: { dev: "/dev/{{ item.key }}", fstype: "{{ item.value }}" }
+  loop: "{{ filesystems | dict2items }}"
+  loop_control: { label: "{{ item.key }}" }
 - name: swap
   ansible.builtin.command: swapon /dev/{{ item }}
   register: result

@@ -9,7 +9,3 @@
     flags: "{{ partition.flags | default(omit) }}"
     state: present
   vars: { filesystem: { swap: linux-swap, vfat: fat32, ext4: ext4 } }
-- name: filesystem
-  community.general.filesystem:
-    dev: /dev/{{ device.key }}{{ ansible_loop.index }}
-    fstype: "{{ partition.filesystem }}"
