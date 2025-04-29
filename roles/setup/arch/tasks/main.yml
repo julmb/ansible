@@ -59,6 +59,10 @@
   ansible.builtin.command: arch-chroot /mnt systemctl enable {{ item }}
   loop: "{{ services }}"
 
+- name: root
+  ansible.builtin.command: findmnt --noheadings --output UUID /mnt
+  register: root
+  changed_when: false
 - name: bootctl
   ansible.builtin.command:
     cmd: arch-chroot /mnt bootctl install
