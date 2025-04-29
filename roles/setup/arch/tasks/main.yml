@@ -27,10 +27,10 @@
 
 - name: generate fstab
   ansible.builtin.command: genfstab -U /mnt
-  register: result
+  register: fstab
   changed_when: false
 - name: write fstab
-  ansible.builtin.copy: { content: "{{ result.stdout }}", dest: /mnt/etc/fstab }
+  ansible.builtin.copy: { content: "{{ fstab.stdout }}", dest: /mnt/etc/fstab }
 
 - name: host name
   ansible.builtin.copy: { content: "{{ setup.hostname }}", dest: /mnt/etc/hostname }
