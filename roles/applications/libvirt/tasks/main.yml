@@ -14,7 +14,7 @@
     - ovmf # firmware for efi support
     install_recommends: no
 - name: service
-  ansible.builtin.systemd: { name: libvirtd, enabled: yes, state: started }
+  ansible.builtin.systemd_service: { name: libvirtd, enabled: yes, state: started }
 
 - name: users
   ansible.builtin.user: { name: "{{ item }}", groups: [libvirt], append: true }

@@ -1,7 +1,7 @@
 - name: package
   ansible.builtin.apt: { name: nftables }
 - name: service
-  ansible.builtin.systemd: { name: nftables, enabled: yes, state: started }
+  ansible.builtin.systemd_service: { name: nftables, enabled: yes, state: started }
 - name: configuration
   ansible.builtin.template: { src: nftables.conf, dest: /etc/, validate: nft --check --file %s }
   notify: reload nftables

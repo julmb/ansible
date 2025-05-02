@@ -25,4 +25,4 @@
     variance: 1h
     persistent: yes
 - name: timer enabled
-  ansible.builtin.systemd: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }
+  ansible.builtin.systemd_service: { name: borgmatic.timer, enabled: yes, state: started, daemon_reload: yes }

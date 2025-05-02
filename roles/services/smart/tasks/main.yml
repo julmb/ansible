@@ -1,7 +1,7 @@
 - name: package
   ansible.builtin.apt: { name: smartmontools }
 - name: service
-  ansible.builtin.systemd: { name: smartd, enabled: yes, state: started }
+  ansible.builtin.systemd_service: { name: smartd, enabled: yes, state: started }
 # TODO: in smartmontools 7.3 this can be set per-device in smartd.conf
 #       this makes this configuration file and the restart handler obsolete
 - name: configuration service

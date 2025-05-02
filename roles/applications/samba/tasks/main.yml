@@ -1,7 +1,7 @@
 - name: package
   ansible.builtin.apt: { name: samba }
 - name: service
-  ansible.builtin.systemd: { name: smbd, enabled: yes, state: started }
+  ansible.builtin.systemd_service: { name: smbd, enabled: yes, state: started }
 - name: users samba
   samba:
     name: "{{ item.key }}"

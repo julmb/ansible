@@ -34,7 +34,7 @@
 - name: zed configuration
   ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
 - name: zed service
-  ansible.builtin.systemd: { name: zfs-zed, enabled: yes, state: started }
+  ansible.builtin.systemd_service: { name: zfs-zed, enabled: yes, state: started }
 
 # TODO:
 # debian uses the return code of zfs get to determine if the user-defined properties for scrubs and trims exist
@@ -53,7 +53,7 @@
     variance: 1h
     persistent: yes
 - name: timer scrub state
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: zpool-scrub@{{ item.key }}.timer
     enabled: "{{ enabled }}"
     state: "{{ 'started' if enabled else 'stopped' }}"
@@ -72,7 +72,7 @@
     variance: 1h
     persistent: yes
 - name: timer trim state
-  ansible.builtin.systemd:
+  ansible.builtin.systemd_service:
     name: zpool-trim@{{ item.key }}.timer
     enabled: "{{ enabled }}"
     state: "{{ 'started' if enabled else 'stopped' }}"
