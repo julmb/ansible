@@ -9,7 +9,7 @@
   community.crypto.openssh_keypair:
     type: "{{ item.key }}"
     passphrase: "{{ item.value }}"
-    comment: "{{ user.key }}@{{ ansible_host }}"
+    comment: "{{ user.key }}@{{ inventory_hostname }}"
     path: ~{{ user.key }}/.ssh/id_{{ item.key }}
     owner: "{{ user.key }}"
     group: "{{ user.key }}"
