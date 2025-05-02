@@ -12,7 +12,7 @@
   ansible.builtin.apt: { name: docker-ce }
   when: ansible_os_family == "Debian"
 - name: service
-  ansible.builtin.service: { name: docker, state: started }
+  ansible.builtin.systemd_service: { name: docker, state: started }
   when: ansible_os_family != "Windows"
 - name: feature
   ansible.windows.win_feature: { name: Containers }

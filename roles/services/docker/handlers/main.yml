@@ -1,5 +1,5 @@
 - name: restart docker linux
-  ansible.builtin.service: { name: docker, state: restarted }
+  ansible.builtin.systemd_service: { name: docker, state: restarted }
   when: ansible_os_family != "Windows"
 - name: restart docker windows
   ansible.windows.win_service: { name: docker, state: restarted }

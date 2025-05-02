@@ -1,5 +1,5 @@
 - name: restart ssh linux
-  ansible.builtin.service: { name: sshd, state: restarted }
+  ansible.builtin.systemd_service: { name: sshd, state: restarted }
   when: ansible_os_family != "Windows"
 - name: restart ssh windows
   ansible.windows.win_service: { name: sshd, state: restarted }

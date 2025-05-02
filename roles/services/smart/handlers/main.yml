@@ -1,4 +1,4 @@
 - name: restart smart
-  ansible.builtin.service: { name: smartd, state: restarted }
+  ansible.builtin.systemd_service: { name: smartd, state: restarted }
 - name: reload smart
-  ansible.builtin.service: { name: smartd, state: reloaded }
+  ansible.builtin.systemd_service: { name: smartd, state: reloaded }

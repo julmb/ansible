@@ -1,2 +1,2 @@
 - name: restart jourdis
-  ansible.builtin.service: { name: jourdis, state: restarted }
+  ansible.builtin.systemd_service: { name: jourdis, state: restarted }
