@@ -14,11 +14,10 @@
     address: all
     method: scram-sha-256
   notify: reload postgresql service
-
-# - name: password
-#   become: true
-#   become_user: postgres
-#   community.postgresql.postgresql_user: { name: postgres, password: "{{ password }}" }
+- name: password
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user: { name: postgres, password: "{{ password }}" }
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
