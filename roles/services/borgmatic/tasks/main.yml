@@ -13,7 +13,7 @@
 - name: repositories
   ansible.builtin.command: borgmatic init --encryption repokey
   register: result
-  changed_when: result.stdout or result.stderr
+  changed_when: result.stdout != "" or result.stderr != ""
 
 - name: timer
   ansible.builtin.include_role: { name: tools/timer }
