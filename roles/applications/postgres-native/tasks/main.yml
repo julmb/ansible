@@ -1,0 +1,23 @@
+- name: package
+  ansible.builtin.apt: { name: [postgresql, python3-psycopg2] }
+- name: configuration
+  become: true
+  become_user: postgres
+  ansible.builtin.template: { src: postgres.conf, dest: /etc/postgresql/15/main/conf.d/ }
+  notify: restart postgresql service
+- name: authentication
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_pg_hba:
+    dest: /etc/postgresql/15/main/pg_hba.conf
+    contype: host
+    address: all
+    method: scram-sha-256
+  notify: reload postgresql service
+- name: password
+  become: true
+  become_user: postgres
+  community.postgresql.postgresql_user: { name: postgres, password: "{{ password }}" }
+
+- name: flush handlers
+  ansible.builtin.meta: flush_handlers
