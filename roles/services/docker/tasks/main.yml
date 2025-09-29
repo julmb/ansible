@@ -1,15 +1,5 @@
-- name: key
-  ansible.builtin.get_url:
-    url: https://download.docker.com/linux/debian/gpg
-    dest: /etc/apt/keyrings/docker.asc
-  when: ansible_os_family == "Debian"
-- name: repository
-  ansible.builtin.apt_repository:
-    filename: docker
-    repo: deb [signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
-  when: ansible_os_family == "Debian"
 - name: package
-  ansible.builtin.apt: { name: docker-ce }
+  ansible.builtin.apt: { name: docker.io }
   when: ansible_os_family == "Debian"
 - name: service
   ansible.builtin.systemd_service: { name: docker, state: started }
