@@ -1,0 +1,6 @@
+services:
+  database:
+    image: nextcloud
+    restart: unless-stopped
+    volumes: [./data:/var/www/html]
+    ports: [{{ forward | default(80) }}:80]
