@@ -1,5 +1,6 @@
 - name: package
-  ansible.builtin.apt: { name: zfsutils-linux }
+  ansible.builtin.apt: { name: ["{{ headers[ansible_architecture] }}", zfsutils-linux] }
+  vars: { headers: { x86_64: linux-headers-amd64 } }
 - name: configuration
   ansible.builtin.template: { src: zfs.conf, dest: /etc/modprobe.d/ }
 - name: kernel module
