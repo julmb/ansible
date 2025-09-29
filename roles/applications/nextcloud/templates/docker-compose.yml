@@ -1,6 +1,20 @@
 services:
-  database:
+  main:
     image: nextcloud
     restart: unless-stopped
-    volumes: [./data:/var/www/html]
+    links: [database]
+    volumes: [./html:/var/www/html]
     ports: [{{ forward | default(80) }}:80]
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloud
+      POSTGRES_DB: nextcloud
+  database:
+    image: postgres
+    restart: unless-stopped
+    volumes: [./data:/var/lib/postgresql/data]
+    environment:
+      POSTGRES_USER: nextcloud
+      POSTGRES_PASSWORD: nextcloud
+      POSTGRES_DB: nextcloud
