@@ -13,6 +13,7 @@
 # TODO: this errors when used on repositories with a different encryption setting
 #       in borgmatic 2.0.0, this can be set per-repository, but debian trixie has borgmatic 1.9.14
 #       so we disable this for now, it's easy enough to run this manually to create new repositories
+#       using the transfer command in borg 2.0, we could also recreate older repositories with consistent encryption settings
 # - name: repositories
 #   ansible.builtin.command: borgmatic init --encryption repokey
 #   register: result
