@@ -55,7 +55,7 @@
 {% endfor %}
 
     <video><model type="virtio"/></video>
-    <graphics type="spice" autoport="yes"/>
+    <graphics type="vnc"/>
 
     <input type="tablet"/>
 
