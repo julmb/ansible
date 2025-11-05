@@ -14,8 +14,7 @@ services:
       POSTGRES_DB: nextcloud
       # nextcloud will only parse X-Forwarded headers from hosts in the trusted proxies list
       # it uses those to determine the protocol (for redirects) and the host (for checks against trusted domains)
-      # curiously, it does not use X-Forwarded-For for correctly logging with the client IP address
-      # it does ues the X-Real-IP header for that, but then the match against the trusted proxies fails
+      # it uses the X-Real-IP header for correctly logging with the client IP address
       TRUSTED_PROXIES: {{ trusted.proxies | default(omit) }}
       NEXTCLOUD_TRUSTED_DOMAINS: {{ trusted.domains | default(omit) }}
       NEXTCLOUD_ADMIN_USER: {{ admin.username }}
