@@ -17,7 +17,7 @@
   <memory unit="{{ domain.value.hardware.memory.unit }}">{{ domain.value.hardware.memory.value }}</memory>
   <clock>
 {% for name, value in domain.value.hardware.clock.items() | default %}
-    <timer name="{{ name }}" present="{{ value }}"/>
+    <timer name="{{ name }}" present="{{ 'yes' if value else 'no' }}"/>
 {% endfor %}
   </clock>
 
