@@ -15,6 +15,11 @@
   <cpu mode="host-passthrough"/>
   <vcpu>{{ domain.value.hardware.cpus }}</vcpu>
   <memory unit="{{ domain.value.hardware.memory.unit }}">{{ domain.value.hardware.memory.value }}</memory>
+  <clock>
+{% for name, value in domain.value.hardware.clock.items() | default %}
+    <timer name="{{ name }}" present="{{ value }}"/>
+{% endfor %}
+  </clock>
 
   <devices>
 
