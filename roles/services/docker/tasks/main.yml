@@ -40,7 +40,7 @@
 - name: configuration
   ansible.builtin.template: { src: daemon.json, dest: "{{ path[ansible_os_family] }}" }
   vars: { path: { Debian: /etc/docker/, Windows: /ProgramData/docker/config/ } }
-  notify: [restart docker debian, restart docker windows]
+  notify: [restart docker linux, restart docker windows]
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
