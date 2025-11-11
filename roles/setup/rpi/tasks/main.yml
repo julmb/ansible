@@ -23,6 +23,3 @@
 - name: reboot
   ansible.builtin.reboot:
   when: fresh.changed
-
-- name: raspberry pi kernel headers
-  ansible.builtin.apt: { name: raspberrypi-kernel-headers }
