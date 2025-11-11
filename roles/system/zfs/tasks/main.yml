@@ -29,13 +29,6 @@
 
 - name: curl package
   ansible.builtin.apt: { name: curl }
-# TODO: adjust this once the bugfix from upstream is in debian
-# TODO: if there is still no code block in upstream, use ansible.posix.patch instead of ansible.builtin.lineinfile
-- name: fix bug in zed slack notification function and add code block
-  ansible.builtin.lineinfile:
-    path: /etc/zfs/zed.d/zed-functions.sh
-    search_string: "    msg_json=\"$(printf '{\"text\": \"*%s*\\n%s\"}' \"${subject}\" \"${msg_body}\" )\""
-    line: "    msg_json=\"$(printf '{\"text\": \"*%s*\\\\n```%s```\"}' \"${subject}\" \"${msg_body}\" )\""
 - name: zed configuration
   ansible.builtin.template: { src: zed.rc, dest: /etc/zfs/zed.d/ }
 - name: zed service
