@@ -2,7 +2,10 @@
   ansible.builtin.apt: { name: raspberrypi-net-mods, state: absent, purge: yes, autoremove: yes }
   register: net_mods
 - name: plain network
-  ansible.builtin.apt: { name: [dhcpcd, dhcpcd5, resolvconf, openresolv], state: absent, purge: yes, autoremove: yes }
+  ansible.builtin.apt: { name: network-manager, state: absent, purge: yes, autoremove: yes }
+  when: net_mods.changed
+- name: package
+  ansible.builtin.apt: { name: ifupdown }
   when: net_mods.changed
 - name: interfaces
   ansible.builtin.copy: { src: interfaces.cfg, dest: /etc/network/interfaces }
