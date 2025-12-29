@@ -2,7 +2,7 @@
 # so we only install headers on amd64 systems
 - name: headers
   ansible.builtin.apt: { name: linux-headers-amd64 }
-  when: ansible_architecture == "x86_64"
+  when: ansible_facts["architecture"] == "x86_64"
 - name: package
   ansible.builtin.apt: { name: zfsutils-linux }
 - name: configuration

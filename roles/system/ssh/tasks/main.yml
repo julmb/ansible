@@ -1,9 +1,9 @@
 - name: package
   ansible.builtin.apt: { name: openssh-server }
-  when: ansible_os_family == "Debian"
+  when: ansible_facts["os_family"] == "Debian"
 - name: package
   community.general.pacman: { name: [openssh, python-cryptography, python-bcrypt] }
-  when: ansible_os_family == "Archlinux"
+  when: ansible_facts["os_family"] == "Archlinux"
   # TODO: hopefully there will be a win_capability module at some point
   #       https://github.com/ansible-collections/ansible.windows/issues/96
   #       https://github.com/ansible-collections/community.windows/issues/270
@@ -16,14 +16,14 @@
   vars: { ansible_become_user: "{{ ansible_user }}", ansible_become_pass: "{{ ansible_password }}" }
   register: result
   changed_when: result.stdout != ""
-  when: ansible_os_family == "Windows"
+  when: ansible_facts["os_family"] == "Windows"
 
 - name: service
   ansible.builtin.systemd_service: { name: sshd, enabled: yes, state: started }
-  when: ansible_os_family != "Windows"
+  when: ansible_facts["os_family"] != "Windows"
 - name: service
   ansible.windows.win_service: { name: sshd, start_mode: auto, state: started }
-  when: ansible_os_family == "Windows"
+  when: ansible_facts["os_family"] == "Windows"
 
 - name: system
   ansible.builtin.include_tasks: system.yml
@@ -37,13 +37,13 @@
 - name: administrator authorized keys
   ansible.builtin.template: { src: authorized_keys, dest: /ProgramData/ssh/administrators_authorized_keys }
   vars: { authorized_keys: "{{ administrator.authorized_keys }}" }
-  when: ansible_os_family == "Windows"
+  when: ansible_facts["os_family"] == "Windows"
 - name: administrator instantiate permissions
   ansible.windows.win_acl_inheritance: { path: /ProgramData/ssh/administrators_authorized_keys, reorganize: yes }
-  when: ansible_os_family == "Windows"
+  when: ansible_facts["os_family"] == "Windows"
 - name: administrator restrict permissions
   ansible.windows.win_acl: { path: /ProgramData/ssh/administrators_authorized_keys, user: Authenticated Users, type: allow, rights: ReadAndExecute, state: absent }
-  when: ansible_os_family == "Windows"
+  when: ansible_facts["os_family"] == "Windows"
 
 - name: flush handlers
   ansible.builtin.meta: flush_handlers
