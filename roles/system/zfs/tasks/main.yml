@@ -1,8 +1,6 @@
-# TODO: it seems like this is not needed for raspberry pi
-#       is it really needed for regular debian?
-# - name: headers
-#   ansible.builtin.apt: { name: "{{ headers[ansible_architecture] }}" }
-#   vars: { headers: { x86_64: linux-headers-amd64, aarch64: linux-headers-arm64 } }
+- name: headers
+  ansible.builtin.apt: { name: linux-headers-amd64 }
+  when: ansible_architecture == "x86_64"
 - name: package
   ansible.builtin.apt: { name: zfsutils-linux }
 - name: configuration
