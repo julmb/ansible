@@ -1,3 +1,5 @@
+# on raspberry pi, the package linux-headers-rpi-v8 is already installed
+# so we only install headers on amd64 systems
 - name: headers
   ansible.builtin.apt: { name: linux-headers-amd64 }
   when: ansible_architecture == "x86_64"
