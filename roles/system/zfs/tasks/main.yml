@@ -14,6 +14,7 @@
 #       maybe we should change ZPOOL_IMPORT_PATH in /etc/default/zfs (there is already a commented line for it)
 #       or adjust zpool.py to give devices explicitly
 #       this seems to take the shape of zpool import -d /dev/disk/by-id/a-part1 -d /dev/disk/by-id/b-part1 ... pool-name
+#       however, this seems to only happen on some machines
 - name: pools
   zpool:
     name: "{{ item.key }}"
