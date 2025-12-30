@@ -4,7 +4,7 @@
   ansible.builtin.file: { path: /etc/borgmatic.d, state: directory, mode: 0600 }
 - name: configuration
   ansible.builtin.copy:
-    content: "{{ item.value }}"
+    content: "{{ item.value | to_nice_yaml }}"
     dest: /etc/borgmatic.d/{{ item.key }}.yaml
     validate: validate-borgmatic-config --config %s
   loop: "{{ backups | dict2items }}"
