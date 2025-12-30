@@ -1,3 +1,1 @@
-source_directories: {{ item.value.paths }}
-repositories: {{ item.value.repositories }}
-encryption_passphrase: {{ item.value.password }}
+{{ item.value }}
