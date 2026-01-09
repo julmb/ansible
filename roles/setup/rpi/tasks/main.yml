@@ -16,6 +16,8 @@
 
 - name: no nopasswd configuration
   ansible.builtin.file: { path: /etc/sudoers.d/010_pi-nopasswd, state: absent }
+- name: no cloud init configuration
+  ansible.builtin.file: { path: /etc/sudoers.d/90-cloud-init-users, state: absent }
 
 - name: full upgrade
   ansible.builtin.apt: { update_cache: yes, upgrade: full }
