@@ -6,7 +6,7 @@
   ansible.builtin.copy:
     content: "{{ item.value | to_nice_yaml }}"
     dest: /etc/borgmatic.d/{{ item.key }}.yaml
-    validate: validate-borgmatic-config --config %s
+    validate: borgmatic config validate --config %s
   loop: "{{ backups | dict2items }}"
   loop_control: { label: "{{ item.key }}" }
 
