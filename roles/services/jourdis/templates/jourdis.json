@@ -1,1 +1,0 @@
-{{ queries | to_json }}
