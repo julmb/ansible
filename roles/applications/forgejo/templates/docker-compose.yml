@@ -1,6 +1,6 @@
 services:
   main:
-    image: codeberg.org/forgejo/forgejo
+    image: codeberg.org/forgejo/forgejo:{{ version }}
     restart: unless-stopped
     volumes: [./data:/data]
     ports:
