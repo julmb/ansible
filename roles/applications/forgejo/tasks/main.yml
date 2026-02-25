@@ -1,0 +1,24 @@
+- name: compose definition
+  ansible.builtin.template: { src: docker-compose.yml, dest: "{{ path }}/" }
+- name: compose up
+  community.docker.docker_compose_v2: { project_src: "{{ path }}" }
+  register: result
+
+- name: wait for container initialization
+  ansible.builtin.pause: { seconds: 5 }
+  when: result.changed
+
+- name: administrator
+  community.docker.docker_compose_v2_exec:
+    project_src: "{{ path }}"
+    service: main
+    user: git
+    command: >
+      forgejo admin user create
+      --admin
+      --username {{ admin.username }}
+      --password {{ admin.password }}
+      --email {{ admin.email }}
+  register: result
+  failed_when: result.rc != 0 and 'user already exists' not in result.stderr
+  changed_when: result.rc == 0

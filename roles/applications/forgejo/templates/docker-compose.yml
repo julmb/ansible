@@ -1,0 +1,21 @@
+services:
+  main:
+    image: codeberg.org/forgejo/forgejo
+    restart: unless-stopped
+    volumes: [./data:/data]
+    ports:
+    - {{ forward.http | default(80) }}:3000
+    - {{ forward.ssh | default(22) }}:22
+    environment:
+      FORGEJO____APP_NAME: {{ title }}
+      FORGEJO__SECURITY__INSTALL_LOCK: "true"
+      FORGEJO__SERVER__DOMAIN: {{ server.http }}
+      FORGEJO__SERVER__SSH_DOMAIN: {{ server.ssh }}
+      FORGEJO__SERVER__ROOT_URL: {{ server.url }}
+{% if configuration is defined %}
+{% for section, entries in configuration.items() %}
+{% for name, value in entries.items() %}
+      FORGEJO__{{ section }}__{{ name }}: "{{ value }}"
+{% endfor %}
+{% endfor %}
+{% endif %}
