@@ -1,6 +1,6 @@
 services:
   main:
-    image: nextcloud
+    image: {{ 'nextcloud:{}'.format(version.nextcloud) }}
     restart: unless-stopped
     links: [database]
     volumes:
@@ -20,7 +20,7 @@ services:
       NEXTCLOUD_ADMIN_USER: {{ admin.username }}
       NEXTCLOUD_ADMIN_PASSWORD: {{ admin.password }}
   database:
-    image: postgres
+    image: {{ 'postgres:{}'.format(version.postgres) }}
     restart: unless-stopped
     shm_size: 1g
     volumes: [./postgres:/var/lib/postgresql]
