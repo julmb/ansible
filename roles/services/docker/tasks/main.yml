@@ -1,5 +1,5 @@
 - name: package
-  ansible.builtin.apt: { name: [docker.io, docker-compose] }
+  ansible.builtin.apt: { name: [docker.io, docker-cli, docker-compose] }
   when: ansible_facts["os_family"] == "Debian"
 - name: service
   ansible.builtin.systemd_service: { name: docker, state: started }
